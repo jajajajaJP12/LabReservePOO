@@ -384,6 +384,26 @@ function App() {
     }
   };
 
+  const rechazarSolicitud = async (id) => {
+    try {
+      // Actualizar la solicitud a 'Rechazada'
+      await updateDoc(doc(db, "solicitudes", id), {
+        estado: 'Rechazada',
+        fechaRechazo: new Date().toISOString()
+      });
+      
+      // Actualizar el estado local
+      setListaSolicitudes(listaSolicitudes.map(s => 
+        s.id === id ? {...s, estado: 'Rechazada'} : s
+      ));
+      
+      mostrarMensaje('❌ Solicitud rechazada', 'success');
+    } catch (error) { 
+      console.error('Error al rechazar solicitud:', error);
+      mostrarMensaje('Error al rechazar solicitud', 'error');
+    }
+  };
+
   // --- FUNCIONES DE UTILIDAD ---
   const generarHorarios = (aula, fecha) => {
     // Generar bloques de horarios de 7am a 6pm
