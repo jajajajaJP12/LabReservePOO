@@ -44,3 +44,4 @@ bin/
 
 # Firebase local config (NO subir a GitHub)
 src/main/resources/firebase.properties
+.env
