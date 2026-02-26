@@ -61,6 +61,13 @@ function App() {
   const [showFormReserva, setShowFormReserva] = useState(false);
   const [showFormSolicitud, setShowFormSolicitud] = useState(false);
   const [aulaSeleccionada, setAulaSeleccionada] = useState(null);
+  
+  // --- ESTADOS DE AULAS PÚBLICAS ---
+  const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date().toISOString().split('T')[0]);
+  const [aulaActual, setAulaActual] = useState(null);
+  const [reservaDetalle, setReservaDetalle] = useState(null);
+  const [showSolicitudDesdeAula, setShowSolicitudDesdeAula] = useState(false);
+  const [horarioSeleccionado, setHorarioSeleccionado] = useState(null);
 
   // --- EFECTO: Cargar datos en tiempo real ---
   useEffect(() => {
@@ -305,16 +312,43 @@ function App() {
     }
   };
 
-  const rechazarSolicitud = async (id) => {
-    try {
-      await updateDoc(doc(db, "solicitudes", id), {
-        estado: 'Rechazada',
-        fechaRechazo: new Date().toISOString()
+  // --- FUNCIONES DE UTILIDAD ---
+  const generarHorarios = (aula, fecha) => {
+    // Generar bloques de horarios de 7am a 6pm
+    const horarios = [];
+    const horas = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
+    
+    // Obtener hora actual y fecha actual
+    const ahora = new Date();
+    const horaActual = ahora.getHours();
+    const fechaActual = new Date().toISOString().split('T')[0];
+    const esHoy = fecha === fechaActual;
+    
+    horas.forEach((hora) => {
+      const horaInicio = `${String(hora).padStart(2, '0')}:00`;
+      const horaSiguiente = hora + 1;
+      const horaFin = `${String(horaSiguiente).padStart(2, '0')}:00`;
+      
+      // Buscar si hay reserva en este horario
+      const reserva = listaReservas.find(r => 
+        r.aulaId === aula &&
+        r.fecha === fecha &&
+        r.horaInicio === horaInicio
+      );
+      
+      // Verificar si el horario ya pasó
+      const horaPasada = esHoy && hora <= horaActual;
+      
+      horarios.push({
+        horaInicio,
+        horaFin,
+        ocupado: !!reserva,
+        reserva: reserva || null,
+        pasado: horaPasada
       });
-      mostrarMensaje('Solicitud rechazada', 'success');
-    } catch (error) { 
-      mostrarMensaje('Error al rechazar solicitud', 'error');
-    }
+    });
+    
+    return horarios;
   };
 
   // ====================================================
@@ -363,6 +397,13 @@ function App() {
               </button>
             )}
             
+            <button 
+              className={`menu-btn ${vistaActual === 'aulasReservadas' ? 'activo' : ''}`} 
+              onClick={() => setVistaActual('aulasReservadas')}
+            >
+              📍 Aulas Reservadas
+            </button>
+
             {permisos.verReservas && (
               <button 
                 className={`menu-btn ${vistaActual === 'reservas' ? 'activo' : ''}`} 
@@ -371,6 +412,13 @@ function App() {
                 📅 Mis Reservas
               </button>
             )}
+
+            <button 
+              className={`menu-btn ${vistaActual === 'aulasPúblicas' ? 'activo' : ''}`} 
+              onClick={() => setVistaActual('aulasPúblicas')}
+            >
+              🏢 Aulas Disponibles
+            </button>
             
             {permisos.solicitarEquipos && (
               <button 
@@ -598,6 +646,98 @@ function App() {
               </div>
             )}
 
+            {/* ============ VISTA AULAS RESERVADAS (TODOS) ============ */}
+            {vistaActual === 'aulasReservadas' && (
+              <div className="seccion-blanca">
+                <div className="section-header">
+                  <h2>📍 Aulas y Reservas del Sistema</h2>
+                  <span className="badge badge-info">
+                    {listaReservas.filter(r => r.estado === 'Confirmada').length} Reservadas
+                  </span>
+                </div>
+
+                <div className="aulas-grid">
+                  {listaAulas.length === 0 ? (
+                    <div style={{gridColumn: 'span 100%', textAlign: 'center', padding: '40px'}}>
+                      <p style={{fontSize: '18px', color: '#94a3b8'}}>No hay aulas registradas</p>
+                    </div>
+                  ) : (
+                    listaAulas.map((aula) => {
+                      const reservasAula = listaReservas.filter(r => r.aulaId === aula.id && r.estado === 'Confirmada');
+                      
+                      return (
+                        <div key={aula.id} className="aula-card">
+                          <div className="aula-header">
+                            <h3>{aula.nombre}</h3>
+                            <span className={`badge ${aula.estado === 'Disponible' ? 'badge-success' : 'badge-warning'}`}>
+                              {aula.estado}
+                            </span>
+                          </div>
+
+                          <div className="aula-info">
+                            <div className="info-item">
+                              <span className="label">👥 Capacidad:</span>
+                              <span className="value">{aula.capacidad} personas</span>
+                            </div>
+                            <div className="info-item">
+                              <span className="label">🖥️ Equipo:</span>
+                              <span className="value">{aula.equipoDisponible}</span>
+                            </div>
+                          </div>
+
+                          {reservasAula.length > 0 ? (
+                            <div className="reservas-aula">
+                              <h4 style={{marginBottom: '12px', fontSize: '13px', color: '#64748b', textTransform: 'uppercase'}}>
+                                📅 Reservas Confirmadas
+                              </h4>
+                              {reservasAula.map((res) => (
+                                <div key={res.id} className="reserva-item">
+                                  <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'start', gap: '12px'}}>
+                                    <div style={{flex: 1}}>
+                                      <div className="reservador-info">
+                                        <strong>{res.nombreReservador}</strong>
+                                        <span> ({res.nombreReservador === 'Sistema' ? 'Admin' : res.rol})</span>
+                                      </div>
+                                      <div className="fecha-hora">
+                                        📅 {new Date(res.fecha).toLocaleDateString('es-ES')} 
+                                        <br />
+                                        🕐 {res.horaInicio} - {res.horaFin}
+                                      </div>
+                                      <div className="descripcion-reserva">
+                                        <strong>Descripción:</strong>
+                                        <p>{res.descripcion}</p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="sin-reservas">
+                              <p>✅ Disponible para reservar</p>
+                            </div>
+                          )}
+
+                          {permisos.solicitarEquipos && (
+                            <button 
+                              className="btn-primary" 
+                              style={{width: '100%', marginTop: '12px'}}
+                              onClick={() => {
+                                setVistaActual('solicitudes');
+                                setShowFormSolicitud(true);
+                              }}
+                            >
+                              ➕ Solicitar esta Aula
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* ============ VISTA RESERVAS (MAESTRO) ============ */}
             {permisos.verReservas && !permisos.solicitarEquipos && vistaActual === 'reservas' && (
               <div className="seccion-blanca">
@@ -686,7 +826,7 @@ function App() {
             {permisos.solicitarEquipos && vistaActual === 'solicitudes' && (
               <div className="seccion-blanca">
                 <div className="section-header">
-                  <h2>Mis Solicitudes</h2>
+                  <h2>Mis Solicitudes de Aulas</h2>
                   <button className="btn-primary" onClick={() => setShowFormSolicitud(!showFormSolicitud)}>
                     {showFormSolicitud ? '❌ Cancelar' : '➕ Nueva Solicitud'}
                   </button>
@@ -696,12 +836,17 @@ function App() {
                   <form onSubmit={crearSolicitud} className="form-grid-2">
                     <select name="tipo" className="input-formal" required>
                       <option value="">Tipo de solicitud</option>
-                      <option value="Aula">Reserva de Aula</option>
-                      <option value="Equipo">Solicitud de Equipo</option>
-                      <option value="Otro">Otro</option>
+                      <option value="Aula">Solicitar Aula</option>
                     </select>
                     <input name="fechaSolicitada" type="date" className="input-formal" placeholder="Fecha solicitada" />
-                    <textarea name="descripcion" className="input-formal" placeholder="Describe tu solicitud con detalle..." required style={{gridColumn: 'span 2'}}></textarea>
+                    <textarea 
+                      name="descripcion" 
+                      className="input-formal" 
+                      placeholder="Describe tu necesidad: qué aula necesitas, para qué actividad, cuántas personas, equipos necesarios, duración aproximada..." 
+                      required 
+                      style={{gridColumn: 'span 2'}}
+                      rows="6"
+                    ></textarea>
                     <button type="submit" className="btn-primary" style={{gridColumn: 'span 2'}}>Enviar Solicitud</button>
                   </form>
                 )}
@@ -809,7 +954,265 @@ function App() {
               </div>
             )}
 
-            {/* ============ VISTA SOLICITUDES ADMIN ============ */}
+            {vistaActual === 'aulasPúblicas' && (
+              <div className="seccion-blanca">
+                <div className="section-header">
+                  <h2>🏢 Aulas Disponibles - Horarios</h2>
+                  <input 
+                    type="date" 
+                    className="input-formal" 
+                    style={{width: '200px', padding: '10px'}}
+                    value={fechaSeleccionada}
+                    onChange={(e) => {
+                      setFechaSeleccionada(e.target.value);
+                      setReservaDetalle(null);
+                      setAulaActual(null);
+                    }}
+                  />
+                </div>
+
+                <div style={{marginBottom: '30px'}}>
+                  <div style={{marginBottom: '15px'}}>
+                    <label style={{fontWeight: '600', color: '#1e293b', display: 'block', marginBottom: '10px'}}>
+                      Selecciona un aula:
+                    </label>
+                  <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px'}}>
+                      {listaAulas.map(aula => (
+                        <button
+                          key={aula.id}
+                          onClick={() => {
+                            setAulaActual(aula);
+                            setReservaDetalle(null);
+                            setHorarioSeleccionado(null);
+                            setShowSolicitudDesdeAula(false);
+                          }}
+                          className={`btn-aula ${aulaActual?.id === aula.id ? 'activo' : ''}`}
+                        >
+                          <div style={{fontWeight: '600'}}>{aula.nombre}</div>
+                          <div style={{fontSize: '12px', color: '#64748b', marginTop: '5px'}}>
+                            Cap: {aula.capacidad} | {aula.equipoDisponible}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {aulaActual && (
+                  <div className="horarios-container">
+                    <h3 style={{marginBottom: '20px', color: '#1e293b'}}>
+                      📅 {aulaActual.nombre} - {new Date(fechaSeleccionada).toLocaleDateString('es-ES', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})}
+                    </h3>
+
+                    <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '15px', marginBottom: '25px'}}>
+                      {generarHorarios(aulaActual.id, fechaSeleccionada).map((horario, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            // No permitir click en horarios pasados
+                            if (horario.pasado) return;
+                            
+                            if (horario.ocupado) {
+                              setReservaDetalle(horario.reserva);
+                              setHorarioSeleccionado(null);
+                            } else {
+                              // Seleccionar horario disponible
+                              if (horarioSeleccionado?.horaInicio === horario.horaInicio) {
+                                // Deseleccionar si ya está seleccionado
+                                setHorarioSeleccionado(null);
+                                setShowSolicitudDesdeAula(false);
+                              } else {
+                                // Seleccionar nuevo horario
+                                setHorarioSeleccionado(horario);
+                                setReservaDetalle(null);
+                                setShowSolicitudDesdeAula(true);
+                              }
+                            }
+                          }}
+                          disabled={horario.pasado}
+                          className={`bloque-horario ${horario.ocupado ? 'ocupado' : 'disponible'}`}
+                          style={{
+                            padding: '15px',
+                            borderRadius: '8px',
+                            border: horarioSeleccionado?.horaInicio === horario.horaInicio ? '3px solid #2563eb' : 'none',
+                            cursor: horario.pasado ? 'not-allowed' : 'pointer',
+                            backgroundColor: horario.pasado ? '#f1f5f9' : (horario.ocupado ? '#fee2e2' : (horarioSeleccionado?.horaInicio === horario.horaInicio ? '#dbeafe' : '#dcfce7')),
+                            borderLeft: `5px solid ${horario.pasado ? '#cbd5e1' : (horario.ocupado ? '#dc2626' : (horarioSeleccionado?.horaInicio === horario.horaInicio ? '#2563eb' : '#16a34a'))}`,
+                            textAlign: 'left',
+                            transition: 'all 0.2s',
+                            opacity: horario.pasado ? 0.6 : 1
+                          }}
+                        >
+                          <div style={{fontWeight: '600', color: horario.pasado ? '#94a3b8' : '#1e293b'}}>
+                            {horario.horaInicio} - {horario.horaFin}
+                          </div>
+                          <div style={{fontSize: '12px', marginTop: '5px', color: horario.pasado ? '#64748b' : (horario.ocupado ? '#991b1b' : '#166534'), fontWeight: '500'}}>
+                            {horario.pasado ? '⏰ PASADO' : (horario.ocupado ? '❌ OCUPADO' : (horarioSeleccionado?.horaInicio === horario.horaInicio ? '✅ SELECCIONADO' : '✅ Disponible'))}
+                          </div>
+                          {horario.ocupado && !horario.pasado && (
+                            <div style={{fontSize: '11px', marginTop: '8px', color: '#7f1d1d', backgroundColor: 'rgba(220, 38, 38, 0.1)', padding: '8px', borderRadius: '4px'}}>
+                              Reservado por: <strong>{horario.reserva?.nombreReservador}</strong>
+                              <br/>
+                              Toca para ver detalles
+                            </div>
+                          )}
+                          {!horario.ocupado && horarioSeleccionado?.horaInicio === horario.horaInicio && (
+                            <div style={{fontSize: '11px', marginTop: '8px', color: '#1e40af', backgroundColor: 'rgba(37, 99, 235, 0.1)', padding: '8px', borderRadius: '4px'}}>
+                              Toca de nuevo para deseleccionar
+                            </div>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Detalles de la reserva OCUPADA */}
+                    {reservaDetalle && (
+                      <div style={{
+                        backgroundColor: '#fee2e2',
+                        border: '2px solid #dc2626',
+                        borderRadius: '8px',
+                        padding: '20px',
+                        marginTop: '20px'
+                      }}>
+                        <h4 style={{color: '#991b1b', marginBottom: '15px'}}>📋 Detalles de la Reserva</h4>
+                        <div style={{display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '15px'}}>
+                          <div>
+                            <label style={{fontWeight: '600', color: '#7f1d1d', fontSize: '12px', textTransform: 'uppercase'}}>
+                              Reservado por:
+                            </label>
+                            <p style={{color: '#1e293b', fontWeight: '500', marginTop: '5px'}}>{reservaDetalle.nombreReservador}</p>
+                            <p style={{color: '#64748b', fontSize: '12px'}}>{reservaDetalle.reservadoPor}</p>
+                          </div>
+                          <div>
+                            <label style={{fontWeight: '600', color: '#7f1d1d', fontSize: '12px', textTransform: 'uppercase'}}>
+                              Horario:
+                            </label>
+                            <p style={{color: '#1e293b', fontWeight: '500', marginTop: '5px'}}>
+                              {reservaDetalle.horaInicio} - {reservaDetalle.horaFin}
+                            </p>
+                          </div>
+                          <div style={{gridColumn: 'span 2'}}>
+                            <label style={{fontWeight: '600', color: '#7f1d1d', fontSize: '12px', textTransform: 'uppercase'}}>
+                              Descripción:
+                            </label>
+                            <p style={{color: '#475569', marginTop: '8px', lineHeight: '1.6', whiteSpace: 'pre-wrap'}}>
+                              {reservaDetalle.descripcion}
+                            </p>
+                          </div>
+                          <div style={{gridColumn: 'span 2'}}>
+                            <label style={{fontWeight: '600', color: '#7f1d1d', fontSize: '12px', textTransform: 'uppercase'}}>
+                              Rol:
+                            </label>
+                            <p style={{color: '#1e293b', marginTop: '5px'}}>
+                              <span className={`badge badge-${reservaDetalle.rol === 'maestro' ? 'maestro' : 'info'}`}>
+                                {reservaDetalle.rol.charAt(0).toUpperCase() + reservaDetalle.rol.slice(1)}
+                              </span>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Formulario de solicitud para horario SELECCIONADO */}
+                    {horarioSeleccionado && usuarioActivo.rol === 'alumno' && !reservaDetalle && (
+                      <div style={{
+                        backgroundColor: '#dbeafe',
+                        border: '2px solid #2563eb',
+                        borderRadius: '8px',
+                        padding: '20px',
+                        marginTop: '20px'
+                      }}>
+                        <h4 style={{color: '#1e40af', marginBottom: '15px'}}>📝 Solicitar Este Horario</h4>
+                        
+                        <div style={{backgroundColor: 'rgba(37, 99, 235, 0.05)', padding: '15px', borderRadius: '6px', marginBottom: '15px', borderLeft: '4px solid #2563eb'}}>
+                          <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px'}}>
+                            <div>
+                              <label style={{fontWeight: '600', color: '#1e40af', fontSize: '11px', textTransform: 'uppercase'}}>Aula:</label>
+                              <p style={{color: '#1e293b', fontWeight: '600', marginTop: '5px'}}>{aulaActual.nombre}</p>
+                            </div>
+                            <div>
+                              <label style={{fontWeight: '600', color: '#1e40af', fontSize: '11px', textTransform: 'uppercase'}}>Fecha:</label>
+                              <p style={{color: '#1e293b', fontWeight: '600', marginTop: '5px'}}>
+                                {new Date(fechaSeleccionada).toLocaleDateString('es-ES')}
+                              </p>
+                            </div>
+                            <div>
+                              <label style={{fontWeight: '600', color: '#1e40af', fontSize: '11px', textTransform: 'uppercase'}}>Horario:</label>
+                              <p style={{color: '#1e293b', fontWeight: '600', marginTop: '5px'}}>
+                                {horarioSeleccionado.horaInicio} - {horarioSeleccionado.horaFin}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <form 
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            const formData = new FormData(e.target);
+                            crearSolicitud(e);
+                            setHorarioSeleccionado(null);
+                            setShowSolicitudDesdeAula(false);
+                          }}
+                          style={{
+                            display: 'grid',
+                            gap: '10px'
+                          }}
+                        >
+                          <input type="hidden" name="tipo" value="Aula" />
+                          <input type="hidden" name="fechaSolicitada" value={fechaSeleccionada} />
+                          
+                          <textarea
+                            name="descripcion"
+                            className="input-formal"
+                            placeholder="Describe el motivo de tu solicitud. ¿Qué actividad realizarás? ¿Cuántos compañeros serán?"
+                            required
+                            rows="5"
+                          ></textarea>
+
+                          <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px'}}>
+                            <button type="submit" className="btn-primary">
+                              ✅ Enviar Solicitud
+                            </button>
+                            <button 
+                              type="button"
+                              className="btn-primary"
+                              onClick={() => {
+                                setHorarioSeleccionado(null);
+                                setShowSolicitudDesdeAula(false);
+                              }}
+                              style={{backgroundColor: '#ef4444'}}
+                            >
+                              ❌ Cancelar
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    )}
+
+                    {usuarioActivo.rol !== 'alumno' && horarioSeleccionado && (
+                      <div style={{
+                        backgroundColor: '#fef3c7',
+                        border: '2px solid #ea580c',
+                        borderRadius: '8px',
+                        padding: '20px',
+                        marginTop: '20px',
+                        textAlign: 'center'
+                      }}>
+                        <p style={{color: '#92400e', fontSize: '14px'}}>
+                          ℹ️ Solo los estudiantes pueden hacer solicitudes. Los maestros pueden reservar directamente.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {!aulaActual && (
+                  <div style={{textAlign: 'center', padding: '40px', color: '#64748b'}}>
+                    <p>Selecciona un aula para ver sus horarios disponibles</p>
+                  </div>
+                )}
+              </div>
+            )}
             {permisos.verSolicitudes && vistaActual === 'solicitudesAdmin' && (
               <div className="seccion-blanca">
                 <div className="section-header">
