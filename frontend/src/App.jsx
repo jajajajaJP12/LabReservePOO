@@ -281,34 +281,106 @@ function App() {
     const tipo = e.target.tipo.value;
     const descripcion = e.target.descripcion.value;
     const fechaSolicitada = e.target.fechaSolicitada?.value || '';
+    const aulaNombre = e.target.aulaNombre?.value || '';
+    const aulaId = e.target.aulaId?.value || '';
+    const horaInicio = e.target.horaInicio?.value || '';
+    const horaFin = e.target.horaFin?.value || '';
+
+    console.log('Creando solicitud con:', {
+      tipo, descripcion, fechaSolicitada, aulaNombre, aulaId, horaInicio, horaFin, 
+      email: usuarioActivo.email
+    });
 
     try {
-      await addDoc(collection(db, "solicitudes"), {
+      const docRef = await addDoc(collection(db, "solicitudes"), {
         tipo,
         descripcion,
         fechaSolicitada,
+        aulaNombre,
+        aulaId,
+        horaInicio,
+        horaFin,
         solicitadoPor: usuarioActivo.email,
+        nombreSolicitador: usuarioActivo.email.split('@')[0],
         rol: usuarioActivo.rol,
         estado: 'Pendiente',
         fechaSolicitud: new Date().toISOString()
       });
+      
+      // Actualizar el estado local inmediatamente
+      const nuevaSolicitud = {
+        id: docRef.id,
+        tipo,
+        descripcion,
+        fechaSolicitada,
+        aulaNombre,
+        aulaId,
+        horaInicio,
+        horaFin,
+        solicitadoPor: usuarioActivo.email,
+        nombreSolicitador: usuarioActivo.email.split('@')[0],
+        rol: usuarioActivo.rol,
+        estado: 'Pendiente',
+        fechaSolicitud: new Date().toISOString()
+      };
+      setListaSolicitudes([nuevaSolicitud, ...listaSolicitudes]);
+      
       e.target.reset();
       mostrarMensaje('Solicitud enviada. Espera la aprobación del administrador.', 'success');
       setShowFormSolicitud(false);
     } catch (error) { 
+      console.error('Error al crear solicitud:', error);
       mostrarMensaje('Error al crear solicitud', 'error');
     }
   };
 
   const aprobarSolicitud = async (id) => {
     try {
-      await updateDoc(doc(db, "solicitudes", id), {
-        estado: 'Aprobada',
-        fechaAprobacion: new Date().toISOString()
-      });
-      mostrarMensaje('Solicitud aprobada', 'success');
+      // Obtener los datos de la solicitud
+      const solicitudDoc = await getDoc(doc(db, "solicitudes", id));
+      const solicitud = solicitudDoc.data();
+      
+      // Si es una solicitud de aula, crear una reserva
+      if (solicitud.tipo === 'Aula') {
+        const nuevaReserva = {
+          aulaNombre: solicitud.aulaNombre,
+          aulaId: solicitud.aulaId,
+          fecha: solicitud.fechaSolicitada,
+          horaInicio: solicitud.horaInicio,
+          horaFin: solicitud.horaFin,
+          descripcion: solicitud.descripcion,
+          aulaCapacidad: solicitud.aulaCapacidad || 0,
+          aulaEquipo: solicitud.aulaEquipo || '',
+          reservadoPor: solicitud.solicitadoPor,
+          nombreReservador: solicitud.nombreSolicitador,
+          rol: solicitud.rol,
+          estado: 'Confirmada',
+          fechaReserva: new Date().toISOString()
+        };
+        
+        console.log('Creando reserva desde solicitud aprobada:', nuevaReserva);
+        
+        // Crear la reserva
+        const reservaRef = await addDoc(collection(db, "reservas"), nuevaReserva);
+        
+        // Actualizar la solicitud a 'Aprobada'
+        await updateDoc(doc(db, "solicitudes", id), {
+          estado: 'Aprobada',
+          fechaAprobacion: new Date().toISOString(),
+          reservaId: reservaRef.id
+        });
+        
+        // Actualizar el estado local con el ID
+        setListaReservas([{...nuevaReserva, id: reservaRef.id}, ...listaReservas]);
+        setListaSolicitudes(listaSolicitudes.map(s => 
+          s.id === id ? {...s, estado: 'Aprobada'} : s
+        ));
+        
+        mostrarMensaje('✅ Solicitud aprobada y reserva creada', 'success');
+      }
     } catch (error) { 
-      mostrarMensaje('Error al aprobar solicitud', 'error');
+      console.error('Error al aprobar solicitud:', error);
+      mostrarMensaje('Error al aprobar solicitud: ' + error.message, 'error');
     }
   };
 
@@ -324,6 +396,9 @@ function App() {
     const fechaActual = new Date().toISOString().split('T')[0];
     const esHoy = fecha === fechaActual;
     
+    console.log('Generando horarios para aula:', aula, 'fecha:', fecha);
+    console.log('Solicitudes disponibles:', listaSolicitudes.filter(s => s.estado === 'Pendiente'));
+    
     horas.forEach((hora) => {
       const horaInicio = `${String(hora).padStart(2, '0')}:00`;
       const horaSiguiente = hora + 1;
@@ -336,6 +411,18 @@ function App() {
         r.horaInicio === horaInicio
       );
       
+      // Buscar si hay solicitud pendiente en este horario
+      const solicitud = listaSolicitudes.find(s =>
+        s.aulaId === aula &&
+        s.fechaSolicitada === fecha &&
+        s.horaInicio === horaInicio &&
+        s.estado === 'Pendiente'
+      );
+      
+      if (solicitud) {
+        console.log(`✅ Encontrada solicitud para ${horaInicio}:`, solicitud);
+      }
+      
       // Verificar si el horario ya pasó
       const horaPasada = esHoy && hora <= horaActual;
       
@@ -344,6 +431,8 @@ function App() {
         horaFin,
         ocupado: !!reserva,
         reserva: reserva || null,
+        conSolicitud: !!solicitud,
+        solicitud: solicitud || null,
         pasado: horaPasada
       });
     });
@@ -404,14 +493,7 @@ function App() {
               📍 Aulas Reservadas
             </button>
 
-            {permisos.verReservas && (
-              <button 
-                className={`menu-btn ${vistaActual === 'reservas' ? 'activo' : ''}`} 
-                onClick={() => setVistaActual('reservas')}
-              >
-                📅 Mis Reservas
-              </button>
-            )}
+
 
             <button 
               className={`menu-btn ${vistaActual === 'aulasPúblicas' ? 'activo' : ''}`} 
@@ -738,89 +820,7 @@ function App() {
               </div>
             )}
 
-            {/* ============ VISTA RESERVAS (MAESTRO) ============ */}
-            {permisos.verReservas && !permisos.solicitarEquipos && vistaActual === 'reservas' && (
-              <div className="seccion-blanca">
-                <div className="section-header">
-                  <h2>Mis Reservas</h2>
-                  <button className="btn-primary" onClick={() => setShowFormReserva(!showFormReserva)}>
-                    {showFormReserva ? '❌ Cancelar' : '➕ Nueva Reserva'}
-                  </button>
-                </div>
 
-                {showFormReserva && (
-                  <form onSubmit={guardarReserva} className="form-grid-2">
-                    <select name="aula" className="input-formal" required>
-                      <option value="">Selecciona aula</option>
-                      {listaAulas.filter(a => a.estado === 'Disponible').map(a => (
-                        <option key={a.id} value={a.id}>
-                          {a.nombre} ({a.capacidad} personas - {a.equipoDisponible})
-                        </option>
-                      ))}
-                    </select>
-                    <input name="fecha" type="date" className="input-formal" required />
-                    <input name="horaInicio" type="time" className="input-formal" placeholder="Hora inicio" required />
-                    <input name="horaFin" type="time" className="input-formal" placeholder="Hora fin" required />
-                    <textarea 
-                      name="descripcion" 
-                      className="input-formal" 
-                      placeholder="Descripción de la clase o actividad..." 
-                      required 
-                      style={{gridColumn: 'span 2'}}
-                      rows="4"
-                    ></textarea>
-                    <button type="submit" className="btn-primary" style={{gridColumn: 'span 2'}}>Confirmar Reserva</button>
-                  </form>
-                )}
-
-                <div className="table-container">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Aula</th>
-                        <th>Fecha</th>
-                        <th>Horario</th>
-                        <th>Descripción</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {listaReservas.filter(r => r.reservadoPor === usuarioActivo.email).length === 0 ? (
-                        <tr><td colSpan="6" style={{textAlign: 'center', padding: '20px'}}>No tienes reservas activas</td></tr>
-                      ) : (
-                        listaReservas.filter(r => r.reservadoPor === usuarioActivo.email).map((res) => (
-                          <tr key={res.id}>
-                            <td>
-                              <div style={{fontWeight: 'bold'}}>{res.aulaNombre}</div>
-                              <div style={{fontSize: '12px', color: '#94a3b8'}}>Cap: {res.aulaCapacidad} | {res.aulaEquipo}</div>
-                            </td>
-                            <td style={{fontWeight: '500'}}>{new Date(res.fecha).toLocaleDateString('es-ES')}</td>
-                            <td style={{fontWeight: '500'}}>{res.horaInicio} - {res.horaFin}</td>
-                            <td style={{fontSize: '13px', color: '#475569', maxWidth: '250px'}}>
-                              {res.descripcion}
-                            </td>
-                            <td>
-                              <span className={`badge ${res.estado === 'Confirmada' ? 'badge-success' : 'badge-warning'}`}>
-                                {res.estado}
-                              </span>
-                            </td>
-                            <td>
-                              <button 
-                                className="btn-small btn-danger" 
-                                onClick={() => cancelarReserva(res.id)}
-                              >
-                                ❌ Cancelar
-                              </button>
-                            </td>
-                          </tr>
-                        ))
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
 
             {/* ============ VISTA SOLICITUDES (ALUMNO) ============ */}
             {permisos.solicitarEquipos && vistaActual === 'solicitudes' && (
@@ -1009,8 +1009,8 @@ function App() {
                         <button
                           key={idx}
                           onClick={() => {
-                            // No permitir click en horarios pasados
-                            if (horario.pasado) return;
+                            // No permitir click en horarios pasados o con solicitud
+                            if (horario.pasado || horario.conSolicitud) return;
                             
                             if (horario.ocupado) {
                               setReservaDetalle(horario.reserva);
@@ -1029,27 +1029,27 @@ function App() {
                               }
                             }
                           }}
-                          disabled={horario.pasado}
+                          disabled={horario.pasado || horario.conSolicitud}
                           className={`bloque-horario ${horario.ocupado ? 'ocupado' : 'disponible'}`}
                           style={{
                             padding: '15px',
                             borderRadius: '8px',
                             border: horarioSeleccionado?.horaInicio === horario.horaInicio ? '3px solid #2563eb' : 'none',
-                            cursor: horario.pasado ? 'not-allowed' : 'pointer',
-                            backgroundColor: horario.pasado ? '#f1f5f9' : (horario.ocupado ? '#fee2e2' : (horarioSeleccionado?.horaInicio === horario.horaInicio ? '#dbeafe' : '#dcfce7')),
-                            borderLeft: `5px solid ${horario.pasado ? '#cbd5e1' : (horario.ocupado ? '#dc2626' : (horarioSeleccionado?.horaInicio === horario.horaInicio ? '#2563eb' : '#16a34a'))}`,
+                            cursor: horario.pasado || horario.conSolicitud ? 'not-allowed' : 'pointer',
+                            backgroundColor: horario.pasado ? '#f1f5f9' : (horario.conSolicitud ? '#fef3c7' : (horario.ocupado ? '#fee2e2' : (horarioSeleccionado?.horaInicio === horario.horaInicio ? '#dbeafe' : '#dcfce7'))),
+                            borderLeft: `5px solid ${horario.pasado ? '#cbd5e1' : (horario.conSolicitud ? '#ea580c' : (horario.ocupado ? '#dc2626' : (horarioSeleccionado?.horaInicio === horario.horaInicio ? '#2563eb' : '#16a34a')))}`,
                             textAlign: 'left',
                             transition: 'all 0.2s',
                             opacity: horario.pasado ? 0.6 : 1
                           }}
                         >
-                          <div style={{fontWeight: '600', color: horario.pasado ? '#94a3b8' : '#1e293b'}}>
+                          <div style={{fontWeight: '600', color: horario.pasado ? '#94a3b8' : (horario.conSolicitud ? '#92400e' : '#1e293b')}}>
                             {horario.horaInicio} - {horario.horaFin}
                           </div>
-                          <div style={{fontSize: '12px', marginTop: '5px', color: horario.pasado ? '#64748b' : (horario.ocupado ? '#991b1b' : '#166534'), fontWeight: '500'}}>
-                            {horario.pasado ? '⏰ PASADO' : (horario.ocupado ? '❌ OCUPADO' : (horarioSeleccionado?.horaInicio === horario.horaInicio ? '✅ SELECCIONADO' : '✅ Disponible'))}
+                          <div style={{fontSize: '12px', marginTop: '5px', color: horario.pasado ? '#64748b' : (horario.conSolicitud ? '#b45309' : (horario.ocupado ? '#991b1b' : '#166534')), fontWeight: '500'}}>
+                            {horario.pasado ? '⏰ PASADO' : (horario.conSolicitud ? '⏳ EN SOLICITUD' : (horario.ocupado ? '❌ OCUPADO' : (horarioSeleccionado?.horaInicio === horario.horaInicio ? '✅ SELECCIONADO' : '✅ Disponible')))}
                           </div>
-                          {horario.ocupado && !horario.pasado && (
+                          {horario.ocupado && !horario.pasado && !horario.conSolicitud && (
                             <div style={{fontSize: '11px', marginTop: '8px', color: '#7f1d1d', backgroundColor: 'rgba(220, 38, 38, 0.1)', padding: '8px', borderRadius: '4px'}}>
                               Reservado por: <strong>{horario.reserva?.nombreReservador}</strong>
                               <br/>
@@ -1146,10 +1146,9 @@ function App() {
                         </div>
 
                         <form 
-                          onSubmit={(e) => {
+                          onSubmit={async (e) => {
                             e.preventDefault();
-                            const formData = new FormData(e.target);
-                            crearSolicitud(e);
+                            await crearSolicitud(e);
                             setHorarioSeleccionado(null);
                             setShowSolicitudDesdeAula(false);
                           }}
@@ -1160,6 +1159,10 @@ function App() {
                         >
                           <input type="hidden" name="tipo" value="Aula" />
                           <input type="hidden" name="fechaSolicitada" value={fechaSeleccionada} />
+                          <input type="hidden" name="aulaNombre" value={aulaActual.nombre} />
+                          <input type="hidden" name="aulaId" value={aulaActual.id} />
+                          <input type="hidden" name="horaInicio" value={horarioSeleccionado.horaInicio} />
+                          <input type="hidden" name="horaFin" value={horarioSeleccionado.horaFin} />
                           
                           <textarea
                             name="descripcion"
