@@ -503,6 +503,9 @@ select.input-formal {
 .topbar-info {
   font-size: 14px;
   color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .content-area {
@@ -684,6 +687,10 @@ tbody tr:hover {
 
 tbody tr.row-highlight {
   background-color: #fef3c7;
+}
+
+tbody tr.row-danger {
+  background-color: #fee2e2;
 }
 
 tbody tr:last-child td {

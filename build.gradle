@@ -11,6 +11,24 @@ repositories {
 
 dependencies {
     implementation 'com.google.firebase:firebase-admin:9.2.0'
+    implementation 'org.slf4j:slf4j-api:2.0.7'
+    implementation 'org.slf4j:slf4j-simple:2.0.7'
+    implementation 'io.grpc:grpc-netty-shaded:1.56.0'
+}
+
+jar {
+    duplicatesStrategy = 'exclude'
+    manifest {
+        attributes 'Main-Class': 'com.labreserve.MainApp'
+    }
+    from {
+        configurations.runtimeClasspath.collect { f -> 
+            f.isDirectory() ? f : zipTree(f)
+        }
+    }
+    exclude 'META-INF/*.SF'
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
 }
 
 test {

@@ -45,3 +45,12 @@ bin/
 # Firebase local config (NO subir a GitHub)
 src/main/resources/firebase.properties
 .env
+
+# Ignorar credenciales de Firebase
+serviceAccountKey.json
+
+# Ignorar dependencias de Node
+node_modules/
+
+# Ignorar caché de Vite
+.vite/
