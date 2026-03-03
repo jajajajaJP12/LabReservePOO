@@ -1,3 +1,4 @@
+  import translations from './translations';
   import { useState, useEffect } from 'react';
   import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
   import { doc, setDoc, getDoc, collection, addDoc, onSnapshot, query, orderBy, updateDoc, deleteDoc, getDocs, where } from 'firebase/firestore';
@@ -48,7 +49,10 @@
     const [mensaje, setMensaje] = useState('');
     const [tipoMensaje, setTipoMensaje] = useState('info');
     const [esRegistro, setEsRegistro] = useState(false);
+    const [cargando, setCargando] = useState(false);
     const [usuarioActivo, setUsuarioActivo] = useState(null);
+    const [lang, setLang] = useState('es');
+    const t = translations[lang];
 
     // --- ESTADOS DE NAVEGACIÓN ---
     const [vistaActual, setVistaActual] = useState('inicio');
@@ -80,6 +84,35 @@
     const [reservaDetalle, setReservaDetalle] = useState(null);
     const [showSolicitudDesdeAula, setShowSolicitudDesdeAula] = useState(false);
     const [horarioSeleccionado, setHorarioSeleccionado] = useState(null);
+
+    // Traduccion de idioma - Funciones globales
+    const traducirEstado = (estado) => {
+      const map = {
+        'Aprobada': t.status.approved, 'Rechazada': t.status.rejected,
+        'Pendiente': t.status.pending, 'Confirmada': t.status.confirmed,
+        'Disponible': t.status.available, 'Mantenimiento': t.status.maintenance,
+        'Devuelto': t.status.returned, 'Sin Stock': t.status.noStock, 'Cancelada': t.status.cancelled,
+      };
+      return map[estado] || estado;
+    };
+
+    const traducirRol = (rol) => {
+      const map = { admin: t.roles.admin, maestro: t.roles.maestro, alumno: t.roles.alumno };
+      return map[rol?.toLowerCase()] || rol;
+    };
+
+    const traducirEquipo = (equipo) => {
+      const map = {
+        'Gafas RV': t.classrooms.vrGlasses,
+        'Cámaras': t.classrooms.cameras,
+        'Laptops': t.classrooms.laptops,
+        'Proyector': t.classrooms.projector,
+        'Pantalla interactiva': t.classrooms.interactiveScreen,
+        'Múltiple': t.classrooms.multiple,
+        'Sin equipo': t.classrooms.noEquip,
+      };
+      return map[equipo] || equipo;
+    };
 
     // --- EFECTO: Cargar datos en tiempo real ---
     useEffect(() => {
@@ -176,7 +209,21 @@
     // --- NUEVA LÓGICA DE REGISTRO SEGURO ---
     const manejarRegistro = async (e) => {
       e.preventDefault();
-      setMensaje('Creando cuenta y verificando permisos...');
+      
+      // Validar que los campos no estén vacíos
+      if (!email.trim() || !password.trim()) {
+        mostrarMensaje('Por favor completa todos los campos', 'error');
+        return;
+      }
+      
+      // Validar que la contraseña tenga al menos 6 caracteres
+      if (password.length < 6) {
+        mostrarMensaje('La contraseña debe tener al menos 6 caracteres', 'error');
+        return;
+      }
+      
+      setCargando(true);
+      setMensaje(t.login.creatingAccount);
       setTipoMensaje('info');
       try {
         const correoNormalizado = email.toLowerCase();
@@ -200,16 +247,37 @@
         setEmail('');
         setPassword('');
         setMensaje('');
-      } catch (error) { 
-        mostrarMensaje('Error: ' + error.message, 'error');
+        setCargando(false);
+      } catch (error) {
+        setCargando(false);
+        
+        // Mensajes de error específicos según el tipo
+        if (error.code === 'auth/email-already-in-use') {
+          mostrarMensaje('Este correo ya está registrado. Intenta con otro', 'error');
+        } else if (error.code === 'auth/invalid-email') {
+          mostrarMensaje('Correo electrónico inválido', 'error');
+        } else if (error.code === 'auth/weak-password') {
+          mostrarMensaje('La contraseña es muy débil. Usa al menos 6 caracteres', 'error');
+        } else {
+          mostrarMensaje('Error al crear la cuenta. Intenta de nuevo', 'error');
+        }
       }
     };
 
     // --- FUNCIÓN RECUPERADA: INICIAR SESIÓN ---
     const manejarIngreso = async (e) => {
       e.preventDefault();
-      setMensaje('Ingresando...');
+      
+      // Validar que los campos no estén vacíos
+      if (!email.trim() || !password.trim()) {
+        mostrarMensaje('Por favor completa todos los campos', 'error');
+        return;
+      }
+      
+      setCargando(true);
+      setMensaje(t.login.loggingIn);
       setTipoMensaje('info');
+      
       try {
         const credencial = await signInWithEmailAndPassword(auth, email, password);
         const docSnap = await getDoc(doc(db, "usuarios", credencial.user.uid));
@@ -221,8 +289,24 @@
         setEmail('');
         setPassword('');
         setMensaje('');
-      } catch (error) { 
-        mostrarMensaje('Error: Credenciales incorrectas.', 'error');
+        setCargando(false);
+      } catch (error) {
+        setCargando(false);
+        
+        // Mensajes de error específicos según el tipo
+        if (error.code === 'auth/user-not-found') {
+          mostrarMensaje('Usuario no encontrado. Verifica tu correo electrónico', 'error');
+        } else if (error.code === 'auth/wrong-password') {
+          mostrarMensaje('Contraseña incorrecta. Intenta de nuevo', 'error');
+        } else if (error.code === 'auth/invalid-email') {
+          mostrarMensaje('Correo electrónico inválido', 'error');
+        } else if (error.code === 'auth/user-disabled') {
+          mostrarMensaje('Esta cuenta ha sido desactivada', 'error');
+        } else if (error.code === 'auth/too-many-requests') {
+          mostrarMensaje('Demasiados intentos fallidos. Intenta más tarde', 'error');
+        } else {
+          mostrarMensaje('Las credenciales no son correctas. Verifica tu correo y contraseña', 'error');
+        }
       }
     };
 
@@ -249,10 +333,10 @@
           });
         });
 
-        mostrarMensaje(`Rol ${rolAsignar.toUpperCase()} asignado a ${emailAsignar}`, 'success');
+        mostrarMensaje(`${t.messages.rolAssigned} ${emailAsignar}`, 'success');
         e.target.reset();
       } catch (error) {
-        mostrarMensaje('Error al asignar rol: ' + error.message, 'error');
+        mostrarMensaje(t.messages.errorRolAssign + error.message, 'error');
       }
     };
 
@@ -271,26 +355,26 @@
         // ¡NUEVO! Notificamos al usuario del cambio en su cuenta
         await crearNotificacion(
           correo,
-          '🛡️ Permisos Actualizados',
-          `Un administrador ha cambiado tu nivel de acceso a: ${nuevoRol.toUpperCase()}. Cierra sesión y vuelve a entrar para ver los cambios.`
+          'permissionsUpdated',
+          t.messages.roleChangedMsg || `${t.messages.adminChangedMsg || 'An administrator has changed'} ${t.messages.yourAccessLevelMsg || 'your access level to'} ${nuevoRol.toUpperCase()}. ${t.messages.signOutAndSignInMsg || 'Sign out and sign back in to see the changes'}.`
         );
 
-        mostrarMensaje(`Permisos de ${correo} actualizados a ${nuevoRol.toUpperCase()}`, 'success');
+        mostrarMensaje(`${t.messages.permissionsUpdated} ${correo} ${t.messages.permissionsUpdatedEnd} ${nuevoRol.toUpperCase()}`, 'success');
       } catch (error) {
-        mostrarMensaje('Error al actualizar: ' + error.message, 'error');
+        mostrarMensaje(t.messages.errorUpdate + error.message, 'error');
       }
     };
 
     // --- FUNCIÓN: ELIMINAR USUARIO DEL SISTEMA ---
     const eliminarUsuarioDB = async (userId, correo) => {
-      if (confirm(`¿Estás seguro de que deseas revocar el acceso a ${correo}?\n\nEsto borrará sus permisos de la base de datos.`)) {
+      if (confirm(`${t.messages.confirmRevokeAccess} ${correo}?\n\n${t.messages.confirmRevokeExtra}`)) {
         try {
           await deleteDoc(doc(db, "usuarios", userId));
           // Opcional: También borrar de la lista de roles asignados
           await deleteDoc(doc(db, "roles_asignados", correo)); 
-          mostrarMensaje(`Acceso revocado a ${correo}`, 'success');
+          mostrarMensaje(`${t.messages.accessRevoked} ${correo}`, 'success');
         } catch (error) {
-          mostrarMensaje('Error al eliminar: ' + error.message, 'error');
+          mostrarMensaje(t.messages.errorRevoke + error.message, 'error');
         }
       }
     };
@@ -305,11 +389,66 @@
     };
 
   // --- FUNCIONES DE NOTIFICACIONES ---
-    const crearNotificacion = async (para, titulo, descripcion) => {
+    // --- FUNCIONES AUXILIARES DE TRADUCCIÓN ---
+    const traducirNotificacion = (titulo, claveNotificacion) => {
+      // Mapeo directo de claves a traducciones
+      const notificacionesTranslations = {
+        newMaterialRequest: { es: 'Nueva Solicitud de Material', en: 'New Material Request' },
+        materialApproved: { es: 'Material Aprobado', en: 'Material Approved' },
+        materialRejected: { es: 'Material Rechazado', en: 'Material Rejected' },
+        successfulReturn: { es: 'Devolución Exitosa', en: 'Successful Return' },
+        overdueReminder: { es: '⚠️ Material Atrasado', en: '⚠️ Overdue Material' },
+        roomReservationConfirmed: { es: 'Reserva Confirmada', en: 'Reservation Confirmed' },
+        roomReservationRejected: { es: 'Reserva Rechazada', en: 'Reservation Rejected' },
+        directReservationCreated: { es: 'Reserva Directa Creada', en: 'Direct Reservation Created' },
+        newRoomRequest: { es: 'Nueva Solicitud de Aula', en: 'New Room Request' },
+        scheduleReleased: { es: 'Horario Liberado / Cancelación', en: 'Schedule Released / Cancellation' },
+        permissionsUpdated: { es: '🛡️ Permisos Actualizados', en: '🛡️ Permissions Updated' },
+      };
+      
       try {
+        // Si nos pasaron la clave directamente
+        if (claveNotificacion && notificacionesTranslations[claveNotificacion]) {
+          return notificacionesTranslations[claveNotificacion][lang] || titulo;
+        }
+        
+        // Si nos pasaron el título, buscar la clave por reverse lookup
+        if (titulo) {
+          for (const [clave, traducciones] of Object.entries(notificacionesTranslations)) {
+            if (traducciones.es === titulo || traducciones.en === titulo) {
+              return traducciones[lang] || titulo;
+            }
+          }
+        }
+      } catch (e) {
+        // Silente fail
+      }
+      
+      // Fallback: devolver el título original
+      return titulo;
+    };
+    
+    const crearNotificacion = async (para, claveNotificacion, descripcion) => {
+      const notificacionesTranslations = {
+        newMaterialRequest: { es: 'Nueva Solicitud de Material', en: 'New Material Request' },
+        materialApproved: { es: 'Material Aprobado', en: 'Material Approved' },
+        materialRejected: { es: 'Material Rechazado', en: 'Material Rejected' },
+        successfulReturn: { es: 'Devolución Exitosa', en: 'Successful Return' },
+        overdueReminder: { es: '⚠️ Material Atrasado', en: '⚠️ Overdue Material' },
+        roomReservationConfirmed: { es: 'Reserva Confirmada', en: 'Reservation Confirmed' },
+        roomReservationRejected: { es: 'Reserva Rechazada', en: 'Reservation Rejected' },
+        directReservationCreated: { es: 'Reserva Directa Creada', en: 'Direct Reservation Created' },
+        newRoomRequest: { es: 'Nueva Solicitud de Aula', en: 'New Room Request' },
+        scheduleReleased: { es: 'Horario Liberado / Cancelación', en: 'Schedule Released / Cancellation' },
+        permissionsUpdated: { es: '🛡️ Permisos Actualizados', en: '🛡️ Permissions Updated' },
+      };
+      
+      try {
+        const tituloEnEspanol = notificacionesTranslations[claveNotificacion]?.es || claveNotificacion;
         await addDoc(collection(db, "notificaciones"), {
           para,
-          titulo,
+          claveNotificacion,
+          titulo: tituloEnEspanol,
           descripcion,
           leida: false,
           fecha: new Date().toISOString()
@@ -333,7 +472,7 @@
 
     // --- FUNCIÓN PARA CANCELAR SOLICITUDES PENDIENTES PROPIAS ---
     const cancelarSolicitudPropia = async (id, coleccion, detalle) => {
-      if (confirm('¿Deseas cancelar esta solicitud?')) {
+      if (confirm(t.messages.confirmCancelRequest)) {
         try {
           await deleteDoc(doc(db, coleccion, id));
           // Le avisamos al admin que el usuario se arrepintió
@@ -342,9 +481,9 @@
             '❌ Solicitud Retirada', 
             `${usuarioActivo.email} canceló su solicitud de: ${detalle}`
           );
-          mostrarMensaje('Solicitud cancelada correctamente', 'success');
+          mostrarMensaje(t.messages.requestCancelled, 'success');
         } catch (error) { 
-          mostrarMensaje('Error al cancelar', 'error'); 
+          mostrarMensaje(t.messages.errorCancel, 'error'); 
         }
       }
     };
@@ -362,7 +501,7 @@
         const equipo = listaEquipos.find(eq => eq.id === equipoId);
 
         if (equipo.cantidad < cantidad) {
-          mostrarMensaje(`Error: Solo hay ${equipo.cantidad} unidades de ${equipo.nombre}.`, 'error');
+          mostrarMensaje(`${t.messages.insufficientStockRequest} ${equipo.cantidad} ${t.messages.units} ${equipo.nombre}.`, 'error');
           return;
         }
         
@@ -384,16 +523,16 @@
         
         await crearNotificacion(
           'admin',
-          ' Nueva Solicitud de Material',
-          `${usuarioActivo.email} solicitó ${cantidad}x ${equipo.nombre}. Motivo: ${motivo}`
+          'newMaterialRequest',
+          `${usuarioActivo.email} ${t.messages.requestedItemMsg || 'requested'} ${cantidad}x ${equipo.nombre}. ${t.messages.reasonMsg || 'Reason'}: ${motivo}`
         );
         
         e.target.reset();
-        mostrarMensaje(' Solicitud enviada al administrador.', 'success');
+        mostrarMensaje(t.messages.requestSent, 'success');
         setShowFormSolicitudMaterial(false);
       } catch (error) {
         console.error('Error al crear solicitud:', error);
-        mostrarMensaje('Error al crear solicitud de material', 'error');
+        mostrarMensaje(t.messages.errorRequest, 'error');
       }
     };
 
@@ -403,7 +542,7 @@
         const equipo = listaEquipos.find(e => e.id === solicitud.equipoId);
         
         if (equipo.cantidad < solicitud.cantidad) {
-          mostrarMensaje(`No hay suficiente stock. Disponibles: ${equipo.cantidad}`, 'error');
+          mostrarMensaje(`${t.messages.insufficientStock} ${equipo.cantidad}`, 'error');
           return;
         }
 
@@ -421,14 +560,14 @@
         
         await crearNotificacion(
           solicitud.solicitadoPor,
-          ' Material Aprobado',
-          `Tu solicitud para ${solicitud.cantidad}x ${equipo.nombre} fue aprobada.`
+          'materialApproved',
+          `${t.messages.yourRequestMsg || 'Your request'} ${solicitud.cantidad}x ${equipo.nombre} ${t.messages.wasApprovedMsg || 'was approved'}.`
         );
         
-        mostrarMensaje('Solicitud aprobada y stock restado.', 'success');
+        mostrarMensaje(t.messages.materialApproved, 'success');
       } catch (error) {
         console.error('Error al aprobar:', error);
-        mostrarMensaje('Error al aprobar solicitud', 'error');
+        mostrarMensaje(t.messages.errorApprove, 'error');
       }
     };
 
@@ -444,11 +583,11 @@
         
         await crearNotificacion(
           solicitud.solicitadoPor,
-          ' Material Rechazado',
-          `Tu solicitud para ${equipo?.nombre || 'el material'} fue rechazada.`
+          'materialRejected',
+          `${t.messages.yourRequestMsg || 'Your request'} ${t.messages.forMsg || 'for'} ${equipo?.nombre || t.messages.materialMsg || 'the material'} ${t.messages.wasRejectedMsg || 'was rejected'}.`
         );
         
-        mostrarMensaje(' Solicitud rechazada', 'warning');
+        mostrarMensaje(t.messages.requestRejected, 'warning');
       } catch (error) {
         console.error('Error al rechazar:', error);
         mostrarMensaje('Error al rechazar solicitud', 'error');
@@ -474,14 +613,14 @@
         
         await crearNotificacion(
           solicitud.solicitadoPor,
-          ' Devolución Exitosa',
-          `El admin confirmó la devolución de ${solicitud.cantidad}x ${equipo.nombre}.`
+          'successfulReturn',
+          `${t.messages.adminConfirmedMsg || 'The admin confirmed the return of'} ${solicitud.cantidad}x ${equipo.nombre}.`
         );
         
-        mostrarMensaje('Material devuelto y stock actualizado.', 'success');
+        mostrarMensaje(t.messages.returnRegistered, 'success');
       } catch (error) {
         console.error('Error en devolución:', error);
-        mostrarMensaje('Error al registrar devolución', 'error');
+        mostrarMensaje(t.messages.errorReturn, 'error');
       }
     };
     
@@ -500,20 +639,21 @@
           creada: new Date().toISOString()
         });
         e.target.reset();
-        mostrarMensaje('Aula registrada correctamente', 'success');
+        mostrarMensaje(t.messages.roomRegistered, 'success');
         setShowFormAula(false);
       } catch (error) { 
-        mostrarMensaje('Error al registrar aula: ' + error.message, 'error');
+        mostrarMensaje(t.messages.errorRegisterRoom + error.message, 'error');
       }
     };
 
     const eliminarAula = async (id) => {
-      if (confirm('¿Estás seguro de que quieres eliminar esta aula?')) {
+      
+if (confirm(t.messages.confirmDeleteRoom)) {
         try {
           await deleteDoc(doc(db, "aulas", id));
-          mostrarMensaje('Aula eliminada', 'success');
+        mostrarMensaje(t.messages.roomDeleted, 'success');
         } catch (error) { 
-          mostrarMensaje('Error al eliminar aula', 'error');
+          mostrarMensaje(t.messages.errorDeleteRoom, 'error');
         }
       }
     };
@@ -535,9 +675,9 @@
           fecha: new Date().toISOString()
         });
         e.target.reset();
-        mostrarMensaje('Equipo registrado correctamente', 'success');
+        mostrarMensaje(t.messages.equipRegistered, 'success');
       } catch (error) { 
-        mostrarMensaje('Error al registrar equipo', 'error');
+        mostrarMensaje(t.messages.errorRegisterEquip, 'error');
       }
     };
 
@@ -568,15 +708,15 @@
           fechaReserva: new Date().toISOString()
         });
         e.target.reset();
-        mostrarMensaje('Aula reservada correctamente', 'success');
+        mostrarMensaje(t.messages.reservationMade, 'success');
         setShowFormReserva(false);
       } catch (error) { 
-        mostrarMensaje('Error al reservar aula', 'error');
+        mostrarMensaje(t.messages.errorReservation, 'error');
       }
     };
 
     const cancelarReserva = async (id) => {
-        if (confirm('¿Estás seguro de cancelar esta reserva? El horario quedará liberado.')) {
+        if (confirm(t.messages.confirmCancelReservation)) {
           try {
             const reserva = listaReservas.find(r => r.id === id);
             await deleteDoc(doc(db, "reservas", id));
@@ -585,26 +725,26 @@
             const destinatario = usuarioActivo.email === reserva.reservadoPor ? 'admin' : reserva.reservadoPor;
             await crearNotificacion(
               destinatario,
-              ' Horario Liberado / Cancelación',
-              `Se canceló la reserva de ${reserva.aulaNombre} el ${reserva.fecha} (${reserva.horaInicio} - ${reserva.horaFin}).`
+              'scheduleReleased',
+              `${t.messages.reservationCancelledMsg || 'The reservation for'} ${reserva.aulaNombre} ${t.messages.onMsg || 'on'} ${reserva.fecha} (${reserva.horaInicio} - ${reserva.horaFin}) ${t.messages.wasCancelledMsg || 'was cancelled'}.`
             );
-            mostrarMensaje('Reserva cancelada y horario liberado', 'success');
+            mostrarMensaje(t.messages.reservationCancelled, 'success');
           } catch (error) { 
-            mostrarMensaje('Error al cancelar reserva', 'error');
+            mostrarMensaje(t.messages.errorCancelReservation, 'error');
           }
         }
       };
 
     // --- FUNCIONES DE INVENTARIO ---
     const eliminarEquipo = async (equipoId) => {
-      if (!window.confirm('¿Estás seguro que deseas eliminar este equipo del inventario?')) return;
+      if (!window.confirm(t.messages.confirmDeleteEquip)) return;
       try {
         await deleteDoc(doc(db, "equipos", equipoId));
         setListaEquipos(listaEquipos.filter(eq => eq.id !== equipoId));
-        mostrarMensaje('Equipo eliminado correctamente', 'success');
+        mostrarMensaje(t.messages.equipDeleted, 'success');
       } catch (error) {
         console.error('Error al eliminar equipo:', error);
-        mostrarMensaje('Error al eliminar equipo', 'error');
+        mostrarMensaje(t.messages.errorDeleteEquip, 'error');
       }
     };
 
@@ -616,10 +756,10 @@
         setListaEquipos(listaEquipos.map(eq =>
           eq.id === equipoId ? {...eq, cantidad: nuevaCantidad} : eq
         ));
-        mostrarMensaje('Cantidad actualizada', 'success');
+        mostrarMensaje(t.messages.qtyUpdated, 'success');
       } catch (error) {
         console.error('Error al actualizar cantidad:', error);
-        mostrarMensaje('Error al actualizar cantidad', 'error');
+        mostrarMensaje(t.messages.errorUpdateQty, 'error');
       }
     };
 
@@ -632,7 +772,7 @@
         );
         
         if (atrasados.length === 0) {
-          mostrarMensaje('No hay materiales atrasados', 'info');
+          mostrarMensaje(t.messages.noOverdue, 'info');
           return;
         }
 
@@ -641,14 +781,14 @@
             // Usamos tu función crearNotificacion para que use el formato correcto
             await crearNotificacion(
               material.solicitadoPor,
-              '⚠️ Material Atrasado',
-              `Atención: No has devuelto el material "${material.equipoNombre}" (x${material.cantidad}). Su préstamo venció el ${new Date(material.fechaDevolucionEsperada).toLocaleString('es-ES', {month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'})}.`
+              t.notifications.overdueReminder,
+              `${t.messages.attentionMsg || 'Attention'}: ${t.messages.notReturnedMsg || "You haven't returned the material"} "${material.equipoNombre}" (x${material.cantidad}). ${t.messages.loanExpiredMsg || 'Your loan expired on'} ${new Date(material.fechaDevolucionEsperada).toLocaleString('es-ES', {month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'})}.`
             );
           }
-          mostrarMensaje(`Se enviaron ${atrasados.length} recordatorios a los alumnos morosos`, 'success');
+          mostrarMensaje(`${t.messages.remindersSent} ${atrasados.length} ${t.messages.remindersEnd}`, 'success');
         } catch (error) {
           console.error('Error al enviar notificaciones:', error);
-          mostrarMensaje('Error al enviar notificaciones', 'error');
+          mostrarMensaje(t.messages.errorReminders, 'error');
         }
       };
 
@@ -674,8 +814,8 @@
               reservadoPor: usuarioActivo.email, nombreReservador: usuarioActivo.email.split('@')[0],
               rol: usuarioActivo.rol, estado: 'Confirmada', fechaReserva: new Date().toISOString()
             });
-            await crearNotificacion('admin', ' Reserva Directa Creada', `${usuarioActivo.email} reservó el aula ${aulaNombre} para el ${fechaSolicitada} (${horaInicio} - ${horaFin}).`);
-            mostrarMensaje('Reserva confirmada exitosamente.', 'success');
+            await crearNotificacion('admin', 'directReservationCreated', `${usuarioActivo.email} ${t.messages.reservedMsg || 'reserved'} ${t.messages.roomMsg || 'the room'} ${aulaNombre} ${t.messages.forMsg || 'for'} ${fechaSolicitada} (${horaInicio} - ${horaFin}).`);
+            mostrarMensaje(t.messages.directReserveCreated, 'success');
           } 
           // Si es Alumno -> Crea Solicitud Pendiente
           else {
@@ -684,15 +824,15 @@
               solicitadoPor: usuarioActivo.email, nombreSolicitador: usuarioActivo.email.split('@')[0],
               rol: usuarioActivo.rol, estado: 'Pendiente', fechaSolicitud: new Date().toISOString()
             });
-            await crearNotificacion('admin', '  Nueva Solicitud de Aula', `${usuarioActivo.email} pide el aula ${aulaNombre} para el ${fechaSolicitada} (${horaInicio} - ${horaFin}).`);
-            mostrarMensaje('Solicitud enviada al administrador.', 'success');
+            await crearNotificacion('admin', 'newRoomRequest', `${usuarioActivo.email} ${t.messages.asksForMsg || 'asks for'} ${t.messages.roomMsg || 'the room'} ${aulaNombre} ${t.messages.forMsg || 'for'} ${fechaSolicitada} (${horaInicio} - ${horaFin}).`);
+            mostrarMensaje(t.messages.requestSent, 'success');
           }
           
           e.target.reset();
           setShowSolicitudDesdeAula(false);
           setHorarioSeleccionado(null);
         } catch (error) { 
-          mostrarMensaje('Error al procesar la petición', 'error');
+          mostrarMensaje(t.messages.errorRequest, 'error');
         }
       };
 
@@ -729,8 +869,8 @@
           // NOTIFICACIÓN AL USUARIO
           await crearNotificacion(
             solicitud.solicitadoPor,
-            ' Reserva Confirmada',
-            `¡Listo! Tu reserva para el aula ${solicitud.aulaNombre} el día ${solicitud.fechaSolicitada} (${solicitud.horaInicio} - ${solicitud.horaFin}) ha sido aprobada.`
+            'roomReservationConfirmed',
+            `${t.messages.readyMsg || 'Ready'} ${t.messages.yourReservationMsg || 'Your reservation'} ${t.messages.forMsg || 'for'} ${t.messages.roomMsg || 'the room'} ${solicitud.aulaNombre} ${t.messages.onMsg || 'on'} ${solicitud.fechaSolicitada} (${solicitud.horaInicio} - ${solicitud.horaFin}) ${t.messages.hasBeenApprovedMsg || 'has been approved'}​.`
           );
           
           setListaReservas([{...nuevaReserva, id: reservaRef.id}, ...listaReservas]);
@@ -738,11 +878,11 @@
             s.id === id ? {...s, estado: 'Aprobada'} : s
           ));
           
-          mostrarMensaje('Solicitud aprobada y reserva creada', 'success');
+          mostrarMensaje(t.messages.requestApproved, 'success');
         }
       } catch (error) { 
         console.error('Error al aprobar solicitud:', error);
-        mostrarMensaje('Error al aprobar solicitud: ' + error.message, 'error');
+        mostrarMensaje(t.messages.errorApprove + error.message, 'error');
       }
     };
 
@@ -759,15 +899,15 @@
         // NOTIFICACIÓN AL USUARIO
         await crearNotificacion(
           solicitud.solicitadoPor,
-          ' Reserva Rechazada',
-          `Lo sentimos, tu solicitud para el aula ${solicitud.aulaNombre} el ${solicitud.fechaSolicitada} fue rechazada por el administrador.`
+          'roomReservationRejected',
+          `${t.messages.sorryMsg || 'Sorry'}, ${t.messages.yourRequestMsg || 'your request'} ${t.messages.forMsg || 'for'} ${t.messages.roomMsg || 'the room'} ${solicitud.aulaNombre} ${t.messages.onMsg || 'on'} ${solicitud.fechaSolicitada} ${t.messages.wasRejectedMsg || 'was rejected'} ${t.messages.byAdminMsg || 'by the administrator'}.`
         );
         
         setListaSolicitudes(listaSolicitudes.map(s => 
           s.id === id ? {...s, estado: 'Rechazada'} : se
         ));
         
-        mostrarMensaje('Solicitud rechazada', 'success');
+        mostrarMensaje(t.messages.requestRejected, 'success');
       } catch (error) { 
         console.error('Error al rechazar solicitud:', error);
         mostrarMensaje('Error al rechazar solicitud', 'error');
@@ -865,24 +1005,24 @@
             <div className="sidebar-header">
               <h2> LabReserve </h2>
               <div className={`role-badge ${rolBadgeClass}`}>
-                {usuarioActivo.rol.toUpperCase()}
+                {t.roles[usuarioActivo.rol]}
               </div>
             </div>
             <nav className="sidebar-menu">
-              <button className={`menu-btn ${vistaActual === 'inicio' ? 'activo' : ''}`} onClick={() => setVistaActual('inicio')}>Inicio</button>
-              {usuarioActivo.rol === 'admin' && (<button className={`menu-btn ${vistaActual === 'roles' ? 'activo' : ''}`} onClick={() => setVistaActual('roles')}>Gestión de Roles</button>)}
-              {permisos.gestionAulas && (<button className={`menu-btn ${vistaActual === 'aulas' ? 'activo' : ''}`} onClick={() => setVistaActual('aulas')}>Aulas</button>)}
-              {permisos.gestionEquipos && (<button className={`menu-btn ${vistaActual === 'equipos' ? 'activo' : ''}`} onClick={() => setVistaActual('equipos')}>Inventario</button>)}
-              <button className={`menu-btn ${vistaActual === 'aulasReservadas' ? 'activo' : ''}`} onClick={() => setVistaActual('aulasReservadas')}>Aulas Reservadas</button>
-              <button className={`menu-btn ${vistaActual === 'aulasPúblicas' ? 'activo' : ''}`} onClick={() => setVistaActual('aulasPúblicas')}>Aulas Disponibles</button>
-              {permisos.solicitarEquipos && (<button className={`menu-btn ${vistaActual === 'solicitudes' ? 'activo' : ''}`} onClick={() => setVistaActual('solicitudes')}>Mis Solicitudes</button>)}
-              {(permisos.verInventario || permisos.solicitarEquipos) && (<button className={`menu-btn ${vistaActual === 'inventario' ? 'activo' : ''}`} onClick={() => setVistaActual('inventario')}>Inventario</button>)}
-              {permisos.verSolicitudes && (<button className={`menu-btn ${vistaActual === 'solicitudesAdmin' ? 'activo' : ''}`} onClick={() => setVistaActual('solicitudesAdmin')}>Solicitudes ({listaSolicitudes.filter(s => s.estado === 'Pendiente').length})</button>)}
-              {permisos.verReservas && (<button className={`menu-btn ${vistaActual === 'reservasAdmin' ? 'activo' : ''}`} onClick={() => setVistaActual('reservasAdmin')}>Todas las Reservas</button>)}
+              <button className={`menu-btn ${vistaActual === 'inicio' ? 'activo' : ''}`} onClick={() => setVistaActual('inicio')}>{t.nav.home}</button>
+              {usuarioActivo.rol === 'admin' && (<button className={`menu-btn ${vistaActual === 'roles' ? 'activo' : ''}`} onClick={() => setVistaActual('roles')}>{t.nav.roles}</button>)}
+              {permisos.gestionAulas && (<button className={`menu-btn ${vistaActual === 'aulas' ? 'activo' : ''}`} onClick={() => setVistaActual('aulas')}>{t.nav.classrooms}</button>)}
+              {permisos.gestionEquipos && (<button className={`menu-btn ${vistaActual === 'equipos' ? 'activo' : ''}`} onClick={() => setVistaActual('equipos')}>{t.nav.inventory}</button>)}
+              <button className={`menu-btn ${vistaActual === 'aulasReservadas' ? 'activo' : ''}`} onClick={() => setVistaActual('aulasReservadas')}>{t.nav.reservedRooms}</button>
+              <button className={`menu-btn ${vistaActual === 'aulasPúblicas' ? 'activo' : ''}`} onClick={() => setVistaActual('aulasPúblicas')}>{t.nav.availableRooms}</button>
+              {permisos.solicitarEquipos && (<button className={`menu-btn ${vistaActual === 'solicitudes' ? 'activo' : ''}`} onClick={() => setVistaActual('solicitudes')}>{t.nav.myRequests}</button>)}
+              {(permisos.verInventario || permisos.solicitarEquipos) && (<button className={`menu-btn ${vistaActual === 'inventario' ? 'activo' : ''}`} onClick={() => setVistaActual('inventario')}>{t.nav.inventoryView}</button>)}
+              {permisos.verSolicitudes && (<button className={`menu-btn ${vistaActual === 'solicitudesAdmin' ? 'activo' : ''}`} onClick={() => setVistaActual('solicitudesAdmin')}>{t.nav.requests} ({listaSolicitudes.filter(s => s.estado === 'Pendiente').length})</button>)}
+              {permisos.verReservas && (<button className={`menu-btn ${vistaActual === 'reservasAdmin' ? 'activo' : ''}`} onClick={() => setVistaActual('reservasAdmin')}>{t.nav.allReservations}</button>)}
 
               <div className="sidebar-footer">
                 <p>{usuarioActivo.email}</p>
-                <button className="btn-logout" onClick={cerrarSesion}>Cerrar Sesión</button>
+                <button className="btn-logout" onClick={cerrarSesion}>{t.nav.logout}</button>
               </div>
             </nav>
           </aside>
@@ -890,10 +1030,28 @@
           <main className="main-content">
             <header className="topbar">
               <div className="topbar-title">
-                <h1 id="page-title">Inicio</h1>
+                <h1 id="page-title">{t.nav.home}</h1>
               </div>
               <div className="topbar-info">
-                <span>Sistema de Reservas del Laboratorio</span>
+                <button
+                  onClick={() => setLang(lang === 'es' ? 'en' : 'es')}
+                  title={t.topbar.langLabel}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '6px',
+                    padding: '6px 14px',
+                    background: 'transparent',
+                    border: '1.5px solid #e2e8f0',
+                    borderRadius: '6px',
+                    fontSize: '13px', fontWeight: '700',
+                    color: '#1e293b', cursor: 'pointer',
+                    transition: 'all 0.2s', letterSpacing: '0.5px',
+                    fontFamily: 'inherit',
+                  }}
+>
+                  <span style={{ fontSize: '16px' }}>{lang === 'es' ? '🇺🇸' : '🇲🇽'}</span>
+                  <span>{t.topbar.langButton}</span>
+                </button>
+                <span>{t.topbar.systemName}</span>
                 {usuarioActivo && (
                   <div style={{position: 'relative'}}>
                     <button 
@@ -928,7 +1086,7 @@
                         maxHeight: '500px', display: 'flex', flexDirection: 'column'
                       }}>
                         <div style={{padding: '15px 20px', backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                          <h3 style={{margin: 0, fontSize: '16px', color: '#1e293b'}}>Mis Notificaciones</h3>
+                          <h3 style={{margin: 0, fontSize: '16px', color: '#1e293b'}}>{t.notifications.title}</h3>
                           <button onClick={() => setShowModalNotificaciones(false)} style={{background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontWeight: 'bold'}}>✕</button>
                         </div>
                         
@@ -936,7 +1094,7 @@
                           {misNotificaciones.length === 0 ? (
                             <div style={{textAlign: 'center', padding: '40px 20px', color: '#94a3b8'}}>
                               <p style={{fontSize: '30px', margin: '0 0 10px 0'}}>📭</p>
-                              <p style={{margin: 0}}>Bandeja vacía</p>
+                              <p style={{margin: 0}}>{t.notifications.empty}</p>
                             </div>
                           ) : (
                             misNotificaciones.map(notif => (
@@ -992,8 +1150,8 @@
               }}>
                 <div style={{fontSize: '40px'}}>⚠️</div>
                 <div>
-                  <h3 style={{margin: '0 0 5px 0', fontSize: '18px', color: '#7f1d1d', fontWeight: 'bold'}}>¡ATENCIÓN! Tienes material vencido</h3>
-                  <p style={{margin: '0 0 10px 0', fontSize: '14px'}}>Debes devolver el siguiente material al administrador inmediatamente:</p>
+                  <h3 style={{margin: '0 0 5px 0', fontSize: '18px', color: '#7f1d1d', fontWeight: 'bold'}}>{t.overdueAlert.title}</h3>
+                  <p style={{margin: '0 0 10px 0', fontSize: '14px'}}>{t.overdueAlert.subtitle}</p>
                   <ul style={{margin: 0, paddingLeft: '20px', fontSize: '13px'}}>
                     {materialesAtrasadosMios.map(mat => (
                       <li key={mat.id}>
@@ -1129,7 +1287,7 @@
 
                     <div style={{ position: 'relative', zIndex: 1 }}>
                       <p style={{ margin: '0 0 8px 0', fontSize: '11px', fontWeight: '600', letterSpacing: '2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)', fontFamily: '"DM Sans", sans-serif' }}>
-                        Panel de Control
+                      {t.home.panelLabel}
                       </p>
                       <h2 style={{
                         margin: '0 0 10px 0',
@@ -1140,16 +1298,16 @@
                         letterSpacing: '0.2px',
                         lineHeight: '1.25'
                       }}>
-                        Bienvenido, <span style={{ fontStyle: 'italic' }}>{usuarioActivo.email.split('@')[0]}</span>
+                        {t.home.welcome} <span style={{ fontStyle: 'italic' }}>{usuarioActivo.email.split('@')[0]}</span>
                       </h2>
                       <p style={{ margin: 0, color: 'rgba(255,255,255,0.5)', fontSize: '13.5px', fontFamily: '"DM Sans", sans-serif' }}>
-                        Sistema de Gestión de Laboratorio — LabReserve
+                        {t.home.systemName}
                       </p>
                     </div>
 
                     <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px' }}>
                       <span style={{ fontSize: '10px', fontWeight: '600', letterSpacing: '1.5px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', fontFamily: '"DM Sans", sans-serif' }}>
-                        Nivel de Acceso
+                        {t.home.accessLevel}
                       </span>
                       <div style={{
                         background: 'rgba(255,255,255,0.07)',
@@ -1158,12 +1316,12 @@
                         padding: '8px 20px',
                       }}>
                         <span style={{ color: '#ffffff', fontSize: '13px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', fontFamily: '"DM Sans", sans-serif' }}>
-                          {usuarioActivo.rol}
+                          {t.roles[usuarioActivo.rol]}
                         </span>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
                         <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#4ade80' }} />
-                        <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', fontFamily: '"DM Sans", sans-serif' }}>Sistema en línea</span>
+                        <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', fontFamily: '"DM Sans", sans-serif' }}>{t.home.systemOnline}</span>
                       </div>
                     </div>
                   </div>
@@ -1175,7 +1333,7 @@
                     <div className="lab-stat-card" style={{ '--line-color': '#2563eb', animation: 'slideUp 0.4s ease 0.1s forwards', opacity: 0 }}>
                       <div className="accent-line" />
                       <div style={{ paddingLeft: '4px' }}>
-                        <p className="lab-section-label">Aulas Registradas</p>
+                        <p className="lab-section-label">{t.home.registeredRooms}</p>
                         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '18px' }}>
                           <span style={{ fontSize: '40px', fontWeight: '300', color: '#0f172a', lineHeight: 1, fontFamily: '"DM Serif Display", serif' }}>
                             {listaAulas.length}
@@ -1187,7 +1345,7 @@
                         <div style={{ height: '2px', background: '#f1f5f9', borderRadius: '1px' }}>
                           <div style={{ height: '100%', background: '#2563eb', borderRadius: '1px', width: `${Math.min((listaAulas.length / 10) * 100, 100)}%`, animation: 'expandBar 1s ease 0.4s both' }} />
                         </div>
-                        <p style={{ margin: '8px 0 0', fontSize: '12px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>espacios disponibles</p>
+                        <p style={{ margin: '8px 0 0', fontSize: '12px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.home.spaces}</p>
                       </div>
                     </div>
 
@@ -1195,7 +1353,7 @@
                     <div className="lab-stat-card" style={{ '--line-color': '#059669', animation: 'slideUp 0.4s ease 0.18s forwards', opacity: 0 }}>
                       <div className="accent-line" />
                       <div style={{ paddingLeft: '4px' }}>
-                        <p className="lab-section-label">Unidades en Stock</p>
+                        <p className="lab-section-label">{t.home.stockUnits}</p>
                         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '18px' }}>
                           <span style={{ fontSize: '40px', fontWeight: '300', color: '#0f172a', lineHeight: 1, fontFamily: '"DM Serif Display", serif' }}>
                             {listaEquipos.reduce((t, eq) => t + (eq.cantidad || 0), 0)}
@@ -1207,7 +1365,7 @@
                         <div style={{ height: '2px', background: '#f1f5f9', borderRadius: '1px' }}>
                           <div style={{ height: '100%', background: '#059669', borderRadius: '1px', width: '72%', animation: 'expandBar 1s ease 0.5s both' }} />
                         </div>
-                        <p style={{ margin: '8px 0 0', fontSize: '12px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>equipos y materiales</p>
+                        <p style={{ margin: '8px 0 0', fontSize: '12px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.home.equipmentMaterials}</p>
                       </div>
                     </div>
 
@@ -1215,7 +1373,7 @@
                     <div className="lab-stat-card" style={{ '--line-color': '#d97706', animation: 'slideUp 0.4s ease 0.26s forwards', opacity: 0 }}>
                       <div className="accent-line" />
                       <div style={{ paddingLeft: '4px' }}>
-                        <p className="lab-section-label">Reservas Confirmadas</p>
+                        <p className="lab-section-label">{t.home.confirmedReservations}</p>
                         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '18px' }}>
                           <span style={{ fontSize: '40px', fontWeight: '300', color: '#0f172a', lineHeight: 1, fontFamily: '"DM Serif Display", serif' }}>
                             {listaReservas.filter(r => r.estado === 'Confirmada').length}
@@ -1227,7 +1385,7 @@
                         <div style={{ height: '2px', background: '#f1f5f9', borderRadius: '1px' }}>
                           <div style={{ height: '100%', background: '#d97706', borderRadius: '1px', width: `${Math.min((listaReservas.filter(r => r.estado === 'Confirmada').length / 20) * 100, 100)}%`, animation: 'expandBar 1s ease 0.6s both' }} />
                         </div>
-                        <p style={{ margin: '8px 0 0', fontSize: '12px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>reservas activas</p>
+                        <p style={{ margin: '8px 0 0', fontSize: '12px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.home.activeReservations}</p>
                       </div>
                     </div>
 
@@ -1236,7 +1394,7 @@
                       <div className="lab-stat-card" style={{ '--line-color': '#dc2626', animation: 'slideUp 0.4s ease 0.34s forwards', opacity: 0 }}>
                         <div className="accent-line" />
                         <div style={{ paddingLeft: '4px' }}>
-                          <p className="lab-section-label">Solicitudes Pendientes</p>
+                          <p className="lab-section-label">{t.home.pendingRequests}</p>
                           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '18px' }}>
                             <span style={{ fontSize: '40px', fontWeight: '300', lineHeight: 1, fontFamily: '"DM Serif Display", serif', color: listaSolicitudes.filter(s => s.estado === 'Pendiente').length + listaSolicitudesMaterial.filter(s => s.estado === 'Pendiente').length > 0 ? '#dc2626' : '#0f172a' }}>
                               {listaSolicitudes.filter(s => s.estado === 'Pendiente').length + listaSolicitudesMaterial.filter(s => s.estado === 'Pendiente').length}
@@ -1248,14 +1406,14 @@
                           <div style={{ height: '2px', background: '#f1f5f9', borderRadius: '1px' }}>
                             <div style={{ height: '100%', background: '#dc2626', borderRadius: '1px', width: `${Math.min(((listaSolicitudes.filter(s => s.estado === 'Pendiente').length + listaSolicitudesMaterial.filter(s => s.estado === 'Pendiente').length) / 10) * 100, 100)}%`, animation: 'expandBar 1s ease 0.7s both' }} />
                           </div>
-                          <p style={{ margin: '8px 0 0', fontSize: '12px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>requieren atención</p>
+                          <p style={{ margin: '8px 0 0', fontSize: '12px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.home.needAttention}</p>
                         </div>
                       </div>
                     ) : (
                       <div className="lab-stat-card" style={{ '--line-color': '#7c3aed', animation: 'slideUp 0.4s ease 0.34s forwards', opacity: 0 }}>
                         <div className="accent-line" />
                         <div style={{ paddingLeft: '4px' }}>
-                          <p className="lab-section-label">Mis Solicitudes</p>
+                          <p className="lab-section-label">{t.home.myRequestsStat}</p>
                           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '18px' }}>
                             <span style={{ fontSize: '40px', fontWeight: '300', color: '#0f172a', lineHeight: 1, fontFamily: '"DM Serif Display", serif' }}>
                               {listaSolicitudes.filter(s => s.solicitadoPor === usuarioActivo.email).length + listaSolicitudesMaterial.filter(s => s.solicitadoPor === usuarioActivo.email).length}
@@ -1267,7 +1425,7 @@
                           <div style={{ height: '2px', background: '#f1f5f9', borderRadius: '1px' }}>
                             <div style={{ height: '100%', background: '#7c3aed', borderRadius: '1px', width: '45%', animation: 'expandBar 1s ease 0.7s both' }} />
                           </div>
-                          <p style={{ margin: '8px 0 0', fontSize: '12px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>trámites enviados</p>
+                          <p style={{ margin: '8px 0 0', fontSize: '12px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.home.sentRequests}</p>
                         </div>
                       </div>
                     )}
@@ -1278,7 +1436,7 @@
 
                     {/* Acciones rápidas */}
                     <div style={{ background: '#ffffff', borderRadius: '6px', padding: '26px', border: '1px solid #e4e8ef' }}>
-                      <p className="lab-section-label">Acceso Directo</p>
+                      <p className="lab-section-label">{t.home.quickAccess}</p>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
 
                         <button className="lab-action-row" onClick={() => setVistaActual('aulasPúblicas')}>
@@ -1288,8 +1446,8 @@
                             </svg>
                           </div>
                           <div style={{ flex: 1 }}>
-                            <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', marginBottom: '1px' }}>Consultar Disponibilidad</div>
-                            <div style={{ fontSize: '11.5px', color: '#94a3b8' }}>Ver horarios de aulas</div>
+                            <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', marginBottom: '1px' }}>{t.home.checkAvailability}</div>
+                            <div style={{ fontSize: '11.5px', color: '#94a3b8' }}>{t.home.checkAvailabilitySub}</div>
                           </div>
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
                         </button>
@@ -1302,8 +1460,8 @@
                               </svg>
                             </div>
                             <div style={{ flex: 1 }}>
-                              <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', marginBottom: '1px' }}>Solicitar Material</div>
-                              <div style={{ fontSize: '11.5px', color: '#94a3b8' }}>Préstamo de equipos</div>
+                              <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', marginBottom: '1px' }}>{t.home.requestMaterial}</div>
+                              <div style={{ fontSize: '11.5px', color: '#94a3b8' }}>{t.home.requestMaterialSub}</div>
                             </div>
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
                           </button>
@@ -1317,9 +1475,9 @@
                               </svg>
                             </div>
                             <div style={{ flex: 1 }}>
-                              <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', marginBottom: '1px' }}>Gestionar Solicitudes</div>
+                              <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', marginBottom: '1px' }}>{t.home.manageRequests}</div>
                               <div style={{ fontSize: '11.5px', color: '#94a3b8' }}>
-                                {listaSolicitudes.filter(s => s.estado === 'Pendiente').length + listaSolicitudesMaterial.filter(s => s.estado === 'Pendiente').length} pendiente(s) de revisión
+                                {listaSolicitudes.filter(s => s.estado === 'Pendiente').length + listaSolicitudesMaterial.filter(s => s.estado === 'Pendiente').length} {t.home.pending}
                               </div>
                             </div>
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
@@ -1334,8 +1492,8 @@
                               </svg>
                             </div>
                             <div style={{ flex: 1 }}>
-                              <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', marginBottom: '1px' }}>Gestión de Usuarios</div>
-                              <div style={{ fontSize: '11.5px', color: '#94a3b8' }}>{listaUsuarios.length} usuario(s) registrado(s)</div>
+                              <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', marginBottom: '1px' }}>{t.home.userManagement}</div>
+                              <div style={{ fontSize: '11.5px', color: '#94a3b8' }}>{listaUsuarios.length} {t.home.registered}</div>
                             </div>
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
                           </button>
@@ -1349,8 +1507,8 @@
                               </svg>
                             </div>
                             <div style={{ flex: 1 }}>
-                              <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', marginBottom: '1px' }}>Todas las Reservas</div>
-                              <div style={{ fontSize: '11.5px', color: '#94a3b8' }}>Historial completo</div>
+                              <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', marginBottom: '1px' }}>{t.home.allReservations}</div>
+                              <div style={{ fontSize: '11.5px', color: '#94a3b8' }}>{t.home.fullHistory}</div>
                             </div>
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
                           </button>
@@ -1361,10 +1519,10 @@
                     {/* Actividad reciente */}
                     <div style={{ background: '#ffffff', borderRadius: '6px', padding: '26px', border: '1px solid #e4e8ef' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                        <p className="lab-section-label" style={{ margin: 0 }}>Actividad Reciente</p>
+                        <p className="lab-section-label" style={{ margin: 0 }}>{t.home.recentActivity}</p>
                         {misNotificaciones.filter(n => !n.leida).length > 0 && (
                           <span style={{ fontSize: '11px', color: '#2563eb', fontWeight: '600', fontFamily: '"DM Sans", sans-serif' }}>
-                            {misNotificaciones.filter(n => !n.leida).length} sin leer
+                            {misNotificaciones.filter(n => !n.leida).length} {t.notifications.unread}
                           </span>
                         )}
                       </div>
@@ -1375,7 +1533,7 @@
                             <div style={{ width: '40px', height: '40px', borderRadius: '50%', border: '1px solid #e2e8f0', margin: '0 auto 12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
                             </div>
-                            <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0, fontFamily: '"DM Sans", sans-serif' }}>Sin actividad reciente</p>
+                            <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0, fontFamily: '"DM Sans", sans-serif' }}>{t.home.noActivity}</p>
                           </div>
                         ) : (
                           misNotificaciones.slice(0, 7).map((notif, idx) => (
@@ -1390,7 +1548,7 @@
                                   fontFamily: '"DM Sans", sans-serif',
                                   marginBottom: '2px'
                                 }}>
-                                  {(notif.titulo || '').replace(/[\u{1F000}-\u{1FFFF}]|[\u{2600}-\u{27BF}]|[\u{1F300}-\u{1F9FF}]/gu, '').trim()}
+                                  {(traducirNotificacion(notif.titulo, notif.claveNotificacion) || '').replace(/[\u{1F000}-\u{1FFFF}]|[\u{2600}-\u{27BF}]|[\u{1F300}-\u{1F9FF}]/gu, '').trim()}
                                 </div>
                                 <div style={{
                                   fontSize: '11.5px', color: '#94a3b8',
@@ -1598,20 +1756,20 @@
                         fontFamily: '"DM Serif Display", serif',
                         lineHeight: '1.25'
                       }}>
-                        Gestión de <span style={{ fontStyle: 'italic' }}>Usuarios y Roles</span>
+                        {t.rolesPage.title} <span style={{ fontStyle: 'italic' }}>{t.rolesPage.titleItalic}</span>
                       </h2>
                       <p style={{ margin: 0, color: 'rgba(255,255,255,0.45)', fontSize: '13px', fontFamily: '"DM Sans", sans-serif' }}>
-                        Asigna niveles de acceso y administra los permisos del sistema
+                        {t.rolesPage.subtitle}
                       </p>
                     </div>
 
                     {/* Stats mini */}
                     <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                       {[
-                        { label: 'Total usuarios', value: listaUsuarios.length },
-                        { label: 'Administradores', value: listaUsuarios.filter(u => u.rol === 'admin').length },
-                        { label: 'Maestros', value: listaUsuarios.filter(u => u.rol === 'maestro').length },
-                        { label: 'Alumnos', value: listaUsuarios.filter(u => u.rol === 'alumno').length },
+                        { label: t.rolesPage.totalUsers, value: listaUsuarios.length },
+                        { label: t.rolesPage.admins, value: listaUsuarios.filter(u => u.rol === 'admin').length },
+                        { label: t.rolesPage.teachers, value: listaUsuarios.filter(u => u.rol === 'maestro').length },
+                        { label: t.rolesPage.students, value: listaUsuarios.filter(u => u.rol === 'alumno').length },
                       ].map((stat, i) => (
                         <div key={i} style={{
                           background: 'rgba(255,255,255,0.07)',
@@ -1658,9 +1816,9 @@
                         </svg>
                       </div>
                       <div>
-                        <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>Asignar Nivel de Acceso</div>
+                        <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>{t.rolesPage.formTitle}</div>
                         <div style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>
-                          Si el usuario ya tiene cuenta, su rol se actualiza de inmediato. Si aún no se registra, el rol se aplicará al momento de crear su cuenta.
+                          {t.rolesPage.formSubtitle}
                         </div>
                       </div>
                     </div>
@@ -1671,29 +1829,29 @@
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 220px auto', gap: '12px', alignItems: 'flex-end' }}>
                           <div>
                             <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>
-                              Correo Electrónico
+                              {t.rolesPage.emailLabel}
                             </label>
                             <input
                               name="emailAsignar"
                               type="email"
                               className="roles-input"
-                              placeholder="usuario@institucion.edu"
+                              placeholder={t.rolesPage.emailPlaceholder}
                               required
                             />
                           </div>
                           <div>
                             <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>
-                              Nivel de Acceso
+                              {t.rolesPage.accessLevel}
                             </label>
                             <select name="rolAsignar" className="roles-input" required style={{ cursor: 'pointer' }}>
-                              <option value="">Seleccionar rol...</option>
-                              <option value="maestro">Maestro / Profesor</option>
-                              <option value="admin">Administrador</option>
-                              <option value="alumno">Alumno (sin privilegios)</option>
+                              <option value="">{t.rolesPage.selectRole}</option>
+                              <option value="maestro">{t.rolesPage.roleTeacher}</option>
+                              <option value="admin">{t.rolesPage.roleAdmin}</option>
+                              <option value="alumno">{t.rolesPage.roleStudent}</option>
                             </select>
                           </div>
                           <button type="submit" className="roles-submit-btn">
-                            Asignar Permisos
+                            {t.rolesPage.assignBtn}
                           </button>
                         </div>
                       </form>
@@ -1726,17 +1884,17 @@
                           </svg>
                         </div>
                         <div>
-                          <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>Usuarios Registrados</div>
-                          <div style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{listaUsuarios.length} cuenta(s) en el sistema</div>
+                          <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>{t.rolesPage.tableTitle}</div>
+                          <div style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{listaUsuarios.length} {t.rolesPage.tableSubtitle}</div>
                         </div>
                       </div>
 
                       {/* Role filter pills */}
                       <div style={{ display: 'flex', gap: '6px' }}>
                         {[
-                          { rol: 'admin',   label: 'Admin',   color: '#dc2626', bg: '#fef2f2' },
-                          { rol: 'maestro', label: 'Maestro', color: '#2563eb', bg: '#eff6ff' },
-                          { rol: 'alumno',  label: 'Alumno',  color: '#16a34a', bg: '#f0fdf4' },
+                          { rol: 'admin',   label: t.roles.admin,   color: '#dc2626', bg: '#fef2f2' },
+                          { rol: 'maestro', label: t.roles.maestro, color: '#2563eb', bg: '#eff6ff' },
+                          { rol: 'alumno',  label: t.roles.alumno,  color: '#16a34a', bg: '#f0fdf4' },
                         ].map(({ rol, label, color, bg }) => {
                           const count = listaUsuarios.filter(u => u.rol === rol).length;
                           return (
@@ -1754,10 +1912,10 @@
                       <table className="roles-table">
                         <thead>
                           <tr>
-                            <th>Usuario</th>
-                            <th>Nivel de Acceso</th>
-                            <th>Registro</th>
-                            <th style={{ textAlign: 'right' }}>Acciones</th>
+                            <th>{t.rolesPage.colUser}</th>
+                            <th>{t.rolesPage.colAccess}</th>
+                            <th>{t.rolesPage.colDate}</th>
+                            <th style={{ textAlign: 'right' }}>{t.rolesPage.colActions}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1769,7 +1927,7 @@
                                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
                                   </svg>
                                 </div>
-                                Cargando usuarios...
+                                {t.rolesPage.loadingUsers}
                               </td>
                             </tr>
                           ) : (
@@ -1795,7 +1953,7 @@
                                       <div>
                                         <div style={{ fontWeight: '600', color: '#1e293b', fontSize: '13px', fontFamily: '"DM Sans", sans-serif' }}>
                                           {user.correo.split('@')[0]}
-                                          {esSelf && <span style={{ marginLeft: '6px', fontSize: '10px', color: '#94a3b8', fontWeight: '400' }}>(tú)</span>}
+                                          {esSelf && <span style={{ marginLeft: '6px', fontSize: '10px', color: '#94a3b8', fontWeight: '400' }}>{t.rolesPage.you}</span>}
                                         </div>
                                         <div style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{user.correo}</div>
                                       </div>
@@ -1811,11 +1969,11 @@
                                         className="roles-select"
                                         disabled={esSelf}
                                       >
-                                        <option value="admin">Administrador</option>
-                                        <option value="maestro">Maestro</option>
-                                        <option value="alumno">Alumno</option>
+                                        <option value="admin">{t.rolesPage.roleAdmin}</option>
+                                        <option value="maestro">{t.rolesPage.roleTeacher}</option>
+                                        <option value="alumno">{t.rolesPage.roleStudent}</option>
                                       </select>
-                                      <span className={`roles-badge ${rolClass}`}>{user.rol}</span>
+                                      <span className={`roles-badge ${rolClass}`}>{traducirRol(user.rol)}</span>
                                     </div>
                                   </td>
 
@@ -1833,7 +1991,7 @@
                                       onClick={() => eliminarUsuarioDB(user.id, user.correo)}
                                       disabled={esSelf}
                                     >
-                                      Revocar acceso
+                                      {t.rolesPage.revokeBtn}
                                     </button>
                                   </td>
                                 </tr>
@@ -1848,10 +2006,10 @@
                     {listaUsuarios.length > 0 && (
                       <div style={{ padding: '12px 24px', borderTop: '1px solid #f1f5f9', background: '#fafbfc', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <span style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>
-                          Mostrando {listaUsuarios.length} usuario(s)
+                          {t.rolesPage.showing} {listaUsuarios.length} {t.rolesPage.users}
                         </span>
                         <span style={{ fontSize: '11px', color: '#cbd5e1', fontFamily: '"DM Sans", sans-serif' }}>
-                          Los cambios de rol se aplican de inmediato
+                          {t.rolesPage.changesApply}
                         </span>
                       </div>
                     )}
@@ -2104,23 +2262,23 @@
 
       <div style={{ position: 'relative', zIndex: 1 }}>
         <p style={{ margin: '0 0 8px 0', fontSize: '11px', fontWeight: '600', letterSpacing: '2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', fontFamily: '"DM Sans", sans-serif' }}>
-          Gestión de Espacios
+          {t.classrooms.sectionLabel}
         </p>
         <h2 style={{ margin: '0 0 8px 0', fontSize: '24px', fontWeight: '400', color: '#ffffff', fontFamily: '"DM Serif Display", serif', lineHeight: '1.25' }}>
-          Control de <span style={{ fontStyle: 'italic' }}>Aulas</span>
+          {t.classrooms.title} <span style={{ fontStyle: 'italic' }}>{t.classrooms.titleItalic}</span>
         </h2>
         <p style={{ margin: 0, color: 'rgba(255,255,255,0.42)', fontSize: '13px', fontFamily: '"DM Sans", sans-serif' }}>
-          Registra espacios, define capacidad y administra el equipamiento disponible
+          {t.classrooms.subtitle}
         </p>
       </div>
 
       {/* Mini stat cards */}
       <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         {[
-          { label: 'Aulas totales',    value: listaAulas.length,                                                warn: false },
-          { label: 'Disponibles',      value: listaAulas.filter(a => a.estado === 'Disponible').length,         warn: false },
-          { label: 'Mantenimiento',    value: listaAulas.filter(a => a.estado === 'Mantenimiento').length,      warn: listaAulas.filter(a => a.estado === 'Mantenimiento').length > 0 },
-          { label: 'Reservas activas', value: listaReservas.filter(r => r.estado === 'Confirmada').length,      warn: false },
+          { label: t.classrooms.totalRooms,    value: listaAulas.length,                                                warn: false },
+          { label: t.classrooms.available,      value: listaAulas.filter(a => a.estado === 'Disponible').length,         warn: false },
+          { label: t.classrooms.maintenance,    value: listaAulas.filter(a => a.estado === 'Mantenimiento').length,      warn: listaAulas.filter(a => a.estado === 'Mantenimiento').length > 0 },
+          { label: t.classrooms.activeReservations, value: listaReservas.filter(r => r.estado === 'Confirmada').length,      warn: false },
         ].map((stat, i) => (
           <div key={i} style={{
             background: stat.warn ? 'rgba(220,38,38,0.15)' : 'rgba(255,255,255,0.07)',
@@ -2153,9 +2311,9 @@
             </svg>
           </div>
           <div>
-            <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>Registrar Nueva Aula</div>
+            <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>{t.classrooms.newRoomTitle}</div>
             <div style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>
-              Agrega un nuevo espacio al sistema con su equipamiento y capacidad
+              {t.classrooms.newRoomSubtitle}
             </div>
           </div>
         </div>
@@ -2175,7 +2333,7 @@
             letterSpacing: '0.2px',
           }}
         >
-          {showFormAula ? '× Cancelar' : '+ Nueva Aula'}
+          {showFormAula ? t.classrooms.cancelBtn : t.classrooms.newRoomBtn}
         </button>
       </div>
 
@@ -2184,16 +2342,16 @@
           <form onSubmit={guardarNuevaAula}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 150px 200px', gap: '14px', alignItems: 'flex-end', marginBottom: '14px' }}>
               <div>
-                <label className="au-label">Nombre del aula</label>
+                <label className="au-label">{t.classrooms.nameLabel}</label>
                 <input
                   name="nombre"
                   className="au-input"
-                  placeholder="Ej: Laboratorio A / Sala de Videoconferencia"
+                  placeholder={t.classrooms.namePlaceholder}
                   required
                 />
               </div>
               <div>
-                <label className="au-label">Capacidad</label>
+                <label className="au-label">{t.classrooms.capacityLabel}</label>
                 <input
                   name="capacidad"
                   type="number"
@@ -2204,22 +2362,22 @@
                 />
               </div>
               <div>
-                <label className="au-label">Equipo principal</label>
+                <label className="au-label">{t.classrooms.equipmentLabel}</label>
                 <select name="equipo" className="au-input" required style={{ cursor: 'pointer' }}>
-                  <option value="">Seleccionar...</option>
-                  <option value="Gafas RV">Gafas RV</option>
-                  <option value="Cámaras">Cámaras</option>
-                  <option value="Laptops">Laptops</option>
-                  <option value="Proyector">Proyector</option>
-                  <option value="Pantalla interactiva">Pantalla interactiva</option>
-                  <option value="Múltiple">Múltiple</option>
-                  <option value="Sin equipo">Sin equipo especial</option>
+                  <option value="">{t.classrooms.selectEquip}</option>
+                  <option value="Gafas RV">{t.classrooms.vrGlasses}</option>
+                  <option value="Cámaras">{t.classrooms.cameras}</option>
+                  <option value="Laptops">{t.classrooms.laptops}</option>
+                  <option value="Proyector">{t.classrooms.projector}</option>
+                  <option value="Pantalla interactiva">{t.classrooms.interactiveScreen}</option>
+                  <option value="Múltiple">{t.classrooms.multiple}</option>
+                  <option value="Sin equipo">{t.classrooms.noEquip}</option>
                 </select>
               </div>
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
-              <button type="button" className="au-btn-ghost" onClick={() => setShowFormAula(false)}>Cancelar</button>
-              <button type="submit" className="au-btn-green">Registrar aula</button>
+              <button type="button" className="au-btn-ghost" onClick={() => setShowFormAula(false)}>{t.classrooms.cancel}</button>
+              <button type="submit" className="au-btn-green">{t.classrooms.registerBtn}</button>
             </div>
           </form>
         </div>
@@ -2234,15 +2392,15 @@
       {/* Sub-header */}
       <div style={{ padding: '12px 20px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
         <span style={{ fontSize: '11.5px', color: '#64748b', fontFamily: '"DM Sans", sans-serif' }}>
-          <span style={{ fontWeight: '600', color: '#1e293b' }}>{listaAulas.length}</span> aula(s) registrada(s) · capacidad total:{' '}
+          <span style={{ fontWeight: '600', color: '#1e293b' }}>{listaAulas.length}</span> {t.classrooms.tableSummary}{' '}
           <span style={{ fontWeight: '600', color: '#059669' }}>
             {listaAulas.reduce((t, a) => t + (parseInt(a.capacidad) || 0), 0)}
-          </span> personas
+          </span> {t.classrooms.people}
         </span>
         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
           {[
-            { label: 'Disponibles',   count: listaAulas.filter(a => a.estado === 'Disponible').length,    color: '#059669', bg: '#f0fdf4' },
-            { label: 'Mantenimiento', count: listaAulas.filter(a => a.estado === 'Mantenimiento').length, color: '#b45309', bg: '#fffbeb' },
+            { label: t.classrooms.available,   count: listaAulas.filter(a => a.estado === 'Disponible').length,    color: '#059669', bg: '#f0fdf4' },
+            { label: t.classrooms.maintenance, count: listaAulas.filter(a => a.estado === 'Mantenimiento').length, color: '#b45309', bg: '#fffbeb' },
           ].map(({ label, count, color, bg }) => (
             <div key={label} style={{ background: bg, border: `1px solid ${color}20`, borderRadius: '4px', padding: '4px 11px', display: 'flex', alignItems: 'center', gap: '5px' }}>
               <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: color, display: 'inline-block', flexShrink: 0 }} />
@@ -2257,13 +2415,13 @@
         <table className="au-table">
           <thead>
             <tr>
-              <th>Aula</th>
-              <th>Capacidad</th>
-              <th>Equipo disponible</th>
-              <th>Estado</th>
-              <th>Reservas activas</th>
-              <th>Creada</th>
-              <th style={{ textAlign: 'right' }}>Acciones</th>
+              <th>{t.classrooms.colRoom}</th>
+              <th>{t.classrooms.colCapacity}</th>
+              <th>{t.classrooms.colEquipment}</th>
+              <th>{t.classrooms.colStatus}</th>
+              <th>{t.classrooms.colActiveRes}</th>
+              <th>{t.classrooms.colCreated}</th>
+              <th style={{ textAlign: 'right' }}>{t.classrooms.colActions}</th>
             </tr>
           </thead>
           <tbody>
@@ -2276,8 +2434,8 @@
                         <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
                       </svg>
                     </div>
-                    <p style={{ margin: 0, fontSize: '13px' }}>Sin aulas registradas</p>
-                    <p style={{ margin: '4px 0 0', fontSize: '11.5px', color: '#cbd5e1' }}>Usa el formulario de arriba para agregar la primera aula</p>
+                    <p style={{ margin: 0, fontSize: '13px' }}>{t.classrooms.noRooms}</p>
+                    <p style={{ margin: '4px 0 0', fontSize: '11.5px', color: '#cbd5e1' }}>{t.classrooms.noRoomsHint}</p>
                   </div>
                 </td>
               </tr>
@@ -2322,7 +2480,7 @@
                             <span style={{ fontFamily: '"DM Serif Display", serif', fontSize: '18px', fontWeight: '300', color: '#0f172a', lineHeight: 1 }}>
                               {aula.capacidad}
                             </span>
-                            <span style={{ fontSize: '10.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>personas</span>
+                            <span style={{ fontSize: '10.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.classrooms.people}</span>
                           </div>
                           <div className="au-bar-track">
                             <div className="au-bar-fill" style={{ width: `${pct}%`, background: barColor, animationDelay: `${0.3 + idx * 0.04}s` }} />
@@ -2333,13 +2491,13 @@
 
                     {/* Equipo */}
                     <td>
-                      <span className="au-badge au-badge-slate">{aula.equipoDisponible || '—'}</span>
+                      <span className="au-badge au-badge-slate">{aula.equipoDisponible ? traducirEquipo(aula.equipoDisponible) : '—'}</span>
                     </td>
 
                     {/* Estado */}
                     <td>
                       <span className={`au-badge ${enMantenimiento ? 'au-badge-amber' : 'au-badge-green'}`}>
-                        {aula.estado || 'Disponible'}
+                        {traducirEstado(aula.estado || 'Disponible')}
                       </span>
                     </td>
 
@@ -2364,7 +2522,7 @@
                     {/* Acciones */}
                     <td style={{ textAlign: 'right' }}>
                       <button className="au-btn-danger" onClick={() => eliminarAula(aula.id)}>
-                        Eliminar
+                        {t.classrooms.deleteBtn}
                       </button>
                     </td>
                   </tr>
@@ -2379,13 +2537,13 @@
       {listaAulas.length > 0 && (
         <div style={{ padding: '10px 20px', borderTop: '1px solid #f1f5f9', background: '#fafbfc', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>
-            {listaAulas.length} aula(s) · {listaAulas.reduce((t, a) => t + (parseInt(a.capacidad) || 0), 0)} personas en total
+            {listaAulas.length} {t.classrooms.tableSummary} · {listaAulas.reduce((t, a) => t + (parseInt(a.capacidad) || 0), 0)} {t.classrooms.people}
           </span>
           <span style={{ fontSize: '11px', color: '#cbd5e1', fontFamily: '"DM Sans", sans-serif', display: 'flex', alignItems: 'center', gap: '5px' }}>
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="2">
               <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
             </svg>
-            Los cambios son inmediatos y se reflejan para todos los usuarios
+            {t.classrooms.footerNote}
           </span>
         </div>
       )}
@@ -2724,13 +2882,13 @@
 
                   <div style={{ position: 'relative', zIndex: 1 }}>
                     <p style={{ margin: '0 0 8px 0', fontSize: '11px', fontWeight: '600', letterSpacing: '2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', fontFamily: '"DM Sans", sans-serif' }}>
-                      Gestión de Recursos
+                      {t.inventoryAdmin.sectionLabel}
                     </p>
                     <h2 style={{ margin: '0 0 8px 0', fontSize: '24px', fontWeight: '400', color: '#ffffff', fontFamily: '"DM Serif Display", serif', lineHeight: '1.25' }}>
-                      Control de <span style={{ fontStyle: 'italic' }}>Inventario</span>
+                      {t.inventoryAdmin.title} <span style={{ fontStyle: 'italic' }}>{t.inventoryAdmin.titleItalic}</span>
                     </h2>
                     <p style={{ margin: 0, color: 'rgba(255,255,255,0.42)', fontSize: '13px', fontFamily: '"DM Sans", sans-serif' }}>
-                      Registra equipos, administra stock y gestiona préstamos
+                      {t.inventoryAdmin.subtitle}
                     </p>
                   </div>
 
@@ -2738,27 +2896,27 @@
                   <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                     {[
                       {
-                        label: 'Tipos de equipo',
+                        label: t.inventoryAdmin.equipmentTypes,
                         value: listaEquipos.length,
                         warn: false,
                       },
                       {
-                        label: 'Unidades en stock',
+                        label: t.inventoryAdmin.stockUnits,
                         value: listaEquipos.reduce((t, eq) => t + (eq.cantidad || 0), 0),
                         warn: false,
                       },
                       {
-                        label: 'Sin stock',
+                        label: t.inventoryAdmin.noStock,
                         value: listaEquipos.filter(eq => (eq.cantidad || 0) === 0).length,
                         warn: listaEquipos.filter(eq => (eq.cantidad || 0) === 0).length > 0,
                       },
                       {
-                        label: 'Préstamos activos',
+                        label: t.inventoryAdmin.activeLoans,
                         value: listaSolicitudesMaterial.filter(s => s.estado === 'Aprobada' && !s.devuelto).length,
                         warn: false,
                       },
                       {
-                        label: 'Atrasados',
+                        label: t.inventoryAdmin.overdue,
                         value: listaSolicitudesMaterial.filter(s => s.estado === 'Aprobada' && !s.devuelto && new Date(s.fechaDevolucionEsperada) < new Date()).length,
                         warn: listaSolicitudesMaterial.filter(s => s.estado === 'Aprobada' && !s.devuelto && new Date(s.fechaDevolucionEsperada) < new Date()).length > 0,
                       },
@@ -2794,9 +2952,9 @@
                         </svg>
                       </div>
                       <div>
-                        <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>Registrar Nuevo Equipo</div>
+                        <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryAdmin.addTitle}</div>
                         <div style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>
-                          Agrega equipos o materiales al inventario del laboratorio
+                          {t.inventoryAdmin.addSubtitle}
                         </div>
                       </div>
                     </div>
@@ -2816,7 +2974,7 @@
                         letterSpacing: '0.2px',
                       }}
                     >
-                      {showFormReserva ? '× Cancelar' : '+ Agregar equipo'}
+                      {showFormReserva ? t.inventoryAdmin.cancelAdd : t.inventoryAdmin.addBtn}
                     </button>
                   </div>
 
@@ -2825,13 +2983,13 @@
                       <form onSubmit={guardarNuevoEquipo}>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 180px 120px 160px', gap: '14px', alignItems: 'flex-end', marginBottom: '14px' }}>
                           <div>
-                            <label className="gi-label">Nombre del equipo</label>
-                            <input name="nombre" className="gi-input" placeholder="Ej: Cámara Sony ZV-E10" required />
+                            <label className="gi-label">{t.inventoryAdmin.nameLabel}</label>
+                            <input name="nombre" className="gi-input" placeholder={t.inventoryAdmin.namePlaceholder} required />
                           </div>
                           <div>
-                            <label className="gi-label">Categoría</label>
+                            <label className="gi-label">{t.inventoryAdmin.categoryLabel}</label>
                             <select name="categoria" className="gi-input" required style={{ cursor: 'pointer' }}>
-                              <option value="">Seleccionar...</option>
+                              <option value="">{t.inventoryAdmin.selectCategory}</option>
                               <option value="Gafas RV">Gafas RV</option>
                               <option value="Cámara">Cámara</option>
                               <option value="Laptop">Laptop</option>
@@ -2842,21 +3000,21 @@
                             </select>
                           </div>
                           <div>
-                            <label className="gi-label">Cantidad</label>
+                            <label className="gi-label">{t.inventoryAdmin.qtyLabel}</label>
                             <input name="cantidad" type="number" min="1" className="gi-input" placeholder="1" defaultValue="1" />
                           </div>
                           <div>
-                            <label className="gi-label">Estado inicial</label>
+                            <label className="gi-label">{t.inventoryAdmin.statusLabel}</label>
                             <select name="estado" className="gi-input" style={{ cursor: 'pointer' }}>
-                              <option value="Disponible">Disponible</option>
-                              <option value="Mantenimiento">Mantenimiento</option>
-                              <option value="Inactivo">Inactivo</option>
+                              <option value="Disponible">{t.status.available}</option>
+                              <option value="Mantenimiento">{t.status.maintenance}</option>
+                              <option value="Inactivo">{t.status.inactive}</option>
                             </select>
                           </div>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
-                          <button type="button" className="gi-btn-ghost" onClick={() => setShowFormReserva(false)}>Cancelar</button>
-                          <button type="submit" className="gi-btn-green">Registrar en inventario</button>
+                          <button type="button" className="gi-btn-ghost" onClick={() => setShowFormReserva(false)}>{t.inventoryAdmin.cancel}</button>
+                          <button type="submit" className="gi-btn-green">{t.inventoryAdmin.registerBtn}</button>
                         </div>
                       </form>
                     </div>
@@ -2884,9 +3042,9 @@
                       <div style={{ padding: '16px 20px', borderBottom: '1px solid #f1f5f9', background: '#fafbfc', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
                         <div className="gi-tab-bar">
                           {[
-                            { key: 'gi-catalogo',    label: 'Catálogo de Equipos' },
-                            { key: 'gi-solicitudes', label: `Solicitudes${pendientesMat > 0 ? ` · ${pendientesMat}` : ''}` },
-                            { key: 'gi-prestamos',   label: `Préstamos Activos${devolucionesPend > 0 ? ` · ${devolucionesPend}` : ''}` },
+                            { key: 'gi-catalogo',    label: t.inventoryAdmin.tabCatalog },
+                            { key: 'gi-solicitudes', label: `${t.inventoryAdmin.tabRequests}${pendientesMat > 0 ? ` · ${pendientesMat}` : ''}` },
+                            { key: 'gi-prestamos',   label: `${t.inventoryAdmin.tabLoans}${devolucionesPend > 0 ? ` · ${devolucionesPend}` : ''}` },
                           ].map(({ key, label }) => (
                             <button
                               key={key}
@@ -2909,7 +3067,7 @@
                             onClick={enviarNotificacionesPorAtrasos}
                             style={{ padding: '6px 14px', background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: '4px', fontSize: '11px', fontWeight: '600', color: '#dc2626', fontFamily: '"DM Sans", sans-serif', cursor: 'pointer', transition: 'all 0.2s', letterSpacing: '0.2px' }}
                           >
-                            Enviar recordatorios de atraso
+                            {t.inventoryAdmin.sendReminders}
                           </button>
                         )}
                       </div>
@@ -2922,13 +3080,13 @@
                           {/* Sub-header with pills */}
                           <div style={{ padding: '12px 20px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
                             <span style={{ fontSize: '11.5px', color: '#64748b', fontFamily: '"DM Sans", sans-serif' }}>
-                              <span style={{ fontWeight: '600', color: '#1e293b' }}>{listaEquipos.length}</span> tipo(s) registrado(s) · <span style={{ fontWeight: '600', color: '#059669' }}>{listaEquipos.reduce((t, eq) => t + (eq.cantidad || 0), 0)}</span> unidades en total
+                              <span style={{ fontWeight: '600', color: '#1e293b' }}>{listaEquipos.length}</span> tipo(s) registrado(s) · <span style={{ fontWeight: '600', color: '#059669' }}>{listaEquipos.reduce((t, eq) => t + (eq.cantidad || 0), 0)}</span> {t.inventoryAdmin.units} en total
                             </span>
                             <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                               {[
-                                { label: 'Con stock',      count: listaEquipos.filter(e => (e.cantidad || 0) > 0).length,                    color: '#059669', bg: '#f0fdf4' },
-                                { label: 'Sin stock',      count: listaEquipos.filter(e => (e.cantidad || 0) === 0).length,                   color: '#dc2626', bg: '#fef2f2' },
-                                { label: 'Mantenimiento',  count: listaEquipos.filter(e => e.estado === 'Mantenimiento').length,               color: '#b45309', bg: '#fffbeb' },
+                                { label: t.inventoryAdmin.withStock,      count: listaEquipos.filter(e => (e.cantidad || 0) > 0).length,                    color: '#059669', bg: '#f0fdf4' },
+                                { label: t.inventoryAdmin.noStockLabel,      count: listaEquipos.filter(e => (e.cantidad || 0) === 0).length,                   color: '#dc2626', bg: '#fef2f2' },
+                                { label: t.inventoryAdmin.maintenanceLabel,  count: listaEquipos.filter(e => e.estado === 'Mantenimiento').length,               color: '#b45309', bg: '#fffbeb' },
                               ].map(({ label, count, color, bg }) => (
                                 <div key={label} style={{ background: bg, border: `1px solid ${color}20`, borderRadius: '4px', padding: '4px 11px', display: 'flex', alignItems: 'center', gap: '5px' }}>
                                   <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: color, display: 'inline-block', flexShrink: 0 }} />
@@ -2942,13 +3100,13 @@
                             <table className="gi-table">
                               <thead>
                                 <tr>
-                                  <th>Equipo</th>
-                                  <th>Categoría</th>
-                                  <th>Stock actual</th>
-                                  <th>En préstamo</th>
-                                  <th>Estado</th>
-                                  <th>Registrado por</th>
-                                  <th style={{ textAlign: 'right' }}>Acciones</th>
+                                  <th>{t.inventoryAdmin.colEquipment}</th>
+                                  <th>{t.inventoryAdmin.colCategory}</th>
+                                  <th>{t.inventoryAdmin.colStock}</th>
+                                  <th>{t.inventoryAdmin.colOnLoan}</th>
+                                  <th>{t.inventoryAdmin.colStatus}</th>
+                                  <th>{t.inventoryAdmin.colRegisteredBy}</th>
+                                  <th style={{ textAlign: 'right' }}>{t.inventoryAdmin.colActions}</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -2961,8 +3119,8 @@
                                             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
                                           </svg>
                                         </div>
-                                        <p style={{ margin: 0, fontSize: '13px' }}>Sin equipos registrados</p>
-                                        <p style={{ margin: '4px 0 0', fontSize: '11.5px', color: '#cbd5e1' }}>Usa el formulario de arriba para agregar el primer equipo</p>
+                                        <p style={{ margin: 0, fontSize: '13px' }}>{t.inventoryAdmin.noEquipment}</p>
+                                        <p style={{ margin: '4px 0 0', fontSize: '11.5px', color: '#cbd5e1' }}>{t.inventoryAdmin.noEquipmentHint}</p>
                                       </div>
                                     </td>
                                   </tr>
@@ -3042,7 +3200,7 @@
                                         {/* Estado */}
                                         <td>
                                           <span className={`gi-badge ${sinStock ? 'gi-badge-red' : enMantenimiento ? 'gi-badge-amber' : 'gi-badge-green'}`}>
-                                            {sinStock ? 'Sin stock' : enMantenimiento ? 'Mantenimiento' : 'Disponible'}
+                                            {sinStock ? t.status.noStock : enMantenimiento ? t.status.maintenance : t.status.available}
                                           </span>
                                         </td>
 
@@ -3095,7 +3253,7 @@
                                 </span>
                               </div>
                             ) : (
-                              <span style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>Sin solicitudes pendientes</span>
+                              <span style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryAdmin.noPendingRequests}</span>
                             )}
                           </div>
 
@@ -3103,13 +3261,13 @@
                             <table className="gi-table">
                               <thead>
                                 <tr>
-                                  <th>Solicitante</th>
-                                  <th>Material</th>
-                                  <th>Cantidad</th>
-                                  <th>Motivo</th>
-                                  <th>Duración</th>
-                                  <th>Devolución esperada</th>
-                                  <th>Estado</th>
+                                  <th>{t.inventoryAdmin.colRequester}</th>
+                                  <th>{t.inventoryAdmin.colMaterial}</th>
+                                  <th>{t.inventoryAdmin.colQty}</th>
+                                  <th>{t.inventoryAdmin.colReason}</th>
+                                  <th>{t.inventoryAdmin.colDuration}</th>
+                                  <th>{t.inventoryAdmin.colDueDate}</th>
+                                  <th>{t.inventoryAdmin.colStatus}</th>
                                   <th style={{ textAlign: 'right' }}>Acciones</th>
                                 </tr>
                               </thead>
@@ -3118,7 +3276,7 @@
                                   <tr style={{ opacity: 1 }}>
                                     <td colSpan="8">
                                       <div className="gi-empty">
-                                        <p style={{ margin: 0, fontSize: '13px' }}>No hay solicitudes de material</p>
+                                        <p style={{ margin: 0, fontSize: '13px' }}>{t.adminRequests.noMaterial}</p>
                                       </div>
                                     </td>
                                   </tr>
@@ -3174,7 +3332,7 @@
                                           {/* Devolución esperada */}
                                           <td>
                                             <div style={{ fontSize: '12px', fontFamily: '"DM Sans", sans-serif', color: esAtrasado ? '#dc2626' : '#475569', fontWeight: esAtrasado ? '600' : '400' }}>
-                                              {esAtrasado && <div style={{ fontSize: '9px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.8px', color: '#dc2626', marginBottom: '2px' }}>Vencido</div>}
+                                              {esAtrasado && <div style={{ fontSize: '9px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.8px', color: '#dc2626', marginBottom: '2px' }}>{t.messages.overdue}</div>}
                                               {new Date(sol.fechaDevolucionEsperada).toLocaleString('es-ES', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                             </div>
                                           </td>
@@ -3182,7 +3340,7 @@
                                           {/* Estado */}
                                           <td>
                                             <span className={`gi-badge ${sol.estado === 'Aprobada' ? 'gi-badge-green' : sol.estado === 'Rechazada' ? 'gi-badge-red' : 'gi-badge-amber'}`}>
-                                              {sol.estado}
+                                              {traducirEstado(sol.estado)}
                                             </span>
                                           </td>
 
@@ -3213,8 +3371,8 @@
                           {/* Sub-header with status counts */}
                           <div style={{ padding: '12px 20px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                             {[
-                              { label: 'En tiempo', count: devolucionesPend - atrasadosCount, color: '#059669', bg: '#f0fdf4' },
-                              { label: 'Atrasados',  count: atrasadosCount,                    color: '#dc2626', bg: '#fef2f2' },
+                              { label: t.inventoryAdmin.onTime, count: devolucionesPend - atrasadosCount, color: '#059669', bg: '#f0fdf4' },
+                              { label: t.inventoryAdmin.overdueLabel,  count: atrasadosCount,                    color: '#dc2626', bg: '#fef2f2' },
                             ].map(({ label, count, color, bg }) => (
                               <div key={label} style={{ background: bg, border: `1px solid ${color}20`, borderRadius: '4px', padding: '4px 11px', display: 'flex', alignItems: 'center', gap: '5px' }}>
                                 <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: color, display: 'inline-block', flexShrink: 0 }} />
@@ -3227,13 +3385,13 @@
                             <table className="gi-table">
                               <thead>
                                 <tr>
-                                  <th>Prestado a</th>
-                                  <th>Material</th>
-                                  <th>Cantidad</th>
-                                  <th>Motivo</th>
-                                  <th>Vencimiento</th>
-                                  <th>Estado de entrega</th>
-                                  <th style={{ textAlign: 'right' }}>Acciones</th>
+                                  <th>{t.inventoryAdmin.colLoanedTo}</th>
+                                  <th>{t.inventoryAdmin.colMaterial}</th>
+                                  <th>{t.inventoryAdmin.colQty}</th>
+                                  <th>{t.inventoryAdmin.colReason}</th>
+                                  <th>{t.inventoryAdmin.colDueTime}</th>
+                                  <th>{t.inventoryAdmin.colDelivery}</th>
+                                  <th style={{ textAlign: 'right' }}>{t.inventoryAdmin.colActions}</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -3247,7 +3405,7 @@
                                           </svg>
                                         </div>
                                         <p style={{ margin: 0, fontSize: '13px', color: '#16a34a', fontWeight: '600' }}>Todo devuelto</p>
-                                        <p style={{ margin: '4px 0 0', fontSize: '11.5px', color: '#94a3b8' }}>No hay materiales en préstamo activo</p>
+                                        <p style={{ margin: '4px 0 0', fontSize: '11.5px', color: '#94a3b8' }}>{t.inventoryAdmin.noActiveLoans}</p>
                                       </div>
                                     </td>
                                   </tr>
@@ -3655,23 +3813,23 @@
 
       <div style={{ position: 'relative', zIndex: 1 }}>
         <p style={{ margin: '0 0 8px 0', fontSize: '11px', fontWeight: '600', letterSpacing: '2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', fontFamily: '"DM Sans", sans-serif' }}>
-          Gestión de Reservas
+          {t.reservedRooms.sectionLabel}
         </p>
         <h2 style={{ margin: '0 0 8px 0', fontSize: '24px', fontWeight: '400', color: '#ffffff', fontFamily: '"DM Serif Display", serif', lineHeight: '1.25' }}>
-          Aulas <span style={{ fontStyle: 'italic' }}>Reservadas</span>
+          {t.reservedRooms.title} <span style={{ fontStyle: 'italic' }}>{t.reservedRooms.titleItalic}</span>
         </h2>
         <p style={{ margin: 0, color: 'rgba(255,255,255,0.42)', fontSize: '13px', fontFamily: '"DM Sans", sans-serif' }}>
-          Consulta el estado de ocupación, horarios activos y reservas del sistema
+          {t.reservedRooms.subtitle}
         </p>
       </div>
 
       {/* Mini stats */}
       <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         {[
-          { label: 'Aulas totales',    value: listaAulas.length,                                                                    warn: false },
-          { label: 'Con reservas',     value: listaAulas.filter(a => listaReservas.some(r => r.aulaId === a.id && r.estado === 'Confirmada')).length, warn: false },
-          { label: 'Sin reservas',     value: listaAulas.filter(a => !listaReservas.some(r => r.aulaId === a.id && r.estado === 'Confirmada')).length, warn: false },
-          { label: 'Total confirmadas',value: listaReservas.filter(r => r.estado === 'Confirmada').length,                          warn: false },
+          { label: t.reservedRooms.totalRooms,    value: listaAulas.length,                                                                    warn: false },
+          { label: t.reservedRooms.withReservations,     value: listaAulas.filter(a => listaReservas.some(r => r.aulaId === a.id && r.estado === 'Confirmada')).length, warn: false },
+          { label: t.reservedRooms.withoutReservations,     value: listaAulas.filter(a => !listaReservas.some(r => r.aulaId === a.id && r.estado === 'Confirmada')).length, warn: false },
+          { label: t.reservedRooms.totalConfirmed,value: listaReservas.filter(r => r.estado === 'Confirmada').length,                          warn: false },
         ].map((stat, i) => (
           <div key={i} style={{
             background: stat.warn ? 'rgba(220,38,38,0.15)' : 'rgba(255,255,255,0.07)',
@@ -3717,21 +3875,21 @@
                 className={`ar-tab ${vistaTab === 'ar-tarjetas' ? 'ar-active' : ''}`}
                 onClick={() => setTabSolicitudesAdmin('ar-tarjetas')}
               >
-                Vista por Aulas
+                {t.reservedRooms.viewByRoom}
               </button>
               <button
                 className={`ar-tab ${vistaTab === 'ar-lista' ? 'ar-active' : ''}`}
                 onClick={() => setTabSolicitudesAdmin('ar-lista')}
               >
-                Lista de Reservas
+                {t.reservedRooms.reservationList}
               </button>
             </div>
 
             {/* Right side: summary pills + reserve action */}
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
               {[
-                { label: 'Confirmadas', count: listaReservas.filter(r => r.estado === 'Confirmada').length, color: '#059669', bg: '#f0fdf4' },
-                { label: 'Canceladas',  count: listaReservas.filter(r => r.estado !== 'Confirmada').length, color: '#dc2626', bg: '#fef2f2' },
+                { label: t.reservedRooms.confirmed, count: listaReservas.filter(r => r.estado === 'Confirmada').length, color: '#059669', bg: '#f0fdf4' },
+                { label: t.reservedRooms.cancelled,  count: listaReservas.filter(r => r.estado !== 'Confirmada').length, color: '#dc2626', bg: '#fef2f2' },
               ].map(({ label, count, color, bg }) => (
                 <div key={label} style={{ background: bg, border: `1px solid ${color}20`, borderRadius: '4px', padding: '5px 12px', display: 'flex', alignItems: 'center', gap: '5px' }}>
                   <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: color, flexShrink: 0 }} />
@@ -3762,7 +3920,7 @@
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                 </svg>
-                Nueva reserva
+                {t.reservedRooms.newReservation}
               </button>
             </div>
           </div>
@@ -3785,8 +3943,8 @@
                           <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
                         </svg>
                       </div>
-                      <p style={{ margin: 0, fontSize: '13px' }}>No hay aulas registradas</p>
-                      <p style={{ margin: '4px 0 0', fontSize: '11.5px', color: '#cbd5e1' }}>Ve a "Aulas" para agregar espacios al sistema</p>
+                      <p style={{ margin: 0, fontSize: '13px' }}>{t.reservedRooms.noRooms}</p>
+                      <p style={{ margin: '4px 0 0', fontSize: '11.5px', color: '#cbd5e1' }}>{t.reservedRooms.noRoomsHint}</p>
                     </div>
                   </div>
                 </div>
@@ -3844,21 +4002,21 @@
                             <div>
                               <div style={{ fontWeight: '700', color: '#0f172a', fontSize: '14px', fontFamily: '"DM Sans", sans-serif', lineHeight: 1.2 }}>{aula.nombre}</div>
                               <div style={{ fontSize: '11px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif', marginTop: '2px' }}>
-                                Cap. {aula.capacidad} · {aula.equipoDisponible || 'Sin equipo especial'}
+                                Cap. {aula.capacidad} · {aula.equipoDisponible ? traducirEquipo(aula.equipoDisponible) : t.availableRooms.noSpecialEquip}
                               </div>
                             </div>
                           </div>
                           <span className={`ar-badge ${enMantenimiento ? 'ar-badge-amber' : tieneReservas ? 'ar-badge-blue' : 'ar-badge-green'}`}>
-                            {enMantenimiento ? 'Mantenimiento' : tieneReservas ? `${reservasAula.length} reserva${reservasAula.length !== 1 ? 's' : ''}` : 'Libre'}
+                            {enMantenimiento ? t.reservedRooms.maintenance : tieneReservas ? `${reservasAula.length} reserva${reservasAula.length !== 1 ? 's' : ''}` : t.reservedRooms.free}
                           </span>
                         </div>
 
                         {/* Occupancy bar */}
                         <div>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                            <span className="ar-label">Ocupación hoy</span>
+                            <span className="ar-label">{t.reservedRooms.occupancyToday}</span>
                             <span style={{ fontSize: '11px', fontWeight: '600', color: pctColor, fontFamily: '"DM Sans", sans-serif' }}>
-                              {reservasHoy} de 11 bloques
+                              {reservasHoy} {t.reservedRooms.slotsOf} 11 {t.reservedRooms.slots}
                             </span>
                           </div>
                           <div className="ar-bar-track">
@@ -3874,7 +4032,7 @@
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
                               <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#86efac' }} />
                               <span style={{ fontSize: '12.5px', color: '#16a34a', fontFamily: '"DM Sans", sans-serif', fontWeight: '600' }}>
-                                Disponible para reservar
+                                {t.reservedRooms.availableToReserve}
                               </span>
                             </div>
                           </div>
@@ -3981,7 +4139,7 @@
                           onClick={() => setVistaActual('aulasPúblicas')}
                           style={{ flex: 1, fontSize: '11px', padding: '6px' }}
                         >
-                          Ver horarios
+                          {t.reservedRooms.viewSchedule}
                         </button>
                         {(usuarioActivo?.rol === 'maestro' || usuarioActivo?.rol === 'admin') && (
                           <button
@@ -3989,7 +4147,7 @@
                             onClick={() => setVistaActual('aulasPúblicas')}
                             style={{ flex: 1, fontSize: '11px', padding: '6px' }}
                           >
-                            + Reservar
+                            {t.reservedRooms.reserve}
                           </button>
                         )}
                       </div>
@@ -4017,14 +4175,14 @@
                 gap: '10px',
               }}>
                 <span style={{ fontSize: '11.5px', color: '#64748b', fontFamily: '"DM Sans", sans-serif' }}>
-                  <span style={{ fontWeight: '600', color: '#1e293b' }}>{listaReservas.filter(r => r.estado === 'Confirmada').length}</span> reserva(s) activa(s) en el sistema
+                  <span style={{ fontWeight: '600', color: '#1e293b' }}>{listaReservas.filter(r => r.estado === 'Confirmada').length}</span> {t.home.activeReservations}
                 </span>
                 {/* Role pills */}
                 <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                   {[
-                    { label: 'Admin',   count: listaReservas.filter(r => r.rol === 'admin'   && r.estado === 'Confirmada').length, color: '#dc2626', bg: '#fef2f2' },
-                    { label: 'Maestro', count: listaReservas.filter(r => r.rol === 'maestro' && r.estado === 'Confirmada').length, color: '#2563eb', bg: '#eff6ff' },
-                    { label: 'Alumno',  count: listaReservas.filter(r => r.rol === 'alumno'  && r.estado === 'Confirmada').length, color: '#16a34a', bg: '#f0fdf4' },
+                    { label: t.roles.admin,   count: listaReservas.filter(r => r.rol === 'admin'   && r.estado === 'Confirmada').length, color: '#dc2626', bg: '#fef2f2' },
+                    { label: t.roles.maestro, count: listaReservas.filter(r => r.rol === 'maestro' && r.estado === 'Confirmada').length, color: '#2563eb', bg: '#eff6ff' },
+                    { label: t.roles.alumno,  count: listaReservas.filter(r => r.rol === 'alumno'  && r.estado === 'Confirmada').length, color: '#16a34a', bg: '#f0fdf4' },
                   ].map(({ label, count, color, bg }) => (
                     <div key={label} style={{ background: bg, border: `1px solid ${color}20`, borderRadius: '4px', padding: '4px 11px', display: 'flex', alignItems: 'center', gap: '5px' }}>
                       <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: color, flexShrink: 0 }} />
@@ -4039,14 +4197,14 @@
                 <table className="ar-table">
                   <thead>
                     <tr>
-                      <th>Aula</th>
-                      <th>Reservado por</th>
-                      <th>Fecha</th>
-                      <th>Horario</th>
-                      <th>Rol</th>
-                      <th>Descripción</th>
-                      <th>Estado</th>
-                      {permisos.verReservas && <th style={{ textAlign: 'right' }}>Acciones</th>}
+                      <th>{t.reservedRooms.colRoom}</th>
+                      <th>{t.reservedRooms.colReservedBy}</th>
+                      <th>{t.reservedRooms.colDate}</th>
+                      <th>{t.reservedRooms.colSchedule}</th>
+                      <th>{t.reservedRooms.colRole}</th>
+                      <th>{t.reservedRooms.colDesc}</th>
+                      <th>{t.reservedRooms.colStatus}</th>
+                      {permisos.verReservas && <th style={{ textAlign: 'right' }}>{t.reservedRooms.colActions}</th>}
                     </tr>
                   </thead>
                   <tbody>
@@ -4059,8 +4217,8 @@
                                 <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
                               </svg>
                             </div>
-                            <p style={{ margin: 0, fontSize: '13px' }}>Sin reservas registradas</p>
-                            <p style={{ margin: '4px 0 0', fontSize: '11.5px', color: '#cbd5e1' }}>Las reservas confirmadas aparecerán aquí</p>
+                            <p style={{ margin: 0, fontSize: '13px' }}>{t.allReservations.noReservations}</p>
+                            <p style={{ margin: '4px 0 0', fontSize: '11.5px', color: '#cbd5e1' }}>{t.allReservations.noReservationsHint || t.reservedRooms.noReservationsHint}</p>
                           </div>
                         </td>
                       </tr>
@@ -4133,7 +4291,7 @@
                                 </div>
                                 {esHoy && (
                                   <span className="ar-badge ar-badge-blue" style={{ fontSize: '9px', padding: '2px 6px', animation: 'arPulse 2s ease infinite' }}>
-                                    Hoy
+                                    {t.reservedRooms.today}
                                   </span>
                                 )}
                               </div>
@@ -4151,7 +4309,7 @@
                             {/* Rol */}
                             <td>
                               <span className={`ar-badge ${res.rol === 'admin' ? 'ar-badge-red' : res.rol === 'maestro' ? 'ar-badge-blue' : 'ar-badge-green'}`}>
-                                {res.rol}
+                                {traducirRol(res.rol)}
                               </span>
                             </td>
 
@@ -4169,7 +4327,7 @@
                             {/* Estado */}
                             <td>
                               <span className={`ar-badge ${res.estado === 'Confirmada' ? 'ar-badge-green' : 'ar-badge-red'}`}>
-                                {res.estado || 'Confirmada'}
+                                {traducirEstado(res.estado || 'Confirmada')}
                               </span>
                             </td>
 
@@ -4178,7 +4336,7 @@
                               <td style={{ textAlign: 'right' }}>
                                 {res.estado === 'Confirmada' && (
                                   <button className="ar-btn-danger" onClick={() => cancelarReserva(res.id)}>
-                                    Cancelar
+                                    {t.reservedRooms.cancelBtn}
                                   </button>
                                 )}
                               </td>
@@ -4201,7 +4359,7 @@
                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="2">
                       <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
                     </svg>
-                    Solo administradores y maestros pueden cancelar reservas
+                    {t.reservedRooms.adminOnly}
                   </span>
                 </div>
               )}
@@ -4217,60 +4375,76 @@
 
   {/* ============ VISTA MIS SOLICITUDES (ALUMNO Y MAESTRO) ============ */}
               {permisos.solicitarEquipos && vistaActual === 'solicitudes' && (
-                <div className="seccion-blanca">
-                  <h2> Estado de Mis Solicitudes</h2>
-                  
-                  <h3 style={{marginTop: '20px', color: '#1e40af'}}>Aulas Pendientes</h3>
-                  <div className="table-container">
-                    <table>
-                      <thead><tr><th>Aula</th><th>Fecha y Hora</th><th>Motivo</th><th>Estado</th><th>Acciones</th></tr></thead>
-                      <tbody>
-                        {listaSolicitudes.filter(s => s.solicitadoPor === usuarioActivo.email).length === 0 ? (
-                          <tr><td colSpan="5" style={{textAlign: 'center', padding: '20px'}}>No tienes solicitudes de aulas</td></tr>
-                        ) : (
-                          listaSolicitudes.filter(s => s.solicitadoPor === usuarioActivo.email).map(sol => (
-                            <tr key={sol.id}>
-                              <td><strong>{sol.aulaNombre || sol.tipo}</strong></td>
-                              <td>{sol.fechaSolicitada} ({sol.horaInicio})</td>
-                              <td style={{fontSize: '12px'}}>{sol.descripcion}</td>
-                              <td><span className={`badge ${sol.estado === 'Aprobada' ? 'badge-success' : sol.estado === 'Rechazada' ? 'badge-danger' : 'badge-warning'}`}>{sol.estado}</span></td>
-                              <td>
-                                {/* Botón para retirar solicitud de aula */}
-                                {sol.estado === 'Pendiente' && (
-                                  <button className="btn-small btn-danger" onClick={() => cancelarSolicitudPropia(sol.id, "solicitudes", `Aula ${sol.aulaNombre}`)}>Retirar</button>
-                                )}
-                              </td>
-                            </tr>
-                          ))
-                        )}
-                      </tbody>
-                    </table>
+                <div className="requests-wrapper" style={{animation: 'slideIn 0.5s ease'}}>
+                  <div className="requests-header">
+                    <div className="requests-header-content">
+                      <h1>{t.myRequests.title}</h1>
+                      <p>{t.myRequests.title}</p>
+                    </div>
                   </div>
+                  
+                  <div className="requests-container">
+                    <div className="request-section">
+                      <div className="request-section-header">
+                        <h2>{t.myRequests.pendingRooms}</h2>
+                        <span className="section-badge">{listaSolicitudes.filter(s => s.solicitadoPor === usuarioActivo.email).length}</span>
+                      </div>
+                      <div className="table-container requests-table">
+                        <table>
+                          <thead><tr><th>{t.myRequests.colRoom}</th><th>{t.myRequests.colDateTime}</th><th>{t.myRequests.colReason}</th><th>{t.myRequests.colStatus}</th><th>{t.myRequests.colActions}</th></tr></thead>
+                          <tbody>
+                            {listaSolicitudes.filter(s => s.solicitadoPor === usuarioActivo.email).length === 0 ? (
+                              <tr><td colSpan="5" style={{textAlign: 'center', padding: '30px', color: '#94a3b8'}}>{t.myRequests.noRoomRequests}</td></tr>
+                            ) : (
+                              listaSolicitudes.filter(s => s.solicitadoPor === usuarioActivo.email).map(sol => (
+                                <tr key={sol.id} className="request-row">
+                                  <td><strong style={{color: '#0f172a'}}>{sol.aulaNombre || sol.tipo}</strong></td>
+                                  <td style={{color: '#475569'}}>{sol.fechaSolicitada} ({sol.horaInicio})</td>
+                                  <td style={{fontSize: '13px', color: '#64748b'}}>{sol.descripcion}</td>
+                                  <td><span className={`request-badge badge ${sol.estado === 'Aprobada' ? 'badge-success' : sol.estado === 'Rechazada' ? 'badge-danger' : 'badge-warning'}`}>{traducirEstado(sol.estado)}</span></td>
+                                  <td>
+                                    {sol.estado === 'Pendiente' && (
+                                      <button className="btn-action btn-withdraw" onClick={() => cancelarSolicitudPropia(sol.id, "solicitudes", `Aula ${sol.aulaNombre}`)}>{t.myRequests.withdrawBtn}</button>
+                                    )}
+                                  </td>
+                                </tr>
+                              ))
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
 
-                  <h3 style={{marginTop: '40px', color: '#1e40af'}}>Materiales Solicitados</h3>
-                  <div className="table-container">
-                    <table>
-                      <thead><tr><th>Material</th><th>Cant</th><th>Vencimiento</th><th>Estado / Devolución</th><th>Acciones</th></tr></thead>
-                      <tbody>
-                        {listaSolicitudesMaterial.filter(s => s.solicitadoPor === usuarioActivo.email).length === 0 ? (
-                          <tr><td colSpan="5" style={{textAlign: 'center', padding: '20px'}}>No tienes solicitudes de materiales</td></tr>
-                        ) : (
-                          listaSolicitudesMaterial.filter(s => s.solicitadoPor === usuarioActivo.email).map(sol => (
-                            <tr key={sol.id}>
-                              <td><strong>{sol.equipoNombre}</strong></td><td>x{sol.cantidad}</td>
-                              <td style={{fontSize: '13px'}}>{new Date(sol.fechaDevolucionEsperada).toLocaleString('es-ES', {month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'})}</td>
-                              <td><span className={`badge ${sol.devuelto ? 'badge-success' : (sol.estado === 'Pendiente' ? 'badge-warning' : 'badge-danger')}`}>{sol.devuelto ? 'Devuelto' : sol.estado}</span></td>
-                              <td>
-                                {/* Botón para retirar solicitud de material */}
-                                {sol.estado === 'Pendiente' && (
-                                  <button className="btn-small btn-danger" onClick={() => cancelarSolicitudPropia(sol.id, "solicitudes_material", `Material ${sol.equipoNombre}`)}>Cancelar</button>
-                                )}
-                              </td>
-                            </tr>
-                          ))
-                        )}
-                      </tbody>
-                    </table>
+                    <div className="request-section">
+                      <div className="request-section-header">
+                        <h2>{t.myRequests.materials}</h2>
+                        <span className="section-badge">{listaSolicitudesMaterial.filter(s => s.solicitadoPor === usuarioActivo.email).length}</span>
+                      </div>
+                      <div className="table-container requests-table">
+                        <table>
+                          <thead><tr><th>{t.myRequests.colMaterial}</th><th>{t.myRequests.colQty}</th><th>{t.myRequests.colDueDate}</th><th>{t.myRequests.colStatusReturn}</th><th>{t.myRequests.colActions}</th></tr></thead>
+                          <tbody>
+                            {listaSolicitudesMaterial.filter(s => s.solicitadoPor === usuarioActivo.email).length === 0 ? (
+                              <tr><td colSpan="5" style={{textAlign: 'center', padding: '30px', color: '#94a3b8'}}>{t.myRequests.noMaterialRequests}</td></tr>
+                            ) : (
+                              listaSolicitudesMaterial.filter(s => s.solicitadoPor === usuarioActivo.email).map(sol => (
+                                <tr key={sol.id} className="request-row">
+                                  <td><strong style={{color: '#0f172a'}}>{sol.equipoNombre}</strong></td>
+                                  <td style={{color: '#475569'}}>x{sol.cantidad}</td>
+                                  <td style={{fontSize: '13px', color: '#64748b'}}>{new Date(sol.fechaDevolucionEsperada).toLocaleString('es-ES', {month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'})}</td>
+                                  <td><span className={`request-badge badge ${sol.devuelto ? 'badge-success' : (sol.estado === 'Pendiente' ? 'badge-warning' : 'badge-danger')}`}>{sol.devuelto ? t.myRequests.returned : sol.estado}</span></td>
+                                  <td>
+                                    {sol.estado === 'Pendiente' && (
+                                      <button className="btn-action btn-cancel" onClick={() => cancelarSolicitudPropia(sol.id, "solicitudes_material", `Material ${sol.equipoNombre}`)}>{t.myRequests.cancelBtn}</button>
+                                    )}
+                                  </td>
+                                </tr>
+                              ))
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
@@ -4279,9 +4453,9 @@
               {permisos.verReservas && vistaActual === 'reservasAdmin' && (
                 <div className="seccion-blanca">
                   <div className="section-header">
-                    <h2>Todas las Reservas</h2>
+                    <h2>{t.allReservations.title}</h2>
                     <span className="badge badge-info">
-                      {listaReservas.filter(r => r.estado === 'Confirmada').length} Activas
+                      {listaReservas.filter(r => r.estado === 'Confirmada').length} {t.allReservations.active}
                     </span>
                   </div>
 
@@ -4289,18 +4463,18 @@
                     <table>
                       <thead>
                         <tr>
-                          <th>Aula</th>
-                          <th>Reservado por</th>
-                          <th>Fecha</th>
-                          <th>Horario</th>
-                          <th>Descripción</th>
-                          <th>Estado</th>
-                          <th>Acciones</th>
+                          <th>{t.allReservations.colRoom}</th>
+                          <th>{t.allReservations.colReservedBy}</th>
+                          <th>{t.allReservations.colDate}</th>
+                          <th>{t.allReservations.colSchedule}</th>
+                          <th>{t.allReservations.colDesc}</th>
+                          <th>{t.allReservations.colStatus}</th>
+                          <th>{t.allReservations.colActions}</th>
                         </tr>
                       </thead>
                       <tbody>
                         {listaReservas.length === 0 ? (
-                          <tr><td colSpan="7" style={{textAlign: 'center', padding: '20px'}}>No hay reservas</td></tr>
+                          <tr><td colSpan="7" style={{textAlign: 'center', padding: '20px'}}>{t.allReservations.noReservations}</td></tr>
                         ) : (
                           listaReservas.map((res) => (
                             <tr key={res.id}>
@@ -4319,7 +4493,7 @@
                               </td>
                               <td>
                                 <span className={`badge ${res.estado === 'Confirmada' ? 'badge-success' : 'badge-warning'}`}>
-                                  {res.estado}
+                                  {traducirEstado(res.estado)}
                                 </span>
                               </td>
                               <td>
@@ -4327,7 +4501,7 @@
                                   className="btn-small btn-danger" 
                                   onClick={() => cancelarReserva(res.id)}
                                 >
-                                  Cancelar
+                                  {t.allReservations.cancelBtn}
                                 </button>
                               </td>
                             </tr>
@@ -4661,13 +4835,13 @@
       {/* Left: text */}
       <div style={{ position: 'relative', zIndex: 1 }}>
         <p style={{ margin: '0 0 8px 0', fontSize: '11px', fontWeight: '600', letterSpacing: '2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', fontFamily: '"DM Sans", sans-serif' }}>
-          Gestión de Espacios
+          {t.availableRooms.sectionLabel}
         </p>
         <h2 style={{ margin: '0 0 8px 0', fontSize: '24px', fontWeight: '400', color: '#ffffff', fontFamily: '"DM Serif Display", serif', lineHeight: '1.25' }}>
-          Aulas <span style={{ fontStyle: 'italic' }}>Disponibles</span>
+          {t.availableRooms.title} <span style={{ fontStyle: 'italic' }}>{t.availableRooms.titleItalic}</span>
         </h2>
         <p style={{ margin: 0, color: 'rgba(255,255,255,0.42)', fontSize: '13px', fontFamily: '"DM Sans", sans-serif' }}>
-          Consulta horarios en tiempo real y reserva o solicita tu espacio
+          {t.availableRooms.subtitle}
         </p>
       </div>
 
@@ -4676,7 +4850,7 @@
         {/* Date picker */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <span style={{ fontSize: '11px', fontWeight: '600', letterSpacing: '1.2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', fontFamily: '"DM Sans", sans-serif' }}>
-            Fecha
+            {t.availableRooms.dateLabel}
           </span>
           <input
             type="date"
@@ -4695,9 +4869,9 @@
         {/* Mini stats row */}
         <div style={{ display: 'flex', gap: '10px' }}>
           {[
-            { label: 'Aulas totales',   value: listaAulas.length },
+            { label: t.availableRooms.totalRooms,   value: listaAulas.length },
             {
-              label: 'Disponibles hoy',
+              label: t.availableRooms.availableToday,
               value: (() => {
                 const hoy = fechaSeleccionada;
                 return listaAulas.filter(a => {
@@ -4707,7 +4881,7 @@
               })(),
             },
             {
-              label: 'Bloques libres',
+              label: t.availableRooms.freeSlots,
               value: (() => {
                 const hoy = fechaSeleccionada;
                 let libre = 0;
@@ -4739,7 +4913,7 @@
       ──────────────────────── */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <p style={{ margin: '0 0 10px 0', fontSize: '10px', fontWeight: '600', letterSpacing: '1.4px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>
-          Selecciona un Aula
+          {t.availableRooms.selectRoom}
         </p>
 
         {listaAulas.length === 0 ? (
@@ -4749,7 +4923,7 @@
                 <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
               </svg>
             </div>
-            <p style={{ margin: 0, fontSize: '12.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>Sin aulas registradas</p>
+            <p style={{ margin: 0, fontSize: '12.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.availableRooms.noRooms}</p>
           </div>
         ) : (
           listaAulas.map((aula, idx) => {
@@ -4797,10 +4971,10 @@
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
                   <span style={{ fontSize: '11px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>
-                    Cap. {aula.capacidad} · {aula.equipoDisponible || 'Sin equipo'}
+                    {t.availableRooms.cap} {aula.capacidad} · {aula.equipoDisponible || t.availableRooms.noEquip}
                   </span>
                   <span className={`ad-badge ${enMantenimiento ? 'ad-badge-amber' : libres > 0 ? 'ad-badge-green' : 'ad-badge-red'}`}>
-                    {enMantenimiento ? 'Mant.' : `${libres} libre${libres !== 1 ? 's' : ''}`}
+                    {enMantenimiento ? t.availableRooms.maintenance : `${libres} ${libres !== 1 ? t.availableRooms.freeSlots : t.availableRooms.selectRoom}`}
                   </span>
                 </div>
 
@@ -4826,14 +5000,14 @@
         {/* Legend */}
         {listaAulas.length > 0 && (
           <div style={{ marginTop: '8px', padding: '12px 14px', background: '#fafbfc', border: '1px solid #f1f5f9', borderRadius: '5px' }}>
-            <p style={{ margin: '0 0 8px 0', fontSize: '9.5px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>Leyenda</p>
+            <p style={{ margin: '0 0 8px 0', fontSize: '9.5px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.availableRooms.legend}</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
               {[
-                { color: '#d1fae5', border: '#86efac', label: 'Disponible' },
-                { color: '#dbeafe', border: '#93c5fd', label: 'Seleccionado' },
-                { color: '#fee2e2', border: '#fca5a5', label: 'Ocupado' },
-                { color: '#fef3c7', border: '#fde68a', label: 'En solicitud' },
-                { color: '#f1f5f9', border: '#e2e8f0', label: 'Pasado' },
+                { color: '#d1fae5', border: '#86efac', label: t.availableRooms.legendFree },
+                { color: '#dbeafe', border: '#93c5fd', label: t.availableRooms.legendSelected },
+                { color: '#fee2e2', border: '#fca5a5', label: t.availableRooms.legendOccupied },
+                { color: '#fef3c7', border: '#fde68a', label: t.availableRooms.legendPending },
+                { color: '#f1f5f9', border: '#e2e8f0', label: t.availableRooms.legendPast },
               ].map(({ color, border, label }) => (
                 <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
                   <div className="ad-legend-dot" style={{ background: color, border: `1px solid ${border}` }} />
@@ -4866,10 +5040,10 @@
               </svg>
             </div>
             <p style={{ margin: '0 0 6px 0', fontSize: '14px', fontWeight: '600', color: '#475569', fontFamily: '"DM Sans", sans-serif' }}>
-              Selecciona un aula para ver sus horarios
+              {t.availableRooms.selectRoomPrompt}
             </p>
             <p style={{ margin: 0, fontSize: '12.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>
-              Elige una opción en el panel de la izquierda para consultar la disponibilidad
+              {t.availableRooms.selectRoomHint}
             </p>
           </div>
         ) : (
@@ -4904,7 +5078,7 @@
                     {aulaActual.nombre}
                   </div>
                   <div style={{ fontSize: '12px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif', marginTop: '2px' }}>
-                    Capacidad {aulaActual.capacidad} personas · {aulaActual.equipoDisponible || 'Sin equipo especial'}
+                    {t.availableRooms.people} {aulaActual.capacidad} · {aulaActual.equipoDisponible || t.availableRooms.noSpecialEquip}
                   </div>
                 </div>
               </div>
@@ -4922,9 +5096,9 @@
                     : generarHorarios(aulaActual.id, fechaSeleccionada).some(h => !h.ocupado && !h.pasado) ? 'ad-badge-green'
                     : 'ad-badge-red'
                 }`}>
-                  {aulaActual.estado === 'Mantenimiento' ? 'En mantenimiento'
-                    : generarHorarios(aulaActual.id, fechaSeleccionada).some(h => !h.ocupado && !h.pasado) ? 'Disponible'
-                    : 'Sin horarios libres'}
+                  {aulaActual.estado === 'Mantenimiento' ? t.availableRooms.statusMaintenance
+                    : generarHorarios(aulaActual.id, fechaSeleccionada).some(h => !h.ocupado && !h.pasado) ? t.availableRooms.statusAvailable
+                    : t.availableRooms.statusNoSlots}
                 </span>
               </div>
             </div>
@@ -4941,13 +5115,13 @@
               {/* Slots header */}
               <div style={{ padding: '12px 20px', borderBottom: '1px solid #f1f5f9', background: '#fafbfc', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <span style={{ fontSize: '10px', fontWeight: '600', letterSpacing: '1.3px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>
-                  Bloques Horarios — 7:00 a 18:00
+                  {t.availableRooms.slotsHeader}
                 </span>
                 {horarioSeleccionado && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2563eb', animation: 'adPulse 1.5s ease infinite' }} />
                     <span style={{ fontSize: '11.5px', fontWeight: '600', color: '#2563eb', fontFamily: '"DM Sans", sans-serif' }}>
-                      Bloque {horarioSeleccionado.horaInicio}–{horarioSeleccionado.horaFin} seleccionado
+                      {t.availableRooms.slotSelected.replace('{inicio}', horarioSeleccionado?.horaInicio).replace('{fin}', horarioSeleccionado?.horaFin)}
                     </span>
                   </div>
                 )}
@@ -4969,7 +5143,7 @@
                         <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
                       </svg>
                       <span style={{ fontSize: '12.5px', fontWeight: '600', color: '#991b1b', fontFamily: '"DM Sans", sans-serif' }}>
-                        Esta fecha ya pasó — no es posible reservar en fechas anteriores al día de hoy
+                        {t.availableRooms.pastDateWarning}
                       </span>
                     </div>
                   );
@@ -5039,9 +5213,9 @@
                             {/* Status icon / label */}
                             <div style={{ textAlign: 'right' }}>
                               {isPast ? (
-                                <span style={{ fontSize: '9px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px', color: '#b0bac9', fontFamily: '"DM Sans", sans-serif' }}>Pasado</span>
+                                <span style={{ fontSize: '9px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px', color: '#b0bac9', fontFamily: '"DM Sans", sans-serif' }}>{t.availableRooms.past}</span>
                               ) : horario.conSolicitud ? (
-                                <span style={{ fontSize: '9px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px', color: '#92400e', fontFamily: '"DM Sans", sans-serif' }}>Pendiente</span>
+                                <span style={{ fontSize: '9px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px', color: '#92400e', fontFamily: '"DM Sans", sans-serif' }}>{t.availableRooms.pending}</span>
                               ) : horario.ocupado ? (
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                   <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
@@ -5148,7 +5322,7 @@
 
                   {reservaDetalle.descripcion && (
                     <div style={{ gridColumn: '1 / -1' }}>
-                      <p style={{ margin: '0 0 4px', fontSize: '10px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>Descripción</p>
+                      <p style={{ margin: '0 0 4px', fontSize: '10px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.availableRooms.description}</p>
                       <div style={{ fontSize: '13px', color: '#475569', fontFamily: '"DM Sans", sans-serif', lineHeight: '1.5', whiteSpace: 'pre-wrap' }}>
                         {reservaDetalle.descripcion}
                       </div>
@@ -5187,9 +5361,7 @@
                       </svg>
                     </div>
                     <div>
-                      <div style={{ fontSize: '13px', fontWeight: '700', color: usuarioActivo.rol === 'alumno' ? '#1e40af' : '#166534', fontFamily: '"DM Sans", sans-serif' }}>
-                        {usuarioActivo.rol === 'alumno' ? 'Enviar Solicitud de Reserva' : 'Confirmar Reserva Directa'}
-                      </div>
+                    {useradoActivo.rol === 'alumno' ? 'Enviar Solicitud de Reserva' : 'Confirmar Reserva Directa'}
                       <div style={{ fontSize: '11px', color: usuarioActivo?.rol === 'alumno' ? '#3b82f6' : '#16a34a', fontFamily: '"DM Sans", sans-serif' }}>
                         {aulaActual.nombre} · {horarioSeleccionado.horaInicio}–{horarioSeleccionado.horaFin} · {new Date(fechaSeleccionada + 'T12:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
                       </div>
@@ -5213,10 +5385,10 @@
                   gap: '12px',
                 }}>
                   {[
-                    { label: 'Aula',    value: aulaActual.nombre },
-                    { label: 'Fecha',   value: new Date(fechaSeleccionada + 'T12:00:00').toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' }) },
-                    { label: 'Horario', value: `${horarioSeleccionado.horaInicio} – ${horarioSeleccionado.horaFin}` },
-                    { label: 'Modo',    value: usuarioActivo.rol === 'alumno' ? 'Solicitud' : 'Reserva directa' },
+                    { label: t.availableRooms.room,    value: aulaActual.nombre },
+                    { label: t.availableRooms.date,   value: new Date(fechaSeleccionada + 'T12:00:00').toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' }) },
+                    { label: t.availableRooms.time, value: `${horarioSeleccionado.horaInicio} – ${horarioSeleccionado.horaFin}` },
+                    { label: t.availableRooms.mode,    value: usuarioActivo.rol === 'alumno' ? t.availableRooms.modeRequest : t.availableRooms.modeDirectReserve },
                   ].map(({ label, value }) => (
                     <div key={label}>
                       <div style={{ fontSize: '10px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif', marginBottom: '2px' }}>
@@ -5241,15 +5413,15 @@
 
                     <div style={{ marginBottom: '14px' }}>
                       <label style={{ display: 'block', marginBottom: '6px', fontSize: '10px', fontWeight: '600', letterSpacing: '1.2px', textTransform: 'uppercase', color: '#64748b', fontFamily: '"DM Sans", sans-serif' }}>
-                        {usuarioActivo.rol === 'alumno' ? 'Motivo de la solicitud' : 'Descripción del uso del aula'}
+                        {usuarioActivo.rol === 'alumno' ? t.availableRooms.reasonLabel : t.availableRooms.descLabel}
                       </label>
                       <textarea
                         name="descripcion"
                         className="ad-textarea"
                         placeholder={
                           usuarioActivo.rol === 'alumno'
-                            ? 'Describe el motivo de tu solicitud al administrador...'
-                            : 'Describe el uso del aula para esta clase o actividad...'
+                            ? t.availableRooms.reasonPlaceholder
+                            : t.availableRooms.descPlaceholder
                         }
                         required
                         rows="3"
@@ -5271,8 +5443,8 @@
                       </svg>
                       <span style={{ fontSize: '12px', color: usuarioActivo.rol === 'alumno' ? '#1e40af' : '#166534', fontFamily: '"DM Sans", sans-serif', lineHeight: 1.5 }}>
                         {usuarioActivo.rol === 'alumno'
-                          ? 'Tu solicitud quedará pendiente hasta que un administrador la apruebe. Recibirás una notificación con la respuesta.'
-                          : 'Como maestro/admin, tu reserva se confirma de inmediato y el horario quedará bloqueado.'
+                          ? t.availableRooms.infoStudent
+                          : t.availableRooms.infoTeacher
                         }
                       </span>
                     </div>
@@ -5283,13 +5455,13 @@
                         className="ad-btn-ghost"
                         onClick={() => { setHorarioSeleccionado(null); setShowSolicitudDesdeAula(false); }}
                       >
-                        Cancelar
+                        {t.availableRooms.cancelBtn}
                       </button>
                       <button
                         type="submit"
                         className={usuarioActivo.rol === 'alumno' ? 'ad-btn-submit-blue' : 'ad-btn-submit'}
                       >
-                        {usuarioActivo.rol === 'alumno' ? 'Enviar Solicitud' : 'Reservar Ahora'}
+                        {usuarioActivo.rol === 'alumno' ? t.availableRooms.submitRequest : t.availableRooms.submitReserve}
                       </button>
                     </div>
                   </form>
@@ -5548,25 +5720,25 @@
 
                     <div style={{ position: 'relative', zIndex: 1 }}>
                       <p style={{ margin: '0 0 8px 0', fontSize: '11px', fontWeight: '600', letterSpacing: '2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)', fontFamily: '"DM Sans", sans-serif' }}>
-                        {rolNormalizado === 'admin' ? 'Gestión de Recursos' : 'Consulta de Recursos'}
+                        {rolNormalizado === 'admin' ? t.inventoryUser.sectionLabel : t.inventoryUser.sectionLabel}
                       </p>
                       <h2 style={{ margin: '0 0 8px 0', fontSize: '24px', fontWeight: '400', color: '#ffffff', fontFamily: '"DM Serif Display", serif', lineHeight: '1.25' }}>
-                        Inventario de <span style={{ fontStyle: 'italic' }}>Materiales y Equipos</span>
+                        {t.inventoryUser.title} <span style={{ fontStyle: 'italic' }}>{t.inventoryUser.titleItalic}</span>
                       </h2>
                       <p style={{ margin: 0, color: 'rgba(255,255,255,0.45)', fontSize: '13px', fontFamily: '"DM Sans", sans-serif' }}>
                         {rolNormalizado === 'admin'
-                          ? 'Registra, edita y controla el stock del laboratorio'
-                          : 'Consulta disponibilidad y solicita préstamos de equipos'}
+                          ? t.inventoryUser.subtitle
+                          : t.inventoryUser.subtitle}
                       </p>
                     </div>
 
                     {/* Mini stats */}
                     <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                       {[
-                        { label: 'Tipos de equipo', value: listaEquipos.length },
-                        { label: 'Total en stock',  value: listaEquipos.reduce((t, eq) => t + (eq.cantidad || 0), 0) },
-                        { label: 'Sin stock',        value: listaEquipos.filter(eq => (eq.cantidad || 0) === 0).length },
-                        { label: 'Préstamos activos', value: listaSolicitudesMaterial.filter(s => s.estado === 'Aprobada' && !s.devuelto).length },
+                        { label: t.inventoryUser.equipmentTypes, value: listaEquipos.length },
+                        { label: t.inventoryUser.totalStock,  value: listaEquipos.reduce((t, eq) => t + (eq.cantidad || 0), 0) },
+                        { label: t.inventoryUser.noStock,        value: listaEquipos.filter(eq => (eq.cantidad || 0) === 0).length },
+                        { label: t.inventoryUser.activeLoans, value: listaSolicitudesMaterial.filter(s => s.estado === 'Aprobada' && !s.devuelto).length },
                       ].map((s, i) => (
                         <div key={i} style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px', padding: '10px 16px', textAlign: 'center', minWidth: '80px' }}>
                           <div style={{ fontSize: '20px', fontWeight: '300', color: s.label === 'Sin stock' && s.value > 0 ? '#fca5a5' : '#ffffff', fontFamily: '"DM Serif Display", serif', lineHeight: 1, marginBottom: '4px' }}>{s.value}</div>
@@ -5586,14 +5758,14 @@
                           </svg>
                         </div>
                         <div>
-                          <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>Registrar Nuevo Equipo</div>
-                          <div style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>Agrega equipos o materiales al inventario del laboratorio</div>
+                          <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.registerEquipment}</div>
+                          <div style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.registerEquipmentDesc}</div>
                         </div>
                         <button
                           onClick={() => setShowFormReserva(!showFormReserva)}
                           style={{ marginLeft: 'auto', padding: '6px 16px', background: showFormReserva ? '#f1f5f9' : '#0f172a', color: showFormReserva ? '#64748b' : '#fff', border: '1px solid #e4e8ef', borderRadius: '4px', fontSize: '12px', fontWeight: '600', fontFamily: '"DM Sans", sans-serif', cursor: 'pointer', transition: 'all 0.2s' }}
                         >
-                          {showFormReserva ? 'Cancelar' : 'Agregar equipo'}
+                          {showFormReserva ? t.inventoryUser.cancelBtn : t.inventoryUser.addEquipmentBtn}
                         </button>
                       </div>
 
@@ -5602,13 +5774,13 @@
                           <form onSubmit={guardarNuevoEquipo}>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 180px 140px 160px', gap: '12px', alignItems: 'flex-end' }}>
                               <div>
-                                <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>Nombre del equipo</label>
-                                <input name="nombre" className="inv-input" placeholder="Ej: Cámara Sony A7" required />
+                                <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.equipmentName}</label>
+                                <input name="nombre" className="inv-input" placeholder={t.inventoryUser.equipmentNamePlaceholder} required />
                               </div>
                               <div>
-                                <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>Categoría</label>
+                                <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.category}</label>
                                 <select name="categoria" className="inv-input" required style={{ cursor: 'pointer' }}>
-                                  <option value="">Seleccionar...</option>
+                                  <option value="">{t.inventoryUser.selectOption}</option>
                                   <option value="Gafas RV">Gafas RV</option>
                                   <option value="Cámara">Cámara</option>
                                   <option value="Laptop">Laptop</option>
@@ -5617,20 +5789,20 @@
                                 </select>
                               </div>
                               <div>
-                                <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>Cantidad</label>
+                                <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.quantity}</label>
                                 <input name="cantidad" type="number" min="1" className="inv-input" placeholder="1" defaultValue="1" />
                               </div>
                               <div>
-                                <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>Estado</label>
+                                <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.status}</label>
                                 <select name="estado" className="inv-input" style={{ cursor: 'pointer' }}>
-                                  <option value="Disponible">Disponible</option>
-                                  <option value="Mantenimiento">Mantenimiento</option>
-                                  <option value="Inactivo">Inactivo</option>
+                                  <option value="Disponible">{t.inventoryUser.available}</option>
+                                  <option value="Mantenimiento">{t.inventoryUser.maintenance}</option>
+                                  <option value="Inactivo">{t.inventoryUser.inactive}</option>
                                 </select>
                               </div>
                             </div>
                             <div style={{ marginTop: '14px', display: 'flex', justifyContent: 'flex-end' }}>
-                              <button type="submit" className="inv-btn-green">Registrar en inventario</button>
+                              <button type="submit" className="inv-btn-green">{t.inventoryUser.registerBtn}</button>
                             </div>
                           </form>
                         </div>
@@ -5648,14 +5820,14 @@
                           </svg>
                         </div>
                         <div>
-                          <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>Solicitar Material en Préstamo</div>
-                          <div style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>Completa el formulario y el administrador aprobará tu solicitud</div>
+                          <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.requestLoan}</div>
+                          <div style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.requestLoanDesc}</div>
                         </div>
                         <button
                           onClick={() => setShowFormSolicitudMaterial(!showFormSolicitudMaterial)}
                           style={{ marginLeft: 'auto', padding: '6px 16px', background: showFormSolicitudMaterial ? '#f1f5f9' : '#059669', color: showFormSolicitudMaterial ? '#64748b' : '#fff', border: '1px solid ' + (showFormSolicitudMaterial ? '#e4e8ef' : '#059669'), borderRadius: '4px', fontSize: '12px', fontWeight: '600', fontFamily: '"DM Sans", sans-serif', cursor: 'pointer', transition: 'all 0.2s' }}
                         >
-                          {showFormSolicitudMaterial ? 'Cancelar' : 'Nueva solicitud'}
+                          {showFormSolicitudMaterial ? t.inventoryUser.cancelBtn : t.inventoryUser.newRequestBtn}
                         </button>
                       </div>
 
@@ -5664,38 +5836,38 @@
                           <form onSubmit={crearSolicitudMaterial}>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 140px 180px', gap: '12px', marginBottom: '12px' }}>
                               <div>
-                                <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>Material</label>
+                                <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.material}</label>
                                 <select name="equipoId" className="inv-input" required style={{ cursor: 'pointer' }}>
-                                  <option value="">Selecciona un material...</option>
+                                  <option value="">{t.inventoryUser.selectMaterial}</option>
                                   {listaEquipos.filter(e => e.cantidad > 0).map(equipo => (
                                     <option key={equipo.id} value={equipo.id}>
-                                      {equipo.nombre} — {equipo.cantidad} disponible{equipo.cantidad !== 1 ? 's' : ''}
+                                      {equipo.nombre} — {equipo.cantidad} {equipo.cantidad === 1 ? t.inventoryUser.available : t.inventoryUser.availablePlural}
                                     </option>
                                   ))}
                                 </select>
                               </div>
                               <div>
-                                <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>Cantidad</label>
+                                <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.quantity}</label>
                                 <input name="cantidad" type="number" min="1" className="inv-input" placeholder="1" required />
                               </div>
                               <div>
-                                <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>Tiempo de uso</label>
+                                <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.usageTime}</label>
                                 <select name="tiempoUso" className="inv-input" required style={{ cursor: 'pointer' }}>
-                                  <option value="">Seleccionar duración...</option>
-                                  <option value="1">1 hora</option>
-                                  <option value="2">2 horas</option>
-                                  <option value="24">1 día completo</option>
-                                  <option value="168">1 semana</option>
-                                  <option value="-24" style={{ color: '#dc2626' }}>TEST: Simular Atraso</option>
+                                  <option value="">{t.inventoryUser.selectDuration}</option>
+                                  <option value="1">1 hour</option>
+                                  <option value="2">2 hours</option>
+                                  <option value="24">1 full day</option>
+                                  <option value="168">1 week</option>
+                                  <option value="-24" style={{ color: '#dc2626' }}>TEST: Simulate Delay</option>
                                 </select>
                               </div>
                             </div>
                             <div style={{ marginBottom: '14px' }}>
-                              <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>Motivo del préstamo</label>
-                              <textarea name="motivo" className="inv-input" placeholder="¿Para qué clase o proyecto necesitas este material?" required rows="2" style={{ resize: 'vertical', minHeight: '60px' }} />
+                              <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.reasonLoan}</label>
+                              <textarea name="motivo" className="inv-input" placeholder={t.inventoryUser.reasonLoanPlaceholder} required rows="2" style={{ resize: 'vertical', minHeight: '60px' }} />
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                              <button type="submit" className="inv-btn-green">Enviar solicitud al administrador</button>
+                              <button type="submit" className="inv-btn-green">{t.inventoryUser.submitRequestBtn}</button>
                             </div>
                           </form>
                         </div>
@@ -5713,8 +5885,8 @@
                           </svg>
                         </div>
                         <div>
-                          <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>Catálogo de Equipos</div>
-                          <div style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{listaEquipos.length} tipo(s) registrado(s) en el inventario</div>
+                          <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.catalogTitle}</div>
+                          <div style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{listaEquipos.length} {t.inventoryUser.equipmentRegistered}</div>
                         </div>
                       </div>
                       {/* Category pills */}
@@ -5730,7 +5902,7 @@
                           return (
                             <div key={estado} style={{ background: bg, border: `1px solid ${color}22`, borderRadius: '4px', padding: '4px 12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                               <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: color, display: 'inline-block' }} />
-                              <span style={{ fontSize: '11px', fontWeight: '600', color, fontFamily: '"DM Sans", sans-serif' }}>{count} {estado}</span>
+                              <span style={{ fontSize: '11px', fontWeight: '600', color, fontFamily: '"DM Sans", sans-serif' }}>{count} {estado === 'Disponible' ? t.inventoryUser.available : estado === 'Sin stock' ? t.inventoryUser.noStock : t.inventoryUser.maintenance}</span>
                             </div>
                           );
                         })}
@@ -5741,12 +5913,12 @@
                       <table className="inv-table">
                         <thead>
                           <tr>
-                            <th>Equipo / Material</th>
-                            <th>Categoría</th>
-                            <th>Stock</th>
-                            <th>Disponibilidad</th>
-                            {rolNormalizado === 'admin' && <th>Registrado por</th>}
-                            {rolNormalizado === 'admin' && <th style={{ textAlign: 'right' }}>Acciones</th>}
+                            <th>{t.inventoryUser.colEquipment}</th>
+                            <th>{t.inventoryUser.colCategory}</th>
+                            <th>{t.inventoryUser.colStock}</th>
+                            <th>{t.inventoryUser.colAvailability}</th>
+                            {rolNormalizado === 'admin' && <th>{t.inventoryUser.colRegisteredBy}</th>}
+                            {rolNormalizado === 'admin' && <th style={{ textAlign: 'right' }}>{t.inventoryUser.colActions}</th>}
                           </tr>
                         </thead>
                         <tbody>
@@ -5758,7 +5930,7 @@
                                     <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
                                   </svg>
                                 </div>
-                                Sin equipos registrados
+                                {t.inventoryUser.noEquipmentRegistered}
                               </td>
                             </tr>
                           ) : (
@@ -5824,7 +5996,7 @@
                                   {/* Disponibilidad */}
                                   <td>
                                     <span className={`inv-badge ${sinStock ? 'inv-badge-red' : enMantenimiento ? 'inv-badge-amber' : 'inv-badge-green'}`}>
-                                      {sinStock ? 'Sin stock' : enMantenimiento ? 'Mantenimiento' : 'Disponible'}
+                                      {sinStock ? t.inventoryUser.noStock : enMantenimiento ? t.inventoryUser.maintenance : t.inventoryUser.available}
                                     </span>
                                   </td>
                                   {/* Admin only columns */}
@@ -5836,7 +6008,7 @@
                                   {rolNormalizado === 'admin' && (
                                     <td style={{ textAlign: 'right' }}>
                                       <button className="inv-btn-danger-outline" onClick={() => eliminarEquipo(eq.id)}>
-                                        Eliminar
+                                        {t.inventoryUser.deleteBtn}
                                       </button>
                                     </td>
                                   )}
@@ -5873,8 +6045,8 @@
                             </svg>
                           </div>
                           <div>
-                            <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>Mis Solicitudes de Material</div>
-                            <div style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>Historial de préstamos solicitados por ti</div>
+                            <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.myMaterialRequests}</div>
+                            <div style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.historyBorrowedByYou}</div>
                           </div>
                         </div>
                         {/* Pending count badge */}
@@ -5882,7 +6054,7 @@
                           <div style={{ background: '#fffbeb', border: '1px solid #fde68a', borderRadius: '4px', padding: '4px 12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                             <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#b45309', display: 'inline-block' }} />
                             <span style={{ fontSize: '11px', fontWeight: '600', color: '#b45309', fontFamily: '"DM Sans", sans-serif' }}>
-                              {listaSolicitudesMaterial.filter(s => s.solicitadoPor === usuarioActivo?.email && s.estado === 'Pendiente').length} pendiente(s)
+                              {listaSolicitudesMaterial.filter(s => s.solicitadoPor === usuarioActivo?.email && s.estado === 'Pendiente').length} {t.inventoryUser.pendingLabel}
                             </span>
                           </div>
                         )}
@@ -5892,12 +6064,12 @@
                         <table className="inv-table">
                           <thead>
                             <tr>
-                              <th>Material</th>
-                              <th>Cantidad</th>
-                              <th>Motivo</th>
-                              <th>Devolución esperada</th>
-                              <th>Estado</th>
-                              <th>Devuelto</th>
+                              <th>{t.inventoryUser.colMaterial}</th>
+                              <th>{t.inventoryUser.colQuantity}</th>
+                              <th>{t.inventoryUser.colReason}</th>
+                              <th>{t.inventoryUser.colExpectedReturn}</th>
+                              <th>{t.inventoryUser.colStatus}</th>
+                              <th>{t.inventoryUser.colReturned}</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -5918,7 +6090,7 @@
                                   <td>
                                     <div style={{ fontSize: '12px', color: esAtrasado ? '#dc2626' : '#64748b', fontFamily: '"DM Sans", sans-serif', fontWeight: esAtrasado ? '600' : '400' }}>
                                       {esAtrasado && (
-                                        <div style={{ fontSize: '10px', fontWeight: '700', color: '#dc2626', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>Vencido</div>
+                                        <div style={{ fontSize: '10px', fontWeight: '700', color: '#dc2626', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>{t.inventoryAdmin.overdueBadge}</div>
                                       )}
                                       {new Date(sol.fechaDevolucionEsperada).toLocaleString('es-ES', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                     </div>
@@ -5930,7 +6102,7 @@
                                   </td>
                                   <td>
                                     <span className={`inv-badge ${sol.devuelto ? 'inv-badge-green' : sol.estado === 'Aprobada' ? 'inv-badge-red' : 'inv-badge-gray'}`}>
-                                      {sol.devuelto ? 'Sí' : sol.estado === 'Aprobada' ? 'No' : '—'}
+                                      {sol.devuelto ? t.inventoryUser.returned : sol.estado === 'Aprobada' ? t.inventoryUser.notReturned : '—'}
                                     </span>
                                   </td>
                                 </tr>
@@ -5948,7 +6120,7 @@
               {permisos.verSolicitudes && vistaActual === 'solicitudesAdmin' && (
                 <div className="seccion-blanca">
                   <div className="section-header">
-                    <h2>Gestión de Solicitudes</h2>
+                    <h2>{t.adminRequests.title}</h2>
                   </div>
 
                   {/* TABS */}
@@ -5965,7 +6137,7 @@
                         color: tabSolicitudesAdmin === 'aulas' ? '#3b82f6' : '#64748b'
                       }}
                     >
-                      📚 Aulas ({listaSolicitudes.filter(s => s.estado === 'Pendiente').length})
+                      📚 {t.adminRequests.tabRooms} ({listaSolicitudes.filter(s => s.estado === 'Pendiente').length})
                     </button>
                     <button 
                       onClick={() => setTabSolicitudesAdmin('materiales')}
@@ -5979,7 +6151,7 @@
                         color: tabSolicitudesAdmin === 'materiales' ? '#3b82f6' : '#64748b'
                       }}
                     >
-                      Materiales ({listaSolicitudesMaterial.filter(s => s.estado === 'Pendiente').length})
+                      {t.adminRequests.tabMateriales} ({listaSolicitudesMaterial.filter(s => s.estado === 'Pendiente').length})
                     </button>
                     <button 
                       onClick={() => setTabSolicitudesAdmin('devoluciones')}
@@ -5993,7 +6165,7 @@
                         color: tabSolicitudesAdmin === 'devoluciones' ? '#3b82f6' : '#64748b'
                       }}
                     >
-                      Devoluciones ({listaSolicitudesMaterial.filter(s => s.estado === 'Aprobada' && !s.devuelto).length})
+                      {t.adminRequests.tabReturns} ({listaSolicitudesMaterial.filter(s => s.estado === 'Aprobada' && !s.devuelto).length})
                     </button>
                   </div>
 
@@ -6003,16 +6175,16 @@
                       <table>
                         <thead>
                           <tr>
-                            <th>Solicitado por</th>
-                            <th>Tipo</th>
-                            <th>Descripción</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
+                            <th>{t.adminRequests.colRequester}</th>
+                            <th>{t.adminRequests.colType}</th>
+                            <th>{t.adminRequests.colDesc}</th>
+                            <th>{t.adminRequests.colStatus}</th>
+                            <th>{t.adminRequests.colActions}</th>
                           </tr>
                         </thead>
                         <tbody>
                           {listaSolicitudes.length === 0 ? (
-                            <tr><td colSpan="5" style={{textAlign: 'center', padding: '20px'}}>No hay solicitudes</td></tr>
+                            <tr><td colSpan="5" style={{textAlign: 'center', padding: '20px'}}>{t.adminRequests.noRequests}</td></tr>
                           ) : (
                             listaSolicitudes.map((sol) => (
                               <tr key={sol.id} className={sol.estado === 'Pendiente' ? 'row-highlight' : ''}>
@@ -6025,7 +6197,7 @@
                                     sol.estado === 'Rechazada' ? 'badge-danger' : 
                                     'badge-warning'
                                   }`}>
-                                    {sol.estado}
+                                    {traducirEstado(sol.estado)}
                                   </span>
                                 </td>
                                 <td>
@@ -6035,13 +6207,13 @@
                                         className="btn-small btn-success" 
                                         onClick={() => aprobarSolicitud(sol.id)}
                                       >
-                                        Aprobar
+                                        {t.adminRequests.approveBtn}
                                       </button>
                                       <button 
                                         className="btn-small btn-danger" 
                                         onClick={() => rechazarSolicitud(sol.id)}
                                       >
-                                        Rechazar
+                                        {t.adminRequests.rejectBtn}
                                       </button>
                                     </>
                                   )}
@@ -6060,18 +6232,18 @@
                       <table>
                         <thead>
                           <tr>
-                            <th>Solicitado por</th>
-                            <th>Material (cantidad)</th>
-                            <th>Motivo</th>  {/* <--- NUEVA COLUMNA */}
-                            <th>Tiempo</th>
-                            <th>Vencimiento</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
+                            <th>{t.adminRequests.colRequester}</th>
+                            <th>{t.adminRequests.colMaterial}</th>
+                            <th>{t.adminRequests.colReason}</th>
+                            <th>{t.adminRequests.colTime}</th>
+                            <th>{t.adminRequests.colDueDate}</th>
+                            <th>{t.adminRequests.colStatus}</th>
+                            <th>{t.adminRequests.colActions}</th>
                           </tr>
                         </thead>
                         <tbody>
                           {listaSolicitudesMaterial.length === 0 ? (
-                            <tr><td colSpan="7" style={{textAlign: 'center', padding: '20px'}}>No hay solicitudes de material</td></tr>
+                            <tr><td colSpan="7" style={{textAlign: 'center', padding: '20px'}}>{t.adminRequests.noMaterial}</td></tr>
                           ) : (
                             listaSolicitudesMaterial.filter(s => s.estado !== 'Rechazada').map((sol) => {
                               const equipo = listaEquipos.find(e => e.id === sol.equipoId);
@@ -6082,8 +6254,8 @@
                               return (
                                 <tr key={sol.id} className={sol.estado === 'Pendiente' ? 'row-highlight' : ''} style={{backgroundColor: esAtrasado ? '#fee2e2' : ''}}>
                                   <td><strong>{sol.solicitadoPor}</strong></td>
-                                  <td>{equipo ? equipo.nombre : 'Desconocido'} <b>(x{sol.cantidad})</b></td>
-                                  <td style={{fontSize: '12px', maxWidth: '150px'}}>{sol.motivo || 'No especificado'}</td> {/* <--- NUEVA CELDA */}
+                                  <td>{equipo ? equipo.nombre : t.adminRequests.unknown} <b>(x{sol.cantidad})</b></td>
+                                  <td style={{fontSize: '12px', maxWidth: '150px'}}>{sol.motivo || t.adminRequests.notSpecified}</td> {/* <--- NUEVA CELDA */}
                                   <td style={{fontSize: '13px'}}>{sol.tiempoUso} horas</td>
                                   <td style={{fontSize: '13px', color: esAtrasado ? '#dc2626' : '#64748b'}}>
                                     {esAtrasado && '⚠️ '} 
@@ -6095,7 +6267,7 @@
                                       sol.estado === 'Rechazada' ? 'badge-danger' : 
                                       'badge-warning'
                                     }`}>
-                                      {sol.estado}
+                                      {traducirEstado(sol.estado)}
                                     </span>
                                   </td>
                                   <td style={{whiteSpace: 'nowrap'}}>
@@ -6105,13 +6277,13 @@
                                           className="btn-small btn-success" 
                                           onClick={() => aprobarSolicitudMaterial(sol.id)}
                                         >
-                                          Aprobar
+                                          {t.adminRequests.approveBtn}
                                         </button>
                                         <button 
                                           className="btn-small btn-danger" 
                                           onClick={() => rechazarSolicitudMaterial(sol.id)}
                                         >
-                                          Rechazar
+                                          {t.adminRequests.rejectBtn}
                                         </button>
                                       </>
                                     )}
@@ -6131,24 +6303,24 @@
                       {/* Botón dinámico para ejecutar la función de atrasos */}
                       <div style={{padding: '15px', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'flex-end', backgroundColor: '#f8fafc'}}>
                         <button className="btn-small btn-danger" onClick={enviarNotificacionesPorAtrasos} style={{padding: '8px 15px'}}>
-                          🔔 Enviar Recordatorios de Atraso a Alumnos
+                          🔔 {t.adminRequests.sendDelayNotifications}
                         </button>
                       </div>
 
                       <table>
                         <thead>
                           <tr>
-                            <th>Usuario</th>
-                            <th>Material</th>
-                            <th>Cantidad</th>
-                            <th>Vencimiento</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
+                            <th>{t.adminRequests.colUser}</th>
+                            <th>{t.adminRequests.colMaterial}</th>
+                            <th>{t.adminRequests.colQty}</th>
+                            <th>{t.adminRequests.colDueStatus}</th>
+                            <th>{t.adminRequests.colDelivery}</th>
+                            <th>{t.adminRequests.colActions}</th>
                           </tr>
                         </thead>
                         <tbody>
                           {listaSolicitudesMaterial.filter(s => s.estado === 'Aprobada' && !s.devuelto).length === 0 ? (
-                            <tr><td colSpan="6" style={{textAlign: 'center', padding: '20px'}}>Todos los materiales han sido devueltos ✅</td></tr>
+                            <tr><td colSpan="6" style={{textAlign: 'center', padding: '20px'}}>{t.adminRequests.allReturned}</td></tr>
                           ) : (
                             listaSolicitudesMaterial
                               .filter(s => s.estado === 'Aprobada' && !s.devuelto)
@@ -6170,12 +6342,12 @@
                                     <td>{equipo ? equipo.nombre : 'Desconocido'}</td>
                                     <td>{sol.cantidad}</td>
                                     <td style={{fontSize: '13px', color: esAtrasado ? '#dc2626' : '#16a34a'}}>
-                                      {esAtrasado ? `⚠️ Atrasado ${horasAtrasado}h` : '✅ A tiempo'} <br/>
+                                      {esAtrasado ? `⚠️ ${t.adminRequests.delayedStatus} ${horasAtrasado}h` : '✅ ' + t.adminRequests.onTimeStatus} <br/>
                                       {new Date(sol.fechaDevolucionEsperada).toLocaleString('es-ES', {year: '2-digit', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'})}
                                     </td>
                                     <td>
                                       <span className={`badge ${esAtrasado ? 'badge-danger' : 'badge-success'}`}>
-                                        {esAtrasado ? 'ATRASADO' : 'EN TIEMPO'}
+                                        {esAtrasado ? t.adminRequests.delayedBadge : t.adminRequests.onTimeBadge}
                                       </span>
                                     </td>
                                     <td>
@@ -6184,7 +6356,7 @@
                                         onClick={() => registrarDevolucionMaterial(sol.id)}
                                         style={{backgroundColor: '#16a34a'}}
                                       >
-                                        ✅ Devolución Confirmada
+                                        ✅ {t.adminRequests.confirmReturnBtn}
                                       </button>
                                     </td>
                                   </tr>
@@ -6201,7 +6373,7 @@
               {/* FALLBACK si no hay vista */}
               {!vistaActual && (
                 <div style={{padding: '20px', color: 'red', fontSize: '16px', fontWeight: 'bold'}}>
-                  Error: Vista no seleccionada. Por favor, recarga la página.
+                  {t.messages.viewNotSelected}
                 </div>
               )}
             </div>
@@ -6211,53 +6383,143 @@
     }
 
     // ====================================================
-    // VISTA LOGIN
+    // VISTA LOGIN - SPLIT SCREEN DESIGN
     // ====================================================
     return (
-      <div className="login-background">
-        <div className="login-container">
-          <div className="login-box">
-            <div className="login-header">
-              <h1>LabReserve</h1>
-              <p>Sistema de Reservas del Laboratorio</p>
-            </div>
+      <div className="split-screen-login">
+        {/* LEFT SIDE - EDUCATIONAL VISUAL */}
+        <div className="login-left-panel">
+          <div className="educational-visual">
+            <div className="visual-bg-gradient"></div>
             
-            {mensaje && <div className={`alert alert-${tipoMensaje}`}>{mensaje}</div>}
+            <div className="edu-content">
+              <div className="edu-header">
+                <div className="lr-brand">LR</div>
+                <h1>LabReserve</h1>
+                <p className="brand-tagline">{t.login.subtitle}</p>
+              </div>
+              
+              <div className="edu-features">
+                <div className="feature-item">
+                  <div className="feature-icon icon-1">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                      <path d="M3 9h18M9 3v18"/>
+                    </svg>
+                  </div>
+                  <h3>{t.login.feature1Title}</h3>
+                  <p>{t.login.feature1Desc}</p>
+                </div>
+                
+                <div className="feature-item">
+                  <div className="feature-icon icon-2">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M12 2L15.09 8.26H22L17.27 12.74L19.36 19.5L12 16.42L4.64 19.5L6.73 12.74L2 8.26H8.91L12 2Z"/>
+                    </svg>
+                  </div>
+                  <h3>{t.login.feature2Title}</h3>
+                  <p>{t.login.feature2Desc}</p>
+                </div>
+                
+                <div className="feature-item">
+                  <div className="feature-icon icon-3">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                      <circle cx="9" cy="7" r="4"/>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                  </div>
+                  <h3>{t.login.feature3Title}</h3>
+                  <p>{t.login.feature3Desc}</p>
+                </div>
+              </div>
+              
+              <div className="decorative-shapes">
+                <div className="shape shape-float-1"></div>
+                <div className="shape shape-float-2"></div>
+                <div className="shape shape-float-3"></div>
+                <div className="shape shape-float-4"></div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-            <form onSubmit={esRegistro ? manejarRegistro : manejarIngreso}>
-              <input 
-                className="input-formal" 
-                type="email" 
-                placeholder="Correo electrónico" 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)} 
-                required 
-              />
-              <input 
-                className="input-formal" 
-                type="password" 
-                placeholder="Contraseña" 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)} 
-                required 
-              />
+        {/* RIGHT SIDE - LOGIN FORM */}
+        <div className="login-right-panel">
+          {/* LANGUAGE SWITCHER */}
+          <button
+            onClick={() => setLang(lang === 'es' ? 'en' : 'es')}
+            title={t.topbar?.langLabel || 'Language'}
+            className="lang-switcher-login"
+          >
+            <span style={{ fontSize: '16px' }}>{lang === 'es' ? '🇺🇸' : '🇲🇽'}</span>
+            <span>{lang === 'es' ? 'EN' : 'ES'}</span>
+          </button>
+
+          <div className="login-form-container">
+            <div className="form-header">
+              <h2>{esRegistro ? t.login.createAccount : t.login.title}</h2>
+              <p className="form-subtitle">{esRegistro ? t.login.subtitle : 'Accede a tu cuenta de estudiante'}</p>
+            </div>
+
+            {mensaje && <div className={`alert-form alert-${tipoMensaje}`}>{mensaje}</div>}
+
+            <form onSubmit={esRegistro ? manejarRegistro : manejarIngreso} className="modern-login-form">
+              <div className="form-group-split">
+                <label>{t.login.email}</label>
+                <div className="input-field">
+                  <input 
+                    type="email" 
+                    placeholder="usuario@institucion.edu"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)} 
+                    required
+                    className="input-split"
+                  />
+                  <span className="field-icon">@</span>
+                </div>
+              </div>
               
+              <div className="form-group-split">
+                <label>{t.login.password}</label>
+                <div className="input-field">
+                  <input 
+                    type="password" 
+                    placeholder="Tu contraseña segura"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)} 
+                    required
+                    className="input-split"
+                  />
+                  <span className="field-icon">•</span>
+                </div>
+              </div>
               
-              <button className="btn-primary" type="submit" style={{width: '100%', marginTop: '15px'}}>
-                {esRegistro ? 'Registrarse' : 'Ingresar'}
+              <button className="btn-submit-split" type="submit" disabled={cargando}>
+                {cargando ? 'Ingresando...' : 'Ingresar'}
               </button>
             </form>
 
-            <div className="login-toggle">
+            <div className="form-divider">
+              <span>o</span>
+            </div>
+
+            <div className="form-toggle-split">
+              <p>{esRegistro ? t.login.alreadyHaveAccount : t.login.noAccount}</p>
               <button 
                 onClick={() => {
                   setEsRegistro(!esRegistro);
                   setMensaje('');
                 }} 
-                className="toggle-btn"
+                className="btn-toggle-split"
               >
-                {esRegistro ? '¿Ya tienes cuenta? Inicia sesión' : '¿No tienes cuenta? Regístrate'}
+                {esRegistro ? t.login.switchToLogin : t.login.switchToRegister}
               </button>
+            </div>
+
+            <div className="form-footer-split">
+              <p>LabReserve © 2025 - Sistema de Reservas Educativo</p>
             </div>
           </div>
         </div>
