@@ -5,10 +5,32 @@
   import { auth, db } from './firebase';
   import './App.css';
 
+
+  // ==================================================
+// FUNCIONES DE ZONA HORARIA ESTRICTA (CORRECCIÓN)
+// ==================================================
+// Cambia 'America/Mexico_City' por tu zona horaria real si es distinta
+  const obtenerFechaLocal = () => {
+    return new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Mexico_City',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).format(new Date());
+  };
+
+  const obtenerHoraLocal = () => {
+    return parseInt(new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Mexico_City',
+      hour: '2-digit',
+      hour12: false
+    }).format(new Date()), 10);
+  };
   // ==================================================
   // SISTEMA DE PERMISOS POR ROL
   // ==================================================
   const PERMISOS = {
+    
     admin: {
       gestionAulas: true,
       gestionEquipos: true,
@@ -39,6 +61,7 @@
       solicitarEquipos: true,
       verInventario: true
     }
+    
   };
 
   function App() {
@@ -76,10 +99,7 @@
     const [tabSolicitudesAdmin, setTabSolicitudesAdmin] = useState('aulas');
     
     // --- ESTADOS DE AULAS PÚBLICAS ---
-    const [fechaSeleccionada, setFechaSeleccionada] = useState(() => {
-      const hoy = new Date();
-      return `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
-    });
+    const [fechaSeleccionada, setFechaSeleccionada] = useState(obtenerFechaLocal);
     const [aulaActual, setAulaActual] = useState(null);
     const [reservaDetalle, setReservaDetalle] = useState(null);
     const [showSolicitudDesdeAula, setShowSolicitudDesdeAula] = useState(false);
@@ -914,20 +934,16 @@ if (confirm(t.messages.confirmDeleteRoom)) {
       }
     };
 
-      // --- FUNCIONES DE UTILIDAD ---
+// --- FUNCIONES DE UTILIDAD ---
     const generarHorarios = (aula, fecha) => {
       // Generar bloques de horarios de 7am a 6pm
       const horarios = [];
       const horas = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
       
-      // Obtener hora actual y fecha actual
-      const ahora = new Date();
-      const horaActual = ahora.getHours();
-      // SOLUCION: Generamos la fecha exacta de tu zona horaria local
-      const fechaActual = `${ahora.getFullYear()}-${String(ahora.getMonth() + 1).padStart(2, '0')}-${String(ahora.getDate()).padStart(2, '0')}`;
+      // SOLUCIÓN APLICADA: Forzamos la zona horaria
+      const horaActual = obtenerHoraLocal();
+      const fechaActual = obtenerFechaLocal();
       const esHoy = fecha === fechaActual;
-      
-      console.log('Generando horarios para aula:', aula, 'fecha:', fecha);
       
       horas.forEach((hora) => {
         const horaInicio = `${String(hora).padStart(2, '0')}:00`;
@@ -949,12 +965,8 @@ if (confirm(t.messages.confirmDeleteRoom)) {
           s.estado === 'Pendiente'
         );
         
-        if (solicitud) {
-          console.log(` Encontrada solicitud para ${horaInicio}:`, solicitud);
-        }
-        
         // Verificar si el horario ya pasó
-        const horaPasada = esHoy && hora <= horaActual;
+        const horaPasada = esHoy && hora < horaActual;
         
         horarios.push({
           horaInicio,
@@ -5361,7 +5373,7 @@ if (confirm(t.messages.confirmDeleteRoom)) {
                       </svg>
                     </div>
                     <div>
-                    {useradoActivo.rol === 'alumno' ? 'Enviar Solicitud de Reserva' : 'Confirmar Reserva Directa'}
+                    {usuarioActivo?.rol === 'alumno' ? 'Enviar Solicitud de Reserva' : 'Confirmar Reserva Directa'}
                       <div style={{ fontSize: '11px', color: usuarioActivo?.rol === 'alumno' ? '#3b82f6' : '#16a34a', fontFamily: '"DM Sans", sans-serif' }}>
                         {aulaActual.nombre} · {horarioSeleccionado.horaInicio}–{horarioSeleccionado.horaFin} · {new Date(fechaSeleccionada + 'T12:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
                       </div>
