@@ -6395,124 +6395,148 @@ if (confirm(t.messages.confirmDeleteRoom)) {
       );
     }
 
+// ====================================================
+    // VISTA LOGIN - DISEÑO INSTITUCIONAL EDTECH+
     // ====================================================
-    // VISTA LOGIN - SPLIT SCREEN DESIGN
-    // ====================================================
-    return (
+return (
       <div className="split-screen-login">
-        {/* LEFT SIDE - EDUCATIONAL VISUAL */}
+
+        {/* ── PANEL IZQUIERDO ── */}
         <div className="login-left-panel">
-          <div className="educational-visual">
-            <div className="visual-bg-gradient"></div>
-            
-            <div className="edu-content">
-              <div className="edu-header">
-                <div className="lr-brand">
-                 <img src={logo} alt="EdTech+" style={{ maxWidth: '280px', height: 'auto', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.3))' }} />
-              </div>
-              <h1 style={{ display: 'none' }}>EdTech+</h1>
-              <p className="brand-tagline" style={{ color: '#cbd5e1', marginTop: '15px', fontSize: '15px' }}>{t.login.subtitle}</p>
+          {/* Orbs decorativos */}
+          <div className="login-orb login-orb-1" />
+          <div className="login-orb login-orb-2" />
+          <div className="login-orb login-orb-3" />
+          <div className="login-left-divider" />
+
+          <div className="edu-content">
+            <div className="lr-brand">
+              <img src={logo} alt="EdTech+ Logo" />
+            </div>+
+
+            <div className="lr-brand-badge">
+              <span className="badge-dot" />
+              PLATAFORMA EDUCATIVA INSTITUCIONAL
             </div>
-              
-              <div className="edu-features">
-                <div className="feature-item">
-                  <div className="feature-icon icon-1">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <rect x="3" y="3" width="18" height="18" rx="2"/>
-                      <path d="M3 9h18M9 3v18"/>
-                    </svg>
-                  </div>
-                  <h3>{t.login.feature1Title}</h3>
-                  <p>{t.login.feature1Desc}</p>
+
+            <p className="brand-tagline">
+              Sistema Integral para la Gestión de Espacios<br />
+              y Recursos Tecnológicos Educativos.
+            </p>
+            <div className="edu-divider" />
+            
+            <div className="edu-features">
+              <div className="feature-item">
+                <div className="feature-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(100,180,255,0.9)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                  </svg>
                 </div>
-                
-                <div className="feature-item">
-                  <div className="feature-icon icon-2">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M12 2L15.09 8.26H22L17.27 12.74L19.36 19.5L12 16.42L4.64 19.5L6.73 12.74L2 8.26H8.91L12 2Z"/>
-                    </svg>
-                  </div>
-                  <h3>{t.login.feature2Title}</h3>
-                  <p>{t.login.feature2Desc}</p>
-                </div>
-                
-                <div className="feature-item">
-                  <div className="feature-icon icon-3">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                      <circle cx="9" cy="7" r="4"/>
-                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                      <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                    </svg>
-                  </div>
-                  <h3>{t.login.feature3Title}</h3>
-                  <p>{t.login.feature3Desc}</p>
+                <div>
+                  <h3>Gestión Académica</h3>
+                  <p>Administración centralizada de aulas y laboratorios para docentes y alumnos.</p>
                 </div>
               </div>
-              
-              <div className="decorative-shapes">
-                <div className="shape shape-float-1"></div>
-                <div className="shape shape-float-2"></div>
-                <div className="shape shape-float-3"></div>
-                <div className="shape shape-float-4"></div>
+
+              <div className="feature-item">
+                <div className="feature-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(100,220,140,0.9)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3>Control de Inventario</h3>
+                  <p>Seguimiento en tiempo real de equipos, préstamos y estado de mantenimiento.</p>
+                </div>
+              </div>
+
+              <div className="feature-item">
+                <div className="feature-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,210,80,0.9)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3>Acceso Seguro</h3>
+                  <p>Autenticación estructurada por niveles de permisos y roles institucionales.</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* RIGHT SIDE - LOGIN FORM */}
+        {/* ── PANEL DERECHO ── */}
         <div className="login-right-panel">
-          {/* LANGUAGE SWITCHER */}
-          <button
-            onClick={() => setLang(lang === 'es' ? 'en' : 'es')}
-            title={t.topbar?.langLabel || 'Language'}
-            className="lang-switcher-login"
-          >
-            <span style={{ fontSize: '16px' }}>{lang === 'es' ? '🇺🇸' : '🇲🇽'}</span>
+
+          <button onClick={() => setLang(lang === 'es' ? 'en' : 'es')} className="lang-switcher-login">
+            <span style={{ fontSize: '15px' }}>{lang === 'es' ? '🇺🇸' : '🇲🇽'}</span>
             <span>{lang === 'es' ? 'EN' : 'ES'}</span>
           </button>
 
           <div className="login-form-container">
+
             <div className="form-header">
-              <h2>{esRegistro ? t.login.createAccount : 'Bienvenido a EdTech+'}</h2>
-              <p className="form-subtitle">{esRegistro ? t.login.subtitle : 'Accede a tu cuenta de estudiante'}</p>
+              <div className="form-header-pill">
+                <span className="pill-dot" />
+                Sistema Activo
+              </div>
+              <h2>{esRegistro ? 'Crear Cuenta' : 'Bienvenido de vuelta'}</h2>
+              <p className="form-subtitle">
+                {esRegistro
+                  ? 'Regístrate con tu correo institucional'
+                  : 'Ingresa tus credenciales para acceder'}
+              </p>
             </div>
 
-            {mensaje && <div className={`alert-form alert-${tipoMensaje}`}>{mensaje}</div>}
+            {mensaje && (
+              <div className={`alert-form alert-${tipoMensaje}`}>
+                {mensaje}
+              </div>
+            )}
 
             <form onSubmit={esRegistro ? manejarRegistro : manejarIngreso} className="modern-login-form">
               <div className="form-group-split">
-                <label>{t.login.email}</label>
+                <label>Correo Institucional</label>
                 <div className="input-field">
-                  <input 
-                    type="email" 
+                  <input
+                    type="email"
                     placeholder="usuario@institucion.edu"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)} 
+                    onChange={(e) => setEmail(e.target.value)}
                     required
                     className="input-split"
                   />
-                  <span className="field-icon">@</span>
+                  <span className="field-icon">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                  </span>
                 </div>
               </div>
-              
+
               <div className="form-group-split">
-                <label>{t.login.password}</label>
+                <label>Contraseña</label>
                 <div className="input-field">
-                  <input 
-                    type="password" 
-                    placeholder="Tu contraseña segura"
+                  <input
+                    type="password"
+                    placeholder="••••••••••"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)} 
+                    onChange={(e) => setPassword(e.target.value)}
                     required
                     className="input-split"
                   />
-                  <span className="field-icon">•</span>
+                  <span className="field-icon">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                  </span>
                 </div>
               </div>
-              
+
               <button className="btn-submit-split" type="submit" disabled={cargando}>
-                {cargando ? 'Ingresando...' : 'Ingresar'}
+                {cargando
+                  ? 'Procesando...'
+                  : esRegistro ? 'Registrar Cuenta' : 'Iniciar Sesión'}
               </button>
             </form>
 
@@ -6521,21 +6545,24 @@ if (confirm(t.messages.confirmDeleteRoom)) {
             </div>
 
             <div className="form-toggle-split">
-              <p>{esRegistro ? t.login.alreadyHaveAccount : t.login.noAccount}</p>
-              <button 
-                onClick={() => {
-                  setEsRegistro(!esRegistro);
-                  setMensaje('');
-                }} 
+              <p>
+                {esRegistro
+                  ? '¿Ya tienes una cuenta institucional?'
+                  : '¿Aún no tienes acceso al sistema?'}
+              </p>
+              <button
+                onClick={() => { setEsRegistro(!esRegistro); setMensaje(''); }}
                 className="btn-toggle-split"
+                type="button"
               >
-                {esRegistro ? t.login.switchToLogin : t.login.switchToRegister}
+                {esRegistro ? 'Ir a Inicio de Sesión' : 'Solicitar Registro'}
               </button>
             </div>
 
             <div className="form-footer-split">
-              <p>EdTech+ © 2025 - Tecnología Inteligente para la Educación</p>
+              <p>EdTech+ © 2025 · Plataforma de Gestión Educativa</p>
             </div>
+
           </div>
         </div>
       </div>
