@@ -1,10 +1,10 @@
 // =====================================================
-// SISTEMA DE TRADUCCIONES — LabReserve
+// SISTEMA DE TRADUCCIONES — EdTech+
 // =====================================================
 const translations = {
   es: {
     login: {
-      title: "LabReserve",
+      title: "EdTech+",
       createAccount: "Crear Cuenta",
       subtitle: "Sistema de Reservas del Laboratorio",
       email: "Correo electrónico",
@@ -66,7 +66,7 @@ const translations = {
     },
     home: {
       panelLabel: "Panel de Control", welcome: "Bienvenido,",
-      systemName: "Sistema de Gestión de Laboratorio — LabReserve",
+      systemName: "Plataforma Integral para la Gestión de Espacios y Recursos Tecnológicos Educativos — EdTech+",
       accessLevel: "Nivel de Acceso", systemOnline: "Sistema en línea",
       registeredRooms: "Aulas Registradas", spaces: "espacios disponibles",
       stockUnits: "Unidades en Stock", equipmentMaterials: "equipos y materiales",
@@ -406,7 +406,7 @@ const translations = {
   // ============================================================
   en: {
     login: {
-      title: "LabReserve",
+      title: "EdTech+",
       createAccount: "Create Account",
       subtitle: "Laboratory Reservation System",
       email: "Email address", password: "Password",
@@ -465,7 +465,7 @@ const translations = {
     },
     home: {
       panelLabel: "Control Panel", welcome: "Welcome,",
-      systemName: "Laboratory Management System — LabReserve",
+      systemName: "Comprehensive Platform for Educational Technology Spaces & Resources — EdTech+",
       accessLevel: "Access Level", systemOnline: "System online",
       registeredRooms: "Registered Rooms", spaces: "available spaces",
       stockUnits: "Units in Stock", equipmentMaterials: "equipment and materials",

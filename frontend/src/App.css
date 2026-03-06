@@ -5,13 +5,13 @@
 /* --- COLORES Y VARIABLES --- */
 :root {
   /* Paleta EdTech+ */
-  --primary: #003087;      
-  --primary-dark: #002161; 
+  --primary: #003087;
+  --primary-dark: #002161;
   --primary-light: #0047AB;
-  --secondary: #00A33B;    
-  
+  --secondary: #00A33B;
+
   --success: #16a34a;
-  --warning: #FBC02D;      
+  --warning: #FBC02D;
   --danger: #dc2626;
   --dark: #0f172a;
   --light: #f8fafc;
@@ -19,7 +19,7 @@
   --text-primary: #1e293b;
   --text-secondary: #64748b;
   --background: #f1f5f9;
-  
+
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
@@ -32,7 +32,8 @@
 }
 
 /* --- ESTILOS GLOBALES --- */
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -47,16 +48,32 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
   line-height: 1.2;
   font-weight: 600;
 }
 
-h1 { font-size: 28px; }
-h2 { font-size: 24px; }
-h3 { font-size: 20px; }
-h4 { font-size: 16px; }
+h1 {
+  font-size: 28px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+h3 {
+  font-size: 20px;
+}
+
+h4 {
+  font-size: 16px;
+}
 
 p {
   margin: 0;
@@ -80,8 +97,13 @@ p {
 }
 
 @keyframes loginFadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 /* ══════════════════════════════════════
@@ -93,7 +115,8 @@ p {
   flex: 1.5;
   position: relative;
   display: flex;
-  align-items: flex-start;        /* centrado vertical real del contenido */
+  align-items: flex-start;
+  /* centrado vertical real del contenido */
   justify-content: center;
   overflow: hidden;
   background: #0d0d0d;
@@ -107,9 +130,9 @@ p {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 55% 45% at 8%  8%,  rgba(0, 163, 59,  0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 45% at 8% 8%, rgba(0, 163, 59, 0.22) 0%, transparent 60%),
     radial-gradient(ellipse 60% 50% at 92% 92%, rgba(251, 192, 45, 0.16) 0%, transparent 58%),
-    radial-gradient(ellipse 45% 40% at 50% 50%, rgba(0,  48, 135, 0.16) 0%, transparent 65%);
+    radial-gradient(ellipse 45% 40% at 50% 50%, rgba(0, 48, 135, 0.16) 0%, transparent 65%);
   pointer-events: none;
   z-index: 0;
 }
@@ -120,8 +143,8 @@ p {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 48px 48px;
   mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
   -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
@@ -160,15 +183,20 @@ p {
   display: block;
   margin-bottom: -100px;
   filter:
-    drop-shadow(0 0 36px rgba(0, 163, 59,  0.65))
-    drop-shadow(0 0 64px rgba(0,  80, 200, 0.25))
-    drop-shadow(0 4px 16px rgba(0, 0, 0,   0.55));
+    drop-shadow(0 0 36px rgba(0, 163, 59, 0.65)) drop-shadow(0 0 64px rgba(0, 80, 200, 0.25)) drop-shadow(0 4px 16px rgba(0, 0, 0, 0.55));
   animation: logoPop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
 }
 
 @keyframes logoPop {
-  from { opacity: 0; transform: scale(0.85) translateY(12px); }
-  to   { opacity: 1; transform: scale(1)    translateY(0); }
+  from {
+    opacity: 0;
+    transform: scale(0.85) translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 /* ── Badge — pegado al logo ── */
@@ -201,8 +229,17 @@ p {
 }
 
 @keyframes badgePulse {
-  0%, 100% { opacity: 1;   box-shadow: 0 0 8px  rgba(0, 163, 59, 0.9); }
-  50%       { opacity: 0.5; box-shadow: 0 0 14px rgba(0, 163, 59, 0.4); }
+
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 8px rgba(0, 163, 59, 0.9);
+  }
+
+  50% {
+    opacity: 0.5;
+    box-shadow: 0 0 14px rgba(0, 163, 59, 0.4);
+  }
 }
 
 /* ── Tagline — más compacta ── */
@@ -224,22 +261,27 @@ p {
 .edu-divider {
   width: 100%;
   height: 1px;
-  background: linear-gradient(
-    to right,
-    transparent 0%,
-    rgba(255, 255, 255, 0.08)  20%,
-    rgba(0, 163, 59, 0.4)      50%,
-    rgba(255, 255, 255, 0.08)  80%,
-    transparent 100%
-  );
+  background: linear-gradient(to right,
+      transparent 0%,
+      rgba(255, 255, 255, 0.08) 20%,
+      rgba(0, 163, 59, 0.4) 50%,
+      rgba(255, 255, 255, 0.08) 80%,
+      transparent 100%);
   margin-bottom: 14px;
   flex-shrink: 0;
   animation: slideUpFade 0.6s ease 0.4s both;
 }
 
 @keyframes slideUpFade {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ── Feature cards ── */
@@ -264,9 +306,20 @@ p {
 }
 
 /* CAMBIO: animaciones escalonadas añadidas */
-.feature-item:nth-child(1) { animation-delay: 0.45s; border-left-color: rgba(0,  48, 135, 0.8); }
-.feature-item:nth-child(2) { animation-delay: 0.55s; border-left-color: rgba(0, 163,  59, 0.8); }
-.feature-item:nth-child(3) { animation-delay: 0.65s; border-left-color: rgba(251,192,  45, 0.8); }
+.feature-item:nth-child(1) {
+  animation-delay: 0.45s;
+  border-left-color: rgba(0, 48, 135, 0.8);
+}
+
+.feature-item:nth-child(2) {
+  animation-delay: 0.55s;
+  border-left-color: rgba(0, 163, 59, 0.8);
+}
+
+.feature-item:nth-child(3) {
+  animation-delay: 0.65s;
+  border-left-color: rgba(251, 192, 45, 0.8);
+}
 
 .feature-item:hover {
   background: rgba(255, 255, 255, 0.07);
@@ -274,9 +327,17 @@ p {
   transform: translateX(5px);
 }
 
-.feature-item:nth-child(1):hover { border-left-color: #0047ab; }
-.feature-item:nth-child(2):hover { border-left-color: #00a33b; }
-.feature-item:nth-child(3):hover { border-left-color: #fbc02d; }
+.feature-item:nth-child(1):hover {
+  border-left-color: #0047ab;
+}
+
+.feature-item:nth-child(2):hover {
+  border-left-color: #00a33b;
+}
+
+.feature-item:nth-child(3):hover {
+  border-left-color: #fbc02d;
+}
 
 .feature-icon {
   width: 46px;
@@ -289,13 +350,15 @@ p {
 }
 
 .feature-item:nth-child(1) .feature-icon {
-  background: rgba(0,  48, 135, 0.2);
-  border: 1px solid rgba(0,  71, 171, 0.3);
+  background: rgba(0, 48, 135, 0.2);
+  border: 1px solid rgba(0, 71, 171, 0.3);
 }
+
 .feature-item:nth-child(2) .feature-icon {
-  background: rgba(0, 163,  59, 0.15);
-  border: 1px solid rgba(0, 163,  59, 0.25);
+  background: rgba(0, 163, 59, 0.15);
+  border: 1px solid rgba(0, 163, 59, 0.25);
 }
+
 .feature-item:nth-child(3) .feature-icon {
   background: rgba(251, 192, 45, 0.12);
   border: 1px solid rgba(251, 192, 45, 0.25);
@@ -326,46 +389,61 @@ p {
 }
 
 .login-orb-1 {
-  width: 600px; height: 600px;
+  width: 600px;
+  height: 600px;
   background: rgba(0, 163, 59, 0.1);
-  top: -200px; left: -200px;
+  top: -200px;
+  left: -200px;
   animation-duration: 14s;
   filter: blur(60px);
 }
+
 .login-orb-2 {
-  width: 450px; height: 450px;
+  width: 450px;
+  height: 450px;
   background: rgba(251, 192, 45, 0.09);
-  bottom: -140px; right: -120px;
+  bottom: -140px;
+  right: -120px;
   animation-duration: 16s;
   animation-delay: -5s;
   filter: blur(70px);
 }
+
 .login-orb-3 {
-  width: 320px; height: 320px;
+  width: 320px;
+  height: 320px;
   background: rgba(0, 48, 135, 0.12);
-  top: 40%; left: 55%;
+  top: 40%;
+  left: 55%;
   animation-duration: 10s;
   animation-delay: -7s;
   filter: blur(55px);
 }
 
 @keyframes orbFloat {
-  0%, 100% { transform: translateY(0px)  scale(1); }
-  50%       { transform: translateY(30px) scale(1.06); }
+
+  0%,
+  100% {
+    transform: translateY(0px) scale(1);
+  }
+
+  50% {
+    transform: translateY(30px) scale(1.06);
+  }
 }
 
 /* ── Divider vertical derecho ── */
 .login-left-divider {
   position: absolute;
-  top: 0; bottom: 0; right: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
   width: 1px;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(251, 192, 45, 0.3) 30%,
-    rgba(0, 163, 59, 0.3)   70%,
-    transparent 100%
-  );
+  background: linear-gradient(to bottom,
+      transparent 0%,
+      rgba(251, 192, 45, 0.3) 30%,
+      rgba(0, 163, 59, 0.3) 70%,
+      transparent 100%);
   z-index: 3;
 }
 
@@ -386,8 +464,10 @@ p {
 .login-right-panel::before {
   content: '';
   position: absolute;
-  top: -100px; right: -100px;
-  width: 350px; height: 350px;
+  top: -100px;
+  right: -100px;
+  width: 350px;
+  height: 350px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(0, 163, 59, 0.07) 0%, transparent 70%);
   pointer-events: none;
@@ -396,8 +476,10 @@ p {
 .login-right-panel::after {
   content: '';
   position: absolute;
-  bottom: -100px; left: -100px;
-  width: 320px; height: 320px;
+  bottom: -100px;
+  left: -100px;
+  width: 320px;
+  height: 320px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(0, 48, 135, 0.07) 0%, transparent 70%);
   pointer-events: none;
@@ -406,7 +488,8 @@ p {
 /* ── Language switcher ── */
 .lang-switcher-login {
   position: absolute;
-  top: 20px; right: 20px;
+  top: 20px;
+  right: 20px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -451,8 +534,15 @@ p {
 }
 
 @keyframes formSlideIn {
-  from { opacity: 0; transform: translateY(28px) scale(0.98); }
-  to   { opacity: 1; transform: translateY(0)    scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* ── Form header ── */
@@ -477,15 +567,25 @@ p {
 }
 
 .form-header-pill .pill-dot {
-  width: 6px; height: 6px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: #00a33b;
   animation: pillPulse 2s ease-in-out infinite;
 }
 
 @keyframes pillPulse {
-  0%, 100% { opacity: 1;   transform: scale(1); }
-  50%       { opacity: 0.5; transform: scale(1.3); }
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(1.3);
+  }
 }
 
 .form-header h2 {
@@ -515,10 +615,29 @@ p {
   border-left: 3px solid transparent;
 }
 
-.alert-form.alert-error   { background: #fef2f2; color: #7f1d1d; border-left-color: #dc2626; }
-.alert-form.alert-success { background: #f0fdf4; color: #166534; border-left-color: #16a34a; }
-.alert-form.alert-info    { background: #eff6ff; color: #1e3a8a; border-left-color: #003087; }
-.alert-form.alert-warning { background: #fffbeb; color: #92400e; border-left-color: #fbc02d; }
+.alert-form.alert-error {
+  background: #fef2f2;
+  color: #7f1d1d;
+  border-left-color: #dc2626;
+}
+
+.alert-form.alert-success {
+  background: #f0fdf4;
+  color: #166534;
+  border-left-color: #16a34a;
+}
+
+.alert-form.alert-info {
+  background: #eff6ff;
+  color: #1e3a8a;
+  border-left-color: #003087;
+}
+
+.alert-form.alert-warning {
+  background: #fffbeb;
+  color: #92400e;
+  border-left-color: #fbc02d;
+}
 
 /* ── Form inputs ── */
 .modern-login-form {
@@ -562,7 +681,9 @@ p {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-.input-split::placeholder { color: #c4cdd9; }
+.input-split::placeholder {
+  color: #c4cdd9;
+}
 
 .input-split:focus {
   outline: none;
@@ -624,7 +745,10 @@ input[type="checkbox"] {
 .btn-submit-split::before {
   content: '';
   position: absolute;
-  top: 0; left: -100%; right: 0; bottom: 0;
+  top: 0;
+  left: -100%;
+  right: 0;
+  bottom: 0;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
   transition: left 0.45s ease;
 }
@@ -644,9 +768,20 @@ input[type="checkbox"] {
   background: linear-gradient(135deg, #002570 0%, #0047ab 60%, #003dc2 100%);
 }
 
-.btn-submit-split:hover::before { left: 100%; }
-.btn-submit-split:active         { transform: translateY(-1px); }
-.btn-submit-split:disabled       { background: #94a3b8; cursor: not-allowed; box-shadow: none; transform: none; }
+.btn-submit-split:hover::before {
+  left: 100%;
+}
+
+.btn-submit-split:active {
+  transform: translateY(-1px);
+}
+
+.btn-submit-split:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
 
 /* ── Divider "o" ── */
 .form-divider {
@@ -687,7 +822,9 @@ input[type="checkbox"] {
 .form-toggle-split::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 2px;
   background: linear-gradient(90deg, #003087, #00a33b, #fbc02d);
   opacity: 0.5;
@@ -752,32 +889,66 @@ input[type="checkbox"] {
     height: auto;
     min-height: 100vh;
   }
+
   .login-left-panel {
     min-height: 340px;
     padding: 40px 32px;
     flex: none;
   }
+
   .login-right-panel {
     padding: 40px 24px 48px;
     flex: none;
   }
-  .login-form-container { max-width: 100%; }
+
+  .login-form-container {
+    max-width: 100%;
+  }
+
   .edu-content {
     align-items: center;
     text-align: center;
   }
-  .lr-brand { align-items: center; }
-  .lr-brand img { width: 200px; }
-  .lr-brand-badge { margin-left: auto; margin-right: auto; }
-  .edu-features { gap: 8px; }
-  .feature-item { text-align: left; padding: 12px 14px; }
+
+  .lr-brand {
+    align-items: center;
+  }
+
+  .lr-brand img {
+    width: 200px;
+  }
+
+  .lr-brand-badge {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .edu-features {
+    gap: 8px;
+  }
+
+  .feature-item {
+    text-align: left;
+    padding: 12px 14px;
+  }
 }
 
 @media (max-width: 480px) {
-  .login-left-panel  { padding: 32px 20px; }
-  .login-right-panel { padding: 32px 16px 40px; }
-  .lr-brand img { width: 160px; }
-  .form-header h2 { font-size: 24px; }
+  .login-left-panel {
+    padding: 32px 20px;
+  }
+
+  .login-right-panel {
+    padding: 32px 16px 40px;
+  }
+
+  .lr-brand img {
+    width: 160px;
+  }
+
+  .form-header h2 {
+    font-size: 24px;
+  }
 }
 
 /* ===================================================== */
@@ -921,6 +1092,7 @@ select.input-formal {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -932,6 +1104,7 @@ select.input-formal {
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1044,30 +1217,36 @@ select.input-formal {
 
 /* ── Variables ── */
 :root {
-  --navy:       #0a0f1e;
-  --navy-mid:   #111827;
+  --navy: #0a0f1e;
+  --navy-mid: #111827;
   --navy-light: #1e293b;
-  --blue:       #003087;
+  --blue: #003087;
   --blue-light: #1a4db3;
-  --green:      #00A33B;
-  --green-light:#00c247;
-  --gold:       #FBC02D;
-  --white:      #ffffff;
-  --gray-50:    #f8fafc;
-  --gray-100:   #f1f5f9;
-  --gray-200:   #e2e8f0;
-  --gray-300:   #cbd5e1;
-  --gray-400:   #94a3b8;
-  --gray-500:   #64748b;
-  --gray-700:   #334155;
-  --gray-900:   #0f172a;
+  --green: #00A33B;
+  --green-light: #00c247;
+  --gold: #FBC02D;
+  --white: #ffffff;
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-700: #334155;
+  --gray-900: #0f172a;
 
-  --sidebar-w:  230px;
-  --topbar-h:   64px;
+  --sidebar-w: 230px;
+  --topbar-h: 64px;
 }
 
 /* ── Reset ── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 /* ============================================================
    LAYOUT
@@ -1096,8 +1275,8 @@ select.input-formal {
 
   /* Subtle grid texture like login left panel */
   background-image:
-    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
   background-size: 32px 32px;
   background-color: var(--navy);
 }
@@ -1111,7 +1290,7 @@ select.input-formal {
   width: 200px;
   height: 200px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,163,59,0.18) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(0, 163, 59, 0.18) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
@@ -1125,7 +1304,7 @@ select.input-formal {
   width: 180px;
   height: 180px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,48,135,0.25) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(0, 48, 135, 0.25) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
@@ -1133,7 +1312,7 @@ select.input-formal {
 /* ── Sidebar Header ── */
 .sidebar-header {
   padding: 24px 20px 20px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -1141,26 +1320,61 @@ select.input-formal {
   z-index: 1;
 }
 
-/* Logo image in sidebar */
-.sidebar-header img {
-  width: 130px;
-  height: auto;
-  display: block;
-  filter: drop-shadow(0 0 12px rgba(0,163,59,0.35)) drop-shadow(0 0 24px rgba(0,48,135,0.2));
-  transition: filter 0.3s ease;
-}
-.sidebar-header img:hover {
-  filter: drop-shadow(0 0 16px rgba(0,163,59,0.55)) drop-shadow(0 0 32px rgba(0,48,135,0.3));
+/* ── Sidebar Brand (EdTech+ logo) ── */
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
-/* Fallback h2 if no image */
-.sidebar-header h2 {
+.sidebar-logo {
+  width: 160px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 12px rgba(0, 163, 59, 0.2));
+}
+
+.sidebar-brand-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 8px rgba(0, 163, 59, 0.25));
+}
+
+.sidebar-brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-brand-name {
   font-family: 'DM Serif Display', serif;
   font-size: 20px;
   font-weight: 400;
   color: #ffffff;
   letter-spacing: 0.3px;
-  line-height: 1.2;
+  line-height: 1.15;
+}
+
+.sidebar-brand-plus {
+  background: linear-gradient(135deg, #003087, #00A33B, #FBC02D);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+  font-size: 22px;
+}
+
+.sidebar-brand-sub {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  font-family: 'DM Sans', sans-serif;
+  margin-top: 1px;
 }
 
 /* ── Role Badge ── */
@@ -1188,20 +1402,20 @@ select.input-formal {
 }
 
 .badge-admin {
-  background: rgba(220,38,38,0.15);
-  border: 1px solid rgba(220,38,38,0.3);
+  background: rgba(220, 38, 38, 0.15);
+  border: 1px solid rgba(220, 38, 38, 0.3);
   color: #fca5a5;
 }
 
 .badge-maestro {
-  background: rgba(0,48,135,0.25);
-  border: 1px solid rgba(99,150,255,0.3);
+  background: rgba(0, 48, 135, 0.25);
+  border: 1px solid rgba(99, 150, 255, 0.3);
   color: #93c5fd;
 }
 
 .badge-alumno {
-  background: rgba(0,163,59,0.15);
-  border: 1px solid rgba(0,163,59,0.3);
+  background: rgba(0, 163, 59, 0.15);
+  border: 1px solid rgba(0, 163, 59, 0.3);
   color: #86efac;
 }
 
@@ -1217,12 +1431,21 @@ select.input-formal {
   position: relative;
   z-index: 1;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.08) transparent;
+  scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
 }
 
-.sidebar-menu::-webkit-scrollbar { width: 4px; }
-.sidebar-menu::-webkit-scrollbar-track { background: transparent; }
-.sidebar-menu::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+.sidebar-menu::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+}
 
 /* ── Menu Buttons ── */
 .menu-btn {
@@ -1231,7 +1454,7 @@ select.input-formal {
   background: transparent;
   border: 1px solid transparent;
   border-radius: 5px;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255, 255, 255, 0.5);
   font-size: 12.5px;
   font-weight: 500;
   font-family: 'DM Sans', sans-serif;
@@ -1249,14 +1472,14 @@ select.input-formal {
 }
 
 .menu-btn:hover {
-  background: rgba(255,255,255,0.06);
-  border-color: rgba(255,255,255,0.08);
-  color: rgba(255,255,255,0.85);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .menu-btn.activo {
-  background: rgba(0,163,59,0.15);
-  border-color: rgba(0,163,59,0.3);
+  background: rgba(0, 163, 59, 0.15);
+  border-color: rgba(0, 163, 59, 0.3);
   color: #ffffff;
   font-weight: 600;
 }
@@ -1277,7 +1500,7 @@ select.input-formal {
 .sidebar-footer {
   margin-top: auto;
   padding: 14px 0 4px;
-  border-top: 1px solid rgba(255,255,255,0.07);
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -1285,7 +1508,7 @@ select.input-formal {
 
 .sidebar-footer p {
   font-size: 11px;
-  color: rgba(255,255,255,0.3);
+  color: rgba(255, 255, 255, 0.3);
   font-family: 'DM Sans', sans-serif;
   padding: 0 4px;
   white-space: nowrap;
@@ -1297,8 +1520,8 @@ select.input-formal {
 .btn-logout {
   width: 100%;
   padding: 9px 12px;
-  background: rgba(220,38,38,0.1);
-  border: 1px solid rgba(220,38,38,0.2);
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.2);
   border-radius: 5px;
   color: #fca5a5;
   font-size: 12px;
@@ -1311,8 +1534,8 @@ select.input-formal {
 }
 
 .btn-logout:hover {
-  background: rgba(220,38,38,0.2);
-  border-color: rgba(220,38,38,0.4);
+  background: rgba(220, 38, 38, 0.2);
+  border-color: rgba(220, 38, 38, 0.4);
   color: #fecaca;
 }
 
@@ -1354,15 +1577,13 @@ select.input-formal {
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(
-    90deg,
-    var(--blue) 0%,
-    var(--blue) 33%,
-    var(--green) 33%,
-    var(--green) 66%,
-    var(--gold) 66%,
-    var(--gold) 100%
-  );
+  background: linear-gradient(90deg,
+      var(--blue) 0%,
+      var(--blue) 33%,
+      var(--green) 33%,
+      var(--green) 66%,
+      var(--gold) 66%,
+      var(--gold) 100%);
 }
 
 .topbar-title h1 {
@@ -1397,9 +1618,18 @@ select.input-formal {
   scrollbar-color: var(--gray-200) transparent;
 }
 
-.content-area::-webkit-scrollbar { width: 6px; }
-.content-area::-webkit-scrollbar-track { background: transparent; }
-.content-area::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 3px; }
+.content-area::-webkit-scrollbar {
+  width: 6px;
+}
+
+.content-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.content-area::-webkit-scrollbar-thumb {
+  background: var(--gray-200);
+  border-radius: 3px;
+}
 
 /* ============================================================
    ALERTS
@@ -1443,13 +1673,27 @@ select.input-formal {
    GENERIC SECTION / TABLE STYLES (legacy views)
    ============================================================ */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideIn {
-  from { opacity: 0; transform: translateX(-12px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .seccion-blanca {
@@ -1507,8 +1751,13 @@ tbody tr {
   transition: background 0.15s;
 }
 
-tbody tr:last-child { border-bottom: none; }
-tbody tr:hover { background: var(--gray-50); }
+tbody tr:last-child {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background: var(--gray-50);
+}
 
 tbody td {
   padding: 12px 16px;
@@ -1534,10 +1783,25 @@ tbody td {
   font-family: 'DM Sans', sans-serif;
 }
 
-.badge-success  { background: #f0fdf4; color: #16a34a; }
-.badge-danger   { background: #fef2f2; color: #dc2626; }
-.badge-warning  { background: #fffbeb; color: #b45309; }
-.badge-info     { background: #eff6ff; color: #2563eb; }
+.badge-success {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+.badge-danger {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.badge-warning {
+  background: #fffbeb;
+  color: #b45309;
+}
+
+.badge-info {
+  background: #eff6ff;
+  color: #2563eb;
+}
 
 /* ── Small Buttons ── */
 .btn-small {
@@ -1552,10 +1816,25 @@ tbody td {
   transition: all 0.15s ease;
 }
 
-.btn-small.btn-success  { background: #f0fdf4; color: #16a34a; border: 1px solid #86efac; }
-.btn-small.btn-success:hover { background: #dcfce7; }
-.btn-small.btn-danger   { background: #fef2f2; color: #dc2626; border: 1px solid #fca5a5; }
-.btn-small.btn-danger:hover  { background: #fee2e2; }
+.btn-small.btn-success {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #86efac;
+}
+
+.btn-small.btn-success:hover {
+  background: #dcfce7;
+}
+
+.btn-small.btn-danger {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+}
+
+.btn-small.btn-danger:hover {
+  background: #fee2e2;
+}
 
 /* ============================================================
    REQUESTS VIEW (mis solicitudes)
@@ -1578,8 +1857,8 @@ tbody td {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 32px 32px;
 }
 
@@ -1594,7 +1873,7 @@ tbody td {
 
 .requests-header-content p {
   font-size: 13px;
-  color: rgba(255,255,255,0.45);
+  color: rgba(255, 255, 255, 0.45);
   font-family: 'DM Sans', sans-serif;
   margin-top: 4px;
   position: relative;
@@ -1644,10 +1923,18 @@ tbody td {
   overflow-x: auto;
 }
 
-.request-row { transition: background 0.15s; }
-.request-row:hover { background: var(--gray-50); }
+.request-row {
+  transition: background 0.15s;
+}
 
-.request-badge { font-size: 10px; padding: 3px 8px; }
+.request-row:hover {
+  background: var(--gray-50);
+}
+
+.request-badge {
+  font-size: 10px;
+  padding: 3px 8px;
+}
 
 .btn-action {
   padding: 5px 12px;
@@ -1665,14 +1952,20 @@ tbody td {
   color: #dc2626;
   border: 1px solid #fca5a5;
 }
-.btn-withdraw:hover { background: #fee2e2; }
+
+.btn-withdraw:hover {
+  background: #fee2e2;
+}
 
 .btn-cancel {
   background: #fffbeb;
   color: #b45309;
   border: 1px solid #fde68a;
 }
-.btn-cancel:hover { background: #fef3c7; }
+
+.btn-cancel:hover {
+  background: #fef3c7;
+}
 
 /* ============================================================
    ALL RESERVATIONS VIEW (legacy)
@@ -1699,15 +1992,29 @@ tbody td {
    RESPONSIVE
    ============================================================ */
 @media (max-width: 768px) {
-  :root { --sidebar-w: 200px; }
-  .content-area { padding: 16px; }
-  .topbar { padding: 0 16px; }
+  :root {
+    --sidebar-w: 200px;
+  }
+
+  .content-area {
+    padding: 16px;
+  }
+
+  .topbar {
+    padding: 0 16px;
+  }
 }
 
 @media (max-width: 640px) {
-  .sidebar { display: none; }
-  .main-content { width: 100%; }
+  .sidebar {
+    display: none;
+  }
+
+  .main-content {
+    width: 100%;
+  }
 }
+
 /* ===================================================== */
 /* TARJETAS Y SECCIONES */
 /* ===================================================== */
@@ -1822,6 +2129,7 @@ tbody td {
 }
 
 @media (max-width: 768px) {
+
   .form-grid-4,
   .form-grid-3,
   .form-grid-2 {
@@ -1912,7 +2220,7 @@ tbody tr:last-child td {
   box-shadow: var(--shadow-lg);
 }
 
-.btn-aula.activo > div {
+.btn-aula.activo>div {
   color: white;
 }
 
@@ -2085,7 +2393,7 @@ tbody tr:last-child td {
   .aulas-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .aula-header {
     flex-direction: column;
     gap: 8px;
@@ -2148,7 +2456,8 @@ tbody tr:last-child td {
     width: 100%;
   }
 
-  th, td {
+  th,
+  td {
     padding: 10px;
     font-size: 12px;
   }
@@ -2375,3 +2684,2356 @@ tbody tr:last-child td {
     font-size: 12px;
   }
 }
+
+/* ============================================================
+   EDTECH+ DASHBOARD INICIO — REDISEÑO CONSISTENTE CON LOGIN
+   ============================================================ */
+
+/* ── Animations ── */
+@keyframes edtechSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes edtechExpandBar {
+  from {
+    width: 0;
+  }
+}
+
+@keyframes edtechFadeInRow {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes edtechBannerGlow {
+
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes edtechDotPulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.5);
+  }
+
+  50% {
+    box-shadow: 0 0 0 4px rgba(74, 222, 128, 0);
+  }
+}
+
+/* ── Wrapper ── */
+.edtech-inicio-wrapper {
+  animation: edtechSlideUp 0.5s ease both;
+}
+
+/* ============================================================
+   BANNER — Matches login left panel design
+   ============================================================ */
+.edtech-inicio-banner {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  padding: 40px 44px;
+  margin-bottom: 20px;
+  background: #0a0f1e;
+  animation: edtechSlideUp 0.5s ease both;
+}
+
+/* Mesh gradient — mirrors login-left-panel::before */
+.edtech-inicio-banner-mesh {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 50% at 5% 10%, rgba(0, 163, 59, 0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 55% at 95% 90%, rgba(251, 192, 45, 0.16) 0%, transparent 58%),
+    radial-gradient(ellipse 50% 45% at 50% 50%, rgba(0, 48, 135, 0.18) 0%, transparent 65%);
+  z-index: 0;
+}
+
+/* Grid texture — mirrors login-left-panel::after */
+.edtech-inicio-banner-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 30%, transparent 100%);
+  z-index: 0;
+}
+
+/* Floating orbs — mirrors login orbs */
+.edtech-inicio-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  animation: edtechBannerGlow 8s ease-in-out infinite;
+}
+
+.edtech-inicio-orb-1 {
+  width: 350px;
+  height: 350px;
+  background: rgba(0, 163, 59, 0.10);
+  top: -120px;
+  right: -80px;
+  filter: blur(60px);
+  animation-duration: 12s;
+}
+
+.edtech-inicio-orb-2 {
+  width: 280px;
+  height: 280px;
+  background: rgba(0, 48, 135, 0.12);
+  bottom: -100px;
+  left: -60px;
+  filter: blur(50px);
+  animation-duration: 14s;
+  animation-delay: -4s;
+}
+
+/* Tricolor divider at bottom — mirrors login-form-container::before */
+.edtech-inicio-banner-divider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #003087 0%, #003087 33%, #00A33B 33%, #00A33B 66%, #FBC02D 66%, #FBC02D 100%);
+  z-index: 2;
+}
+
+/* ── Banner content layout ── */
+.edtech-inicio-banner-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.edtech-inicio-banner-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.edtech-inicio-banner-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+/* ── Badge — mirrors login lr-brand-badge ── */
+.edtech-inicio-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  width: fit-content;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.50);
+  font-family: 'DM Sans', sans-serif;
+  margin-bottom: 14px;
+  animation: edtechSlideUp 0.4s ease 0.1s both;
+}
+
+.edtech-inicio-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00a33b;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(0, 163, 59, 0.9);
+  animation: badgePulse 2.5s ease-in-out infinite;
+}
+
+/* ── Title ── */
+.edtech-inicio-title {
+  margin: 0 0 10px 0;
+  font-size: 28px;
+  font-weight: 400;
+  color: #ffffff;
+  font-family: 'DM Serif Display', serif;
+  letter-spacing: 0.2px;
+  line-height: 1.25;
+  animation: edtechSlideUp 0.5s ease 0.15s both;
+}
+
+.edtech-inicio-title em {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.90);
+}
+
+.edtech-inicio-subtitle {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.50);
+  font-size: 13.5px;
+  font-family: 'DM Sans', sans-serif;
+  animation: edtechSlideUp 0.5s ease 0.2s both;
+}
+
+/* ── Right side ── */
+.edtech-inicio-level-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-inicio-role-box {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 8px 20px;
+}
+
+.edtech-inicio-role-box span {
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-inicio-online {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.edtech-inicio-online span {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.40);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-inicio-online-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4ade80;
+  animation: edtechDotPulse 2s ease-in-out infinite;
+}
+
+/* ============================================================
+   STAT CARDS
+   ============================================================ */
+.edtech-inicio-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.edtech-inicio-stat-card {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 28px 28px 24px;
+  border: 1px solid #e4e8ef;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  opacity: 0;
+  animation: edtechSlideUp 0.4s ease forwards;
+}
+
+.edtech-stat-delay-1 {
+  animation-delay: 0.10s;
+}
+
+.edtech-stat-delay-2 {
+  animation-delay: 0.18s;
+}
+
+.edtech-stat-delay-3 {
+  animation-delay: 0.26s;
+}
+
+.edtech-stat-delay-4 {
+  animation-delay: 0.34s;
+}
+
+.edtech-inicio-stat-card:hover {
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.10);
+  transform: translateY(-4px);
+}
+
+/* Accent line — left border using dynamic --accent color */
+.edtech-inicio-stat-accent {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent);
+  border-radius: 0 2px 2px 0;
+}
+
+.edtech-inicio-stat-body {
+  padding-left: 6px;
+}
+
+.edtech-inicio-stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: #94a3b8;
+  margin: 0 0 16px 0;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-inicio-stat-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.edtech-inicio-stat-number {
+  font-size: 42px;
+  font-weight: 300;
+  color: #0f172a;
+  line-height: 1;
+  font-family: 'DM Serif Display', serif;
+}
+
+.edtech-inicio-stat-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid;
+  flex-shrink: 0;
+}
+
+.edtech-inicio-stat-bar {
+  height: 3px;
+  background: #f1f5f9;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.edtech-inicio-stat-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  animation: edtechExpandBar 1s ease 0.5s both;
+}
+
+.edtech-inicio-stat-sub {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: #94a3b8;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ============================================================
+   BOTTOM GRID
+   ============================================================ */
+.edtech-inicio-bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 12px;
+  opacity: 0;
+  animation: edtechSlideUp 0.4s ease 0.42s forwards;
+}
+
+/* ── Panel (shared) ── */
+.edtech-inicio-panel {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 26px;
+  border: 1px solid #e4e8ef;
+}
+
+.edtech-inicio-panel-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: #94a3b8;
+  margin: 0 0 16px 0;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-inicio-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.edtech-inicio-unread-count {
+  font-size: 11px;
+  color: #003087;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ── Quick access actions ── */
+.edtech-inicio-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.edtech-inicio-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 16px;
+  border-radius: 8px;
+  border: 1px solid #e9edf3;
+  background: #fafbfc;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  width: 100%;
+  text-align: left;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-inicio-action-btn:hover {
+  background: #ffffff;
+  border-color: #94a3b8;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.07);
+  transform: translateX(4px);
+}
+
+.edtech-inicio-action-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid;
+  transition: transform 0.2s ease;
+}
+
+.edtech-inicio-action-btn:hover .edtech-inicio-action-icon {
+  transform: scale(1.08);
+}
+
+.edtech-inicio-action-text {
+  flex: 1;
+}
+
+.edtech-inicio-action-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 2px;
+}
+
+.edtech-inicio-action-sub {
+  font-size: 11.5px;
+  color: #94a3b8;
+}
+
+.edtech-inicio-action-chevron {
+  color: #cbd5e1;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.edtech-inicio-action-btn:hover .edtech-inicio-action-chevron {
+  transform: translateX(3px);
+  color: #94a3b8;
+}
+
+/* ── Activity feed ── */
+.edtech-inicio-activity-list {
+  max-height: 300px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-200) transparent;
+}
+
+.edtech-inicio-activity-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 13px 0;
+  border-bottom: 1px solid #f1f5f9;
+  opacity: 0;
+  animation: edtechFadeInRow 0.4s ease forwards;
+}
+
+.edtech-inicio-activity-row:last-child {
+  border-bottom: none;
+}
+
+.edtech-inicio-dot-unread {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #003087;
+  flex-shrink: 0;
+  margin-top: 6px;
+  box-shadow: 0 0 6px rgba(0, 48, 135, 0.4);
+}
+
+.edtech-inicio-dot-read {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+.edtech-inicio-activity-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.edtech-inicio-activity-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: 'DM Sans', sans-serif;
+  margin-bottom: 2px;
+}
+
+.edtech-inicio-activity-title.read {
+  font-weight: 400;
+  color: #64748b;
+}
+
+.edtech-inicio-activity-desc {
+  font-size: 11.5px;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-inicio-activity-time {
+  font-size: 11px;
+  color: #cbd5e1;
+  flex-shrink: 0;
+  margin-left: 12px;
+  font-family: 'DM Sans', sans-serif;
+  white-space: nowrap;
+}
+
+.edtech-inicio-activity-empty {
+  padding: 40px 0;
+  text-align: center;
+}
+
+.edtech-inicio-activity-empty-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid #e2e8f0;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edtech-inicio-activity-empty p {
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 0;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ── Responsive ── */
+@media (max-width: 960px) {
+  .edtech-inicio-banner {
+    padding: 28px 24px;
+  }
+
+  .edtech-inicio-banner-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .edtech-inicio-banner-right {
+    align-items: flex-start;
+    margin-top: 10px;
+  }
+
+  .edtech-inicio-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .edtech-inicio-title {
+    font-size: 22px;
+  }
+}
+
+/* ============================================================
+   EDTECH+ ROLES & USERS MANAGEMENT — CONSISTENT W/ LOGIN
+   ============================================================ */
+
+/* ── Wrapper ── */
+.edtech-roles-wrapper {
+  animation: edtechSlideUp 0.5s ease both;
+}
+
+/* ── Banner ── reuses same pattern as dashboard inicio banner */
+.edtech-roles-banner {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  padding: 36px 40px;
+  margin-bottom: 20px;
+  background: #0a0f1e;
+  animation: edtechSlideUp 0.5s ease both;
+}
+
+.edtech-roles-banner-mesh {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 50% 55% at 10% 20%, rgba(124, 58, 237, 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 50% at 90% 80%, rgba(0, 48, 135, 0.16) 0%, transparent 58%),
+    radial-gradient(ellipse 45% 40% at 50% 50%, rgba(220, 38, 38, 0.10) 0%, transparent 65%);
+  z-index: 0;
+}
+
+.edtech-roles-banner-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 30%, transparent 100%);
+  z-index: 0;
+}
+
+.edtech-roles-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  animation: edtechBannerGlow 8s ease-in-out infinite;
+}
+
+.edtech-roles-orb-1 {
+  width: 320px;
+  height: 320px;
+  background: rgba(124, 58, 237, 0.12);
+  top: -100px;
+  right: -60px;
+  filter: blur(55px);
+  animation-duration: 11s;
+}
+
+.edtech-roles-orb-2 {
+  width: 260px;
+  height: 260px;
+  background: rgba(0, 48, 135, 0.10);
+  bottom: -80px;
+  left: -40px;
+  filter: blur(45px);
+  animation-duration: 13s;
+  animation-delay: -3s;
+}
+
+.edtech-roles-banner-divider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #003087 0%, #003087 33%, #00A33B 33%, #00A33B 66%, #FBC02D 66%, #FBC02D 100%);
+  z-index: 2;
+}
+
+.edtech-roles-banner-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.edtech-roles-banner-left {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Badge pill */
+.edtech-roles-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  width: fit-content;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.50);
+  font-family: 'DM Sans', sans-serif;
+  margin-bottom: 14px;
+  animation: edtechSlideUp 0.4s ease 0.1s both;
+}
+
+.edtech-roles-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #7c3aed;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(124, 58, 237, 0.8);
+  animation: badgePulse 2.5s ease-in-out infinite;
+}
+
+/* Title */
+.edtech-roles-title {
+  margin: 0 0 8px 0;
+  font-size: 26px;
+  font-weight: 400;
+  color: #ffffff;
+  font-family: 'DM Serif Display', serif;
+  line-height: 1.25;
+  animation: edtechSlideUp 0.5s ease 0.15s both;
+}
+
+.edtech-roles-title em {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.edtech-roles-subtitle {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  animation: edtechSlideUp 0.5s ease 0.2s both;
+}
+
+/* Mini stats */
+.edtech-roles-mini-stats {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.edtech-roles-mini-stat {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 10px 16px;
+  text-align: center;
+  min-width: 80px;
+}
+
+.edtech-roles-mini-stat-val {
+  font-size: 22px;
+  font-weight: 300;
+  color: #ffffff;
+  font-family: 'DM Serif Display', serif;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.edtech-roles-mini-stat-label {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.40);
+  font-family: 'DM Sans', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── Cards ── */
+.edtech-roles-card {
+  background: #ffffff;
+  border: 1px solid #e4e8ef;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  opacity: 0;
+  animation: edtechSlideUp 0.4s ease forwards;
+}
+
+.edtech-roles-card-delay-1 {
+  animation-delay: 0.10s;
+}
+
+.edtech-roles-card-delay-2 {
+  animation-delay: 0.20s;
+}
+
+.edtech-roles-card-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fafbfc;
+  flex-wrap: wrap;
+}
+
+.edtech-roles-card-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.edtech-roles-card-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid;
+}
+
+.edtech-roles-card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-roles-card-sub {
+  font-size: 11.5px;
+  color: #94a3b8;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-roles-card-body {
+  padding: 20px 24px;
+}
+
+/* ── Form ── */
+.edtech-roles-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 220px auto;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.edtech-roles-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #94a3b8;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-roles-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #dde2ea;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  color: #1e293b;
+  background: #ffffff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.edtech-roles-input:focus {
+  border-color: #003087;
+  box-shadow: 0 0 0 3px rgba(0, 48, 135, 0.08);
+}
+
+.edtech-roles-input::placeholder {
+  color: #b0b8c8;
+}
+
+.edtech-roles-submit-btn {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #0a0f1e 0%, #1a2332 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  white-space: nowrap;
+  height: 42px;
+}
+
+.edtech-roles-submit-btn:hover {
+  background: linear-gradient(135deg, #1a2332 0%, #2a3342 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(10, 15, 30, 0.2);
+}
+
+/* ── Filter pills ── */
+.edtech-roles-filter-pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.edtech-roles-filter-pill {
+  border: 1px solid;
+  border-radius: 6px;
+  padding: 4px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-roles-filter-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* ── Table ── */
+.edtech-roles-table-wrap {
+  overflow-x: auto;
+}
+
+.edtech-roles-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-roles-table thead tr {
+  background: #f8fafc;
+  border-bottom: 1px solid #e4e8ef;
+}
+
+.edtech-roles-table thead th {
+  padding: 11px 16px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.edtech-roles-table tbody tr {
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.15s ease;
+  opacity: 0;
+  animation: edtechFadeInRow 0.35s ease forwards;
+}
+
+.edtech-roles-table tbody tr:hover {
+  background: #fafbfc;
+}
+
+.edtech-roles-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.edtech-roles-table td {
+  padding: 13px 16px;
+  font-size: 13px;
+  color: #334155;
+  vertical-align: middle;
+}
+
+.edtech-roles-no-anim {
+  opacity: 1 !important;
+  animation: none !important;
+}
+
+/* ── User cell ── */
+.edtech-roles-user-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.edtech-roles-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid;
+}
+
+.edtech-roles-avatar span {
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  text-transform: uppercase;
+}
+
+.edtech-roles-user-name {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-roles-you-tag {
+  margin-left: 6px;
+  font-size: 10px;
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.edtech-roles-user-email {
+  font-size: 11.5px;
+  color: #94a3b8;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ── Access cell ── */
+.edtech-roles-access-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.edtech-roles-select {
+  padding: 6px 10px;
+  border: 1px solid #e4e8ef;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: 'DM Sans', sans-serif;
+  color: #334155;
+  background: #fafbfc;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+  outline: none;
+  min-width: 130px;
+}
+
+.edtech-roles-select:focus {
+  border-color: #003087;
+  box-shadow: 0 0 0 3px rgba(0, 48, 135, 0.08);
+}
+
+.edtech-roles-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Role badge ── */
+.edtech-roles-rbadge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-roles-rbadge-admin {
+  background: rgba(220, 38, 38, 0.08);
+  color: #dc2626;
+}
+
+.edtech-roles-rbadge-maestro {
+  background: rgba(0, 48, 135, 0.06);
+  color: #003087;
+}
+
+.edtech-roles-rbadge-alumno {
+  background: rgba(0, 163, 59, 0.06);
+  color: #00A33B;
+}
+
+/* ── Date cell ── */
+.edtech-roles-date-cell {
+  color: #64748b;
+  font-size: 12px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-roles-no-date {
+  color: #cbd5e1;
+}
+
+/* ── Revoke button ── */
+.edtech-roles-revoke-btn {
+  padding: 6px 14px;
+  background: transparent;
+  color: #dc2626;
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: all 0.2s ease;
+}
+
+.edtech-roles-revoke-btn:hover {
+  background: rgba(220, 38, 38, 0.06);
+  border-color: #dc2626;
+}
+
+.edtech-roles-revoke-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Table footer ── */
+.edtech-roles-table-footer {
+  padding: 12px 24px;
+  border-top: 1px solid #f1f5f9;
+  background: #fafbfc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edtech-roles-footer-count {
+  font-size: 11.5px;
+  color: #94a3b8;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-roles-footer-note {
+  font-size: 11px;
+  color: #cbd5e1;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ── Empty state ── */
+.edtech-roles-empty {
+  text-align: center;
+  padding: 44px 20px;
+}
+
+.edtech-roles-empty-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid #e2e8f0;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edtech-roles-empty p {
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 0;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ── Responsive ── */
+@media (max-width: 960px) {
+  .edtech-roles-banner {
+    padding: 28px 24px;
+  }
+
+  .edtech-roles-banner-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .edtech-roles-mini-stats {
+    margin-top: 12px;
+  }
+
+  .edtech-roles-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .edtech-roles-title {
+    font-size: 22px;
+  }
+
+  .edtech-roles-filter-pills {
+    margin-top: 10px;
+  }
+}
+
+/* ============================================================
+   EDTECH+ CLASSROOMS (AULAS) — CONSISTENT W/ LOGIN
+   ============================================================ */
+
+/* ── Wrapper ── */
+.edtech-aulas-wrapper {
+  animation: edtechSlideUp 0.5s ease both;
+}
+
+/* ── Banner ── green-tinted mesh for classrooms */
+.edtech-aulas-banner {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  padding: 36px 40px;
+  margin-bottom: 20px;
+  background: #0a0f1e;
+  animation: edtechSlideUp 0.5s ease both;
+}
+
+.edtech-aulas-banner-mesh {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 50% 55% at 10% 20%, rgba(0, 163, 59, 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 50% at 90% 80%, rgba(0, 48, 135, 0.14) 0%, transparent 58%),
+    radial-gradient(ellipse 45% 40% at 50% 50%, rgba(251, 192, 45, 0.08) 0%, transparent 65%);
+  z-index: 0;
+}
+
+.edtech-aulas-banner-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 30%, transparent 100%);
+  z-index: 0;
+}
+
+.edtech-aulas-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  animation: edtechBannerGlow 8s ease-in-out infinite;
+}
+
+.edtech-aulas-orb-1 {
+  width: 300px;
+  height: 300px;
+  background: rgba(0, 163, 59, 0.12);
+  top: -90px;
+  right: -50px;
+  filter: blur(55px);
+  animation-duration: 10s;
+}
+
+.edtech-aulas-orb-2 {
+  width: 240px;
+  height: 240px;
+  background: rgba(251, 192, 45, 0.08);
+  bottom: -70px;
+  left: -30px;
+  filter: blur(45px);
+  animation-duration: 12s;
+  animation-delay: -2s;
+}
+
+.edtech-aulas-banner-divider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #003087 0%, #003087 33%, #00A33B 33%, #00A33B 66%, #FBC02D 66%, #FBC02D 100%);
+  z-index: 2;
+}
+
+.edtech-aulas-banner-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.edtech-aulas-banner-left {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Badge pill */
+.edtech-aulas-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  width: fit-content;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.50);
+  font-family: 'DM Sans', sans-serif;
+  margin-bottom: 14px;
+  animation: edtechSlideUp 0.4s ease 0.1s both;
+}
+
+.edtech-aulas-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00A33B;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(0, 163, 59, 0.8);
+  animation: badgePulse 2.5s ease-in-out infinite;
+}
+
+/* Title */
+.edtech-aulas-title {
+  margin: 0 0 8px 0;
+  font-size: 26px;
+  font-weight: 400;
+  color: #ffffff;
+  font-family: 'DM Serif Display', serif;
+  line-height: 1.25;
+  animation: edtechSlideUp 0.5s ease 0.15s both;
+}
+
+.edtech-aulas-title em {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.edtech-aulas-subtitle {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  animation: edtechSlideUp 0.5s ease 0.2s both;
+}
+
+/* Mini stats */
+.edtech-aulas-mini-stats {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.edtech-aulas-mini-stat {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 10px 14px;
+  text-align: center;
+  min-width: 76px;
+}
+
+.edtech-aulas-mini-stat-warn {
+  background: rgba(220, 38, 38, 0.12) !important;
+  border-color: rgba(220, 38, 38, 0.30) !important;
+}
+
+.edtech-aulas-mini-stat-val {
+  font-size: 22px;
+  font-weight: 300;
+  color: #ffffff;
+  font-family: 'DM Serif Display', serif;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.edtech-aulas-mini-stat-val.warn {
+  color: #fca5a5;
+}
+
+.edtech-aulas-mini-stat-label {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.40);
+  font-family: 'DM Sans', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.edtech-aulas-mini-stat-label.warn {
+  color: rgba(252, 165, 165, 0.8);
+}
+
+/* ── Cards ── */
+.edtech-aulas-card {
+  background: #ffffff;
+  border: 1px solid #e4e8ef;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  opacity: 0;
+  animation: edtechSlideUp 0.4s ease forwards;
+}
+
+.edtech-aulas-card-delay-1 {
+  animation-delay: 0.08s;
+}
+
+.edtech-aulas-card-delay-2 {
+  animation-delay: 0.14s;
+}
+
+.edtech-aulas-card-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fafbfc;
+  flex-wrap: wrap;
+}
+
+.edtech-aulas-card-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.edtech-aulas-card-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid;
+}
+
+.edtech-aulas-card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-aulas-card-sub {
+  font-size: 11.5px;
+  color: #94a3b8;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* Toggle button */
+.edtech-aulas-toggle-btn {
+  padding: 7px 16px;
+  background: linear-gradient(135deg, #0a0f1e 0%, #1a2332 100%);
+  color: #fff;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.2px;
+}
+
+.edtech-aulas-toggle-btn:hover {
+  box-shadow: 0 4px 12px rgba(10, 15, 30, 0.15);
+  transform: translateY(-1px);
+}
+
+.edtech-aulas-toggle-btn.active {
+  background: #f1f5f9;
+  color: #64748b;
+  border-color: #e4e8ef;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Form body */
+.edtech-aulas-form-body {
+  padding: 20px 24px;
+  border-top: 1px solid #f1f5f9;
+  background: #ffffff;
+}
+
+.edtech-aulas-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 150px 200px;
+  gap: 14px;
+  align-items: flex-end;
+  margin-bottom: 14px;
+}
+
+.edtech-aulas-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  color: #94a3b8;
+  margin: 0 0 6px 0;
+  font-family: 'DM Sans', sans-serif;
+  display: block;
+}
+
+.edtech-aulas-input {
+  width: 100%;
+  padding: 9px 13px;
+  border: 1px solid #dde2ea;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  color: #1e293b;
+  background: #ffffff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.edtech-aulas-input:focus {
+  border-color: #00A33B;
+  box-shadow: 0 0 0 3px rgba(0, 163, 59, 0.09);
+}
+
+.edtech-aulas-input::placeholder {
+  color: #b8c0cc;
+}
+
+.edtech-aulas-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.edtech-aulas-btn-ghost {
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid #e4e8ef;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  color: #64748b;
+  transition: all 0.2s;
+}
+
+.edtech-aulas-btn-ghost:hover {
+  border-color: #94a3b8;
+  background: #f8fafc;
+  color: #334155;
+}
+
+.edtech-aulas-btn-green {
+  padding: 9px 20px;
+  background: linear-gradient(135deg, #00A33B 0%, #059669 100%);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.edtech-aulas-btn-green:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 163, 59, 0.2);
+}
+
+.edtech-aulas-btn-danger {
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  color: #dc2626;
+  transition: all 0.2s;
+}
+
+.edtech-aulas-btn-danger:hover {
+  border-color: #dc2626;
+  background: rgba(220, 38, 38, 0.06);
+}
+
+/* ── Subheader ── */
+.edtech-aulas-subheader {
+  padding: 12px 20px;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.edtech-aulas-subheader-text {
+  font-size: 11.5px;
+  color: #64748b;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-aulas-subheader-bold {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.edtech-aulas-subheader-green {
+  font-weight: 600;
+  color: #00A33B;
+}
+
+/* Filter pills */
+.edtech-aulas-filter-pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.edtech-aulas-filter-pill {
+  border: 1px solid;
+  border-radius: 6px;
+  padding: 4px 11px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-aulas-filter-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* ── Table ── */
+.edtech-aulas-table-wrap {
+  overflow-x: auto;
+}
+
+.edtech-aulas-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-aulas-table thead tr {
+  background: #f8fafc;
+  border-bottom: 1px solid #e4e8ef;
+}
+
+.edtech-aulas-table thead th {
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.edtech-aulas-table tbody tr {
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.15s;
+  opacity: 0;
+  animation: edtechFadeInRow 0.3s ease forwards;
+}
+
+.edtech-aulas-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.edtech-aulas-table tbody tr:hover {
+  background: #fafbfc;
+}
+
+.edtech-aulas-table td {
+  padding: 12px 16px;
+  font-size: 13px;
+  color: #334155;
+  vertical-align: middle;
+}
+
+.edtech-aulas-no-anim {
+  opacity: 1 !important;
+  animation: none !important;
+}
+
+/* Room cell */
+.edtech-aulas-room-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.edtech-aulas-room-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  background: rgba(0, 163, 59, 0.06);
+  border: 1px solid rgba(0, 163, 59, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edtech-aulas-room-icon.maint {
+  background: rgba(180, 83, 9, 0.06);
+  border-color: rgba(180, 83, 9, 0.18);
+}
+
+.edtech-aulas-room-name {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-aulas-room-date {
+  font-size: 10.5px;
+  color: #b0bac9;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* Capacity cell */
+.edtech-aulas-cap-cell {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+}
+
+.edtech-aulas-cap-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 18px;
+  font-weight: 300;
+  color: #0f172a;
+  line-height: 1;
+}
+
+.edtech-aulas-cap-unit {
+  font-size: 10.5px;
+  color: #94a3b8;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-aulas-bar-track {
+  height: 3px;
+  background: #f1f5f9;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 5px;
+  width: 72px;
+}
+
+.edtech-aulas-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  animation: edtechExpandBar 0.9s ease both;
+}
+
+/* Badges */
+.edtech-aulas-badge {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-aulas-badge-green {
+  background: rgba(0, 163, 59, 0.06);
+  color: #00A33B;
+}
+
+.edtech-aulas-badge-amber {
+  background: rgba(180, 83, 9, 0.06);
+  color: #b45309;
+}
+
+.edtech-aulas-badge-blue {
+  background: rgba(0, 48, 135, 0.06);
+  color: #003087;
+}
+
+.edtech-aulas-badge-slate {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+/* Date cell */
+.edtech-aulas-date-cell {
+  font-size: 12px;
+  color: #64748b;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-aulas-no-data {
+  color: #cbd5e1;
+  font-size: 12px;
+}
+
+/* Table footer */
+.edtech-aulas-table-footer {
+  padding: 10px 20px;
+  border-top: 1px solid #f1f5f9;
+  background: #fafbfc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edtech-aulas-footer-count {
+  font-size: 11.5px;
+  color: #94a3b8;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-aulas-footer-note {
+  font-size: 11px;
+  color: #cbd5e1;
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Empty state */
+.edtech-aulas-empty {
+  text-align: center;
+  padding: 44px 20px;
+}
+
+.edtech-aulas-empty-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid #e2e8f0;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edtech-aulas-empty p {
+  margin: 0;
+  font-size: 13px;
+  color: #94a3b8;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-aulas-empty-hint {
+  margin: 4px 0 0 !important;
+  font-size: 11.5px !important;
+  color: #cbd5e1 !important;
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+  .edtech-aulas-banner {
+    padding: 28px 24px;
+  }
+
+  .edtech-aulas-banner-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .edtech-aulas-mini-stats {
+    margin-top: 12px;
+  }
+
+  .edtech-aulas-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .edtech-aulas-title {
+    font-size: 22px;
+  }
+
+  .edtech-aulas-filter-pills {
+    margin-top: 10px;
+  }
+}
+
+/* ============================================================
+   VISTA DE CONTROL DE INVENTARIO (EQUIPOS)
+   ============================================================ */
+
+.edtech-equipos-wrapper {
+  animation: edtechFadeIn 0.5s ease;
+}
+
+/* -- Banner / Header -- */
+.edtech-equipos-banner {
+  background: linear-gradient(105deg, var(--navy) 0%, #004d16 50%, var(--green) 100%);
+  border-radius: 8px;
+  padding: 32px 40px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 48, 135, 0.1);
+}
+
+.edtech-equipos-banner-mesh {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(at 80% 0%, rgba(0, 163, 59, 0.15) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(251, 192, 45, 0.1) 0px, transparent 50%);
+  z-index: 0;
+}
+
+.edtech-equipos-banner-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+  z-index: 0;
+}
+
+.edtech-equipos-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  z-index: 0;
+  opacity: 0.6;
+}
+
+.edtech-equipos-orb-1 {
+  top: -40px;
+  right: -20px;
+  width: 200px;
+  height: 200px;
+  background: var(--green);
+}
+
+.edtech-equipos-orb-2 {
+  bottom: -60px;
+  left: 20%;
+  width: 250px;
+  height: 250px;
+  background: var(--blue);
+}
+
+.edtech-equipos-banner-divider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue), var(--green), var(--gold));
+  z-index: 1;
+}
+
+.edtech-equipos-banner-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.edtech-equipos-banner-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.edtech-equipos-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #ffffff;
+  width: fit-content;
+  margin-bottom: 12px;
+  backdrop-filter: blur(4px);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-equipos-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 8px var(--gold);
+}
+
+.edtech-equipos-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+  letter-spacing: 0.3px;
+  line-height: 1.2;
+}
+
+.edtech-equipos-title em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.edtech-equipos-subtitle {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* -- Mini Stats (inside banner) -- */
+.edtech-equipos-mini-stats {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.edtech-equipos-mini-stat {
+  background: rgba(10, 15, 30, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 12px 18px;
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+  min-width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.edtech-equipos-mini-stat-warn {
+  border-color: rgba(251, 192, 45, 0.4);
+  background: rgba(251, 192, 45, 0.1);
+}
+
+.edtech-equipos-mini-stat-val {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  color: #ffffff;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.edtech-equipos-mini-stat-val.warn {
+  color: var(--gold);
+}
+
+.edtech-equipos-mini-stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'DM Sans', sans-serif;
+  text-align: center;
+}
+
+.edtech-equipos-mini-stat-label.warn {
+  color: rgba(251, 192, 45, 0.8);
+}
+
+/* -- Content Grid -- */
+.edtech-equipos-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+}
+
+/* -- Card Styles -- */
+.edtech-equipos-card {
+  background: #ffffff;
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  opacity: 0;
+  animation: edtechSlideUp 0.4s ease forwards;
+}
+
+.edtech-equipos-card-delay-1 { animation-delay: 0.1s; }
+.edtech-equipos-card-delay-2 { animation-delay: 0.2s; }
+
+.edtech-equipos-card-header {
+  padding: 16px 20px;
+  background: var(--gray-50);
+  border-bottom: 1px solid var(--gray-100);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.edtech-equipos-card-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid;
+  flex-shrink: 0;
+}
+
+.edtech-equipos-card-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--navy-mid);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.edtech-equipos-card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* -- Inputs -- */
+.edtech-equipos-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.edtech-equipos-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-equipos-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--gray-200);
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--navy-mid);
+  background: #ffffff;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s;
+}
+
+.edtech-equipos-input:focus {
+  outline: none;
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(0, 163, 59, 0.1);
+}
+
+/* -- Buttons -- */
+.edtech-equipos-btn-primary {
+  padding: 10px 20px;
+  background: var(--green);
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.edtech-equipos-btn-primary:hover {
+  background: var(--green-light);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 163, 59, 0.2);
+}
+
+.edtech-equipos-btn-danger, .edtech-equipos-btn-ghost {
+  padding: 6px 14px;
+  background: transparent;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.edtech-equipos-btn-danger {
+  border: 1px solid #fca5a5;
+  color: #dc2626;
+}
+.edtech-equipos-btn-danger:hover {
+  border-color: #dc2626; background: #fef2f2;
+}
+
+.edtech-equipos-btn-ghost {
+  border: 1px solid var(--gray-200);
+  color: var(--gray-500);
+}
+.edtech-equipos-btn-ghost:hover {
+  border-color: var(--gray-400); background: var(--gray-50); color: var(--navy-mid);
+}
+
+/* -- List / Table -- */
+.edtech-equipos-table-container {
+  overflow-x: auto;
+}
+
+.edtech-equipos-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.edtech-equipos-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  border-bottom: 1px solid var(--gray-200);
+  background: var(--gray-50);
+}
+
+.edtech-equipos-table td {
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--navy-mid);
+  border-bottom: 1px solid var(--gray-100);
+  vertical-align: middle;
+}
+
+.edtech-equipos-table tr:hover {
+  background: #fafbfc;
+}
+
+/* -- Status Badges -- */
+.edtech-equipos-status {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.edtech-equipos-status-disp { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+.edtech-equipos-status-mant { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+.edtech-equipos-status-baja { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+.edtech-equipos-status-pres { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+
+/* -- Qty Input -- */
+.edtech-equipos-qty {
+  width: 60px;
+  padding: 6px 8px;
+  border: 1px solid var(--gray-200);
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: inherit;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.edtech-equipos-qty:focus {
+  outline: none;
+  border-color: var(--green);
+  box-shadow: 0 0 0 2px rgba(0, 163, 59, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .edtech-equipos-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
