@@ -1,7 +1,7 @@
 import logo from './logo.png';
 import translations from './translations';
 import { useState, useEffect } from 'react';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from 'firebase/auth';
 import { doc, setDoc, getDoc, collection, addDoc, onSnapshot, query, orderBy, updateDoc, deleteDoc, getDocs, where } from 'firebase/firestore';
 import { auth, db } from './firebase';
 import './App.css';
@@ -75,6 +75,7 @@ function App() {
   const [esRegistro, setEsRegistro] = useState(false);
   const [cargando, setCargando] = useState(false);
   const [usuarioActivo, setUsuarioActivo] = useState(null);
+  const [autenticando, setAutenticando] = useState(true); // <--- NUEVO: Esperar a Firebase Auth
   const [lang, setLang] = useState('es');
   const t = translations[lang];
 
@@ -135,6 +136,39 @@ function App() {
     };
     return map[equipo] || equipo;
   };
+
+  // --- NUEVO EFECTO: PERSISTENCIA DE SESIÓN ---
+  useEffect(() => {
+    const unsubscribeAuth = onAuthStateChanged(auth, async (userFirebase) => {
+      if (userFirebase) {
+        try {
+          // Buscamos su rol en Firestore
+          const docSnap = await getDoc(doc(db, "usuarios", userFirebase.uid));
+          if (docSnap.exists()) {
+            setUsuarioActivo({
+              uid: userFirebase.uid,
+              email: userFirebase.email,
+              rol: docSnap.data().rol.toLowerCase()
+            });
+          } else {
+            // Si por alguna razón no tiene perfil en Firestore, lo tratamos como alumno
+            setUsuarioActivo({
+              uid: userFirebase.uid,
+              email: userFirebase.email,
+              rol: 'alumno'
+            });
+          }
+        } catch (error) {
+          console.error("Error recuperando sesión:", error);
+        }
+      } else {
+        setUsuarioActivo(null);
+      }
+      setAutenticando(false);
+    });
+
+    return () => unsubscribeAuth();
+  }, []);
 
   // --- EFECTO: Cargar datos en tiempo real ---
   useEffect(() => {
@@ -1395,7 +1429,7 @@ function App() {
                     <div className="edtech-inicio-stat-body">
                       <p className="edtech-inicio-stat-label">{t.home.confirmedReservations}</p>
                       <div className="edtech-inicio-stat-row">
-                        <span className="edtech-inicio-stat-number">{listaReservas.filter(r => r.estado === 'Confirmada').length}</span>
+                        <span className="edtech-inicio-stat-number">{listaReservas.filter(r => r.estado === 'Confirmada' && r.fecha >= obtenerFechaLocal()).length}</span>
                         <div className="edtech-inicio-stat-icon" style={{ background: 'rgba(251,191,36,0.10)', borderColor: 'rgba(251,191,36,0.20)' }}>
                           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                             <rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
@@ -1403,7 +1437,7 @@ function App() {
                         </div>
                       </div>
                       <div className="edtech-inicio-stat-bar">
-                        <div className="edtech-inicio-stat-bar-fill" style={{ background: '#fbbf24', width: `${Math.min((listaReservas.filter(r => r.estado === 'Confirmada').length / 20) * 100, 100)}%` }} />
+                        <div className="edtech-inicio-stat-bar-fill" style={{ background: '#fbbf24', width: `${Math.min((listaReservas.filter(r => r.estado === 'Confirmada' && r.fecha >= obtenerFechaLocal()).length / 20) * 100, 100)}%` }} />
                       </div>
                       <p className="edtech-inicio-stat-sub">{t.home.activeReservations}</p>
                     </div>
@@ -3202,7 +3236,8 @@ function App() {
                               </div>
                             ) : (
                               listaAulas.map((aula, idx) => {
-                                const reservasAula = listaReservas.filter(r => r.aulaId === aula.id && r.estado === 'Confirmada');
+                                const hoyStr = obtenerFechaLocal();
+                                const reservasAula = listaReservas.filter(r => r.aulaId === aula.id && r.estado === 'Confirmada' && r.fecha >= hoyStr);
                                 const tieneReservas = reservasAula.length > 0;
                                 const enMantenimiento = aula.estado === 'Mantenimiento';
 
@@ -3427,14 +3462,22 @@ function App() {
                               gap: '10px',
                             }}>
                               <span style={{ fontSize: '11.5px', color: '#64748b', fontFamily: '"DM Sans", sans-serif' }}>
-                                <span style={{ fontWeight: '600', color: '#1e293b' }}>{listaReservas.filter(r => r.estado === 'Confirmada').length}</span> {t.home.activeReservations}
+                                {(() => {
+                                  const hoy = obtenerFechaLocal();
+                                  const confirmadasFuturas = listaReservas.filter(r => r.estado === 'Confirmada' && r.fecha >= hoy).length;
+                                  return (
+                                    <>
+                                      <span style={{ fontWeight: '600', color: '#1e293b' }}>{confirmadasFuturas}</span> {t.home.activeReservations}
+                                    </>
+                                  );
+                                })()}
                               </span>
                               {/* Role pills */}
                               <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                                 {[
-                                  { label: t.roles.admin, count: listaReservas.filter(r => r.rol === 'admin' && r.estado === 'Confirmada').length, color: '#dc2626', bg: '#fef2f2' },
-                                  { label: t.roles.maestro, count: listaReservas.filter(r => r.rol === 'maestro' && r.estado === 'Confirmada').length, color: '#2563eb', bg: '#eff6ff' },
-                                  { label: t.roles.alumno, count: listaReservas.filter(r => r.rol === 'alumno' && r.estado === 'Confirmada').length, color: '#16a34a', bg: '#f0fdf4' },
+                                  { label: t.roles.admin, count: listaReservas.filter(r => r.rol === 'admin' && r.estado === 'Confirmada' && r.fecha >= obtenerFechaLocal()).length, color: '#dc2626', bg: '#fef2f2' },
+                                  { label: t.roles.maestro, count: listaReservas.filter(r => r.rol === 'maestro' && r.estado === 'Confirmada' && r.fecha >= obtenerFechaLocal()).length, color: '#2563eb', bg: '#eff6ff' },
+                                  { label: t.roles.alumno, count: listaReservas.filter(r => r.rol === 'alumno' && r.estado === 'Confirmada' && r.fecha >= obtenerFechaLocal()).length, color: '#16a34a', bg: '#f0fdf4' },
                                 ].map(({ label, count, color, bg }) => (
                                   <div key={label} style={{ background: bg, border: `1px solid ${color}20`, borderRadius: '4px', padding: '4px 11px', display: 'flex', alignItems: 'center', gap: '5px' }}>
                                     <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: color, flexShrink: 0 }} />
@@ -3460,26 +3503,29 @@ function App() {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {listaReservas.length === 0 ? (
-                                    <tr style={{ opacity: 1 }}>
-                                      <td colSpan="8">
-                                        <div className="ar-empty">
-                                          <div style={{ width: '42px', height: '42px', borderRadius: '50%', border: '1px solid #e2e8f0', margin: '0 auto 12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1.5">
-                                              <rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
-                                            </svg>
-                                          </div>
-                                          <p style={{ margin: 0, fontSize: '13px' }}>{t.allReservations.noReservations}</p>
-                                          <p style={{ margin: '4px 0 0', fontSize: '11.5px', color: '#cbd5e1' }}>{t.allReservations.noReservationsHint || t.reservedRooms.noReservationsHint}</p>
-                                        </div>
-                                      </td>
-                                    </tr>
-                                  ) : (
-                                    listaReservas.map((res, idx) => {
-                                      const hoy = (() => {
-                                        const d = new Date();
-                                        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-                                      })();
+                                  {(() => {
+                                    const hoy = obtenerFechaLocal();
+                                    const reservasFiltradas = listaReservas.filter(r => r.fecha >= hoy);
+
+                                    if (reservasFiltradas.length === 0) {
+                                      return (
+                                        <tr style={{ opacity: 1 }}>
+                                          <td colSpan="8">
+                                            <div className="ar-empty">
+                                              <div style={{ width: '42px', height: '42px', borderRadius: '50%', border: '1px solid #e2e8f0', margin: '0 auto 12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1.5">
+                                                  <rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
+                                                </svg>
+                                              </div>
+                                              <p style={{ margin: 0, fontSize: '13px' }}>{t.allReservations.noReservations}</p>
+                                              <p style={{ margin: '4px 0 0', fontSize: '11.5px', color: '#cbd5e1' }}>{t.allReservations.noReservationsHint || t.reservedRooms.noReservationsHint}</p>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                      );
+                                    }
+
+                                    return reservasFiltradas.map((res, idx) => {
                                       const esHoy = res.fecha === hoy;
                                       const esFuturo = res.fecha > hoy;
                                       const esCancelada = res.estado !== 'Confirmada';
@@ -3595,26 +3641,35 @@ function App() {
                                           )}
                                         </tr>
                                       );
-                                    })
-                                  )}
+                                    });
+                                  })()}
                                 </tbody>
                               </table>
                             </div>
 
                             {/* Footer */}
-                            {listaReservas.length > 0 && (
-                              <div style={{ padding: '10px 20px', borderTop: '1px solid #f1f5f9', background: '#fafbfc', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>
-                                  {listaReservas.length} reserva(s) en total · {listaReservas.filter(r => r.estado === 'Confirmada').length} confirmada(s)
-                                </span>
-                                <span style={{ fontSize: '11px', color: '#cbd5e1', fontFamily: '"DM Sans", sans-serif', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="2">
-                                    <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
-                                  </svg>
-                                  {t.reservedRooms.adminOnly}
-                                </span>
-                              </div>
-                            )}
+                            {(() => {
+                              const hoy = obtenerFechaLocal();
+                              const filtradasTotal = listaReservas.filter(r => r.fecha >= hoy).length;
+                              const filtradasConfirmadas = listaReservas.filter(r => r.estado === 'Confirmada' && r.fecha >= hoy).length;
+
+                              if (filtradasTotal > 0) {
+                                return (
+                                  <div style={{ padding: '10px 20px', borderTop: '1px solid #f1f5f9', background: '#fafbfc', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <span style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>
+                                      {filtradasTotal} reserva(s) en total · {filtradasConfirmadas} confirmada(s)
+                                    </span>
+                                    <span style={{ fontSize: '11px', color: '#cbd5e1', fontFamily: '"DM Sans", sans-serif', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="2">
+                                        <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+                                      </svg>
+                                      {t.reservedRooms.adminOnly}
+                                    </span>
+                                  </div>
+                                );
+                              }
+                              return null;
+                            })()}
                           </div>
                         )}
                       </>
@@ -3864,10 +3919,15 @@ function App() {
                         </tr>
                       </thead>
                       <tbody>
-                        {listaReservas.length === 0 ? (
-                          <tr><td colSpan="7" style={{ textAlign: 'center', padding: '20px' }}>{t.allReservations.noReservations}</td></tr>
-                        ) : (
-                          listaReservas.map((res) => (
+                        {(() => {
+                          const hoy = obtenerFechaLocal();
+                          const reservasFiltradas = listaReservas.filter(r => r.fecha >= hoy);
+
+                          if (reservasFiltradas.length === 0) {
+                            return <tr><td colSpan="7" style={{ textAlign: 'center', padding: '20px' }}>{t.allReservations.noReservations}</td></tr>;
+                          }
+
+                          return reservasFiltradas.map((res) => (
                             <tr key={res.id}>
                               <td>
                                 <div style={{ fontWeight: 'bold' }}>{res.aulaNombre}</div>
@@ -3877,7 +3937,7 @@ function App() {
                                 <div style={{ fontWeight: '500' }}>{res.nombreReservador}</div>
                                 <div style={{ fontSize: '11px', color: '#94a3b8' }}>{res.reservadoPor}</div>
                               </td>
-                              <td style={{ fontWeight: '500' }}>{new Date(res.fecha).toLocaleDateString('es-ES')}</td>
+                              <td style={{ fontWeight: '500' }}>{new Date(res.fecha + 'T12:00:00').toLocaleDateString('es-ES')}</td>
                               <td style={{ fontWeight: '500' }}>{res.horaInicio} - {res.horaFin}</td>
                               <td style={{ fontSize: '12px', color: '#475569', maxWidth: '200px' }}>
                                 {res.descripcion}
@@ -3896,8 +3956,8 @@ function App() {
                                 </button>
                               </td>
                             </tr>
-                          ))
-                        )}
+                          ));
+                        })()}
                       </tbody>
                     </table>
                   </div>
@@ -5928,6 +5988,25 @@ function App() {
           </div >
         </main >
       </div >
+    );
+  }
+
+  if (autenticando) {
+    return (
+      <div style={{
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+        gap: '20px'
+      }}>
+        <div className="loader-pill">
+          <div className="loader-dot" />
+        </div>
+        <p style={{ color: '#64748b', fontWeight: '500', letterSpacing: '0.5px' }}>Verificando Sesión...</p>
+      </div>
     );
   }
 
