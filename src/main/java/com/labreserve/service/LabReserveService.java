@@ -11,12 +11,14 @@ package com.labreserve.service;
     private EquipoService equipoService;
     private SolicitudMaterialService solicitudMaterialService;
     private ReservaService reservaService;
+    private AccessGateService accessGateService;
 
     private LabReserveService() {
         this.usuarioService = new UsuarioService();
         this.equipoService = new EquipoService();
         this.solicitudMaterialService = new SolicitudMaterialService();
         this.reservaService = new ReservaService();
+        this.accessGateService = new AccessGateService();
     }
 
     /**
@@ -44,6 +46,10 @@ package com.labreserve.service;
 
     public ReservaService getReservaService() {
         return reservaService;
+    }
+
+    public AccessGateService getAccessGateService() {
+        return accessGateService;
     }
 
     /**

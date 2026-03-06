@@ -890,6 +890,50 @@ input[type="checkbox"] {
   transform: none;
 }
 
+/* ── Olvidaste tu contraseña ── */
+.forgot-password-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -8px;
+  margin-bottom: 2px;
+}
+
+.btn-forgot-password {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 2px;
+  font-family: inherit;
+  transition: all 0.25s ease;
+  letter-spacing: 0.1px;
+}
+
+.btn-forgot-password:hover {
+  color: #003087;
+  transform: translateX(2px);
+}
+
+.btn-forgot-password:hover svg {
+  color: #003087;
+  transform: scale(1.1);
+}
+
+.btn-forgot-password svg {
+  transition: all 0.2s ease;
+  color: #94a3b8;
+}
+
+.btn-forgot-password:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* ── Divider "o" ── */
 .form-divider {
   display: flex;
@@ -5392,4 +5436,775 @@ tbody tr:last-child td {
 
 .edtech-ar-mini-stat-label.warn {
   color: rgba(252, 165, 165, 0.8);
+}
+
+
+/* ===================================================== */
+/* ACCESS GATE - PUERTA DE SEGURIDAD INSTITUCIONAL       */
+/* ===================================================== */
+
+.access-gate-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #090b10;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Sora', 'Segoe UI', sans-serif;
+  animation: agFadeIn 0.8s ease forwards;
+}
+
+@keyframes agFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* ── Fondo con gradiente mesh ── */
+.access-gate-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 50% 40% at 15% 15%, rgba(0, 163, 59, 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 45% at 85% 85%, rgba(251, 192, 45, 0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 35% at 50% 50%, rgba(0, 48, 135, 0.18) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Grid de fondo ── */
+.ag-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Partículas flotantes ── */
+.ag-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ag-particle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: agParticleFloat 12s ease-in-out infinite;
+}
+
+.ag-particle-1 {
+  width: 4px;
+  height: 4px;
+  background: #00A33B;
+  top: 15%;
+  left: 20%;
+  animation-duration: 10s;
+  box-shadow: 0 0 10px rgba(0, 163, 59, 0.8);
+}
+
+.ag-particle-2 {
+  width: 3px;
+  height: 3px;
+  background: #FBC02D;
+  top: 30%;
+  right: 15%;
+  animation-duration: 14s;
+  animation-delay: -3s;
+  box-shadow: 0 0 8px rgba(251, 192, 45, 0.8);
+}
+
+.ag-particle-3 {
+  width: 5px;
+  height: 5px;
+  background: #003087;
+  bottom: 20%;
+  left: 10%;
+  animation-duration: 16s;
+  animation-delay: -6s;
+  box-shadow: 0 0 12px rgba(0, 48, 135, 0.8);
+}
+
+.ag-particle-4 {
+  width: 3px;
+  height: 3px;
+  background: #00A33B;
+  bottom: 35%;
+  right: 25%;
+  animation-duration: 11s;
+  animation-delay: -2s;
+  box-shadow: 0 0 8px rgba(0, 163, 59, 0.6);
+}
+
+.ag-particle-5 {
+  width: 4px;
+  height: 4px;
+  background: #FBC02D;
+  top: 60%;
+  left: 30%;
+  animation-duration: 13s;
+  animation-delay: -8s;
+  box-shadow: 0 0 10px rgba(251, 192, 45, 0.6);
+}
+
+.ag-particle-6 {
+  width: 2px;
+  height: 2px;
+  background: #003087;
+  top: 10%;
+  right: 35%;
+  animation-duration: 9s;
+  animation-delay: -4s;
+  box-shadow: 0 0 6px rgba(0, 48, 135, 0.8);
+}
+
+@keyframes agParticleFloat {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.4;
+  }
+
+  25% {
+    transform: translate(30px, -20px) scale(1.3);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: translate(-15px, 25px) scale(0.8);
+    opacity: 0.5;
+  }
+
+  75% {
+    transform: translate(20px, 15px) scale(1.1);
+    opacity: 0.7;
+  }
+}
+
+/* ── Orbs de fondo ── */
+.ag-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  animation: orbFloat 8s ease-in-out infinite;
+}
+
+.ag-orb-1 {
+  width: 500px;
+  height: 500px;
+  background: rgba(0, 163, 59, 0.08);
+  top: -180px;
+  left: -180px;
+  animation-duration: 14s;
+  filter: blur(80px);
+}
+
+.ag-orb-2 {
+  width: 400px;
+  height: 400px;
+  background: rgba(251, 192, 45, 0.06);
+  bottom: -120px;
+  right: -100px;
+  animation-duration: 18s;
+  animation-delay: -5s;
+  filter: blur(90px);
+}
+
+.ag-orb-3 {
+  width: 350px;
+  height: 350px;
+  background: rgba(0, 48, 135, 0.1);
+  top: 50%;
+  right: 20%;
+  transform: translateY(-50%);
+  animation-duration: 12s;
+  animation-delay: -8s;
+  filter: blur(70px);
+}
+
+/* ── Botón de idioma ── */
+.ag-lang-btn {
+  position: absolute;
+  top: 28px;
+  right: 28px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 100;
+  padding: 0;
+}
+
+.ag-lang-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px) scale(1.08);
+  border-color: rgba(0, 163, 59, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.ag-lang-btn .lang-flag-circle {
+  width: 26px;
+  height: 26px;
+  background: transparent;
+  box-shadow: none;
+  font-size: 18px;
+}
+
+/* ── Tarjeta principal ── */
+.ag-card {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 460px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 40px 36px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  box-shadow:
+    0 32px 64px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+    0 0 80px rgba(0, 48, 135, 0.08);
+  animation: agCardSlide 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+
+@keyframes agCardSlide {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ── Shake animation para errores ── */
+.ag-shake {
+  animation: agShakeAnim 0.6s ease;
+}
+
+@keyframes agShakeAnim {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  10% {
+    transform: translateX(-12px);
+  }
+
+  20% {
+    transform: translateX(10px);
+  }
+
+  30% {
+    transform: translateX(-8px);
+  }
+
+  40% {
+    transform: translateX(6px);
+  }
+
+  50% {
+    transform: translateX(-4px);
+  }
+
+  60% {
+    transform: translateX(2px);
+  }
+}
+
+/* ── Barra tricolor ── */
+.ag-tricolor-bar {
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 3px;
+  background: linear-gradient(90deg, #003087, #00A33B, #FBC02D);
+  border-radius: 0 0 4px 4px;
+}
+
+/* ── Escudo de seguridad ── */
+.ag-shield-container {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.ag-shield-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 163, 59, 0.2) 0%, transparent 65%);
+  animation: agShieldGlow 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes agShieldGlow {
+
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+}
+
+.ag-shield {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  animation: agShieldPulse 4s ease-in-out infinite;
+}
+
+@keyframes agShieldPulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 163, 59, 0.15);
+  }
+
+  50% {
+    box-shadow: 0 0 0 12px rgba(0, 163, 59, 0.05);
+  }
+}
+
+/* ── Logo ── */
+.ag-logo {
+  margin-bottom: 6px;
+}
+
+.ag-logo img {
+  width: 180px;
+  height: auto;
+  display: block;
+  filter:
+    drop-shadow(0 0 24px rgba(0, 163, 59, 0.5)) drop-shadow(0 0 48px rgba(0, 80, 200, 0.2)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+  animation: logoPop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
+}
+
+/* ── Badge ── */
+.ag-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  margin-bottom: 20px;
+  animation: slideUpFade 0.6s ease 0.4s both;
+}
+
+.ag-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00A33B;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(0, 163, 59, 0.9);
+  animation: badgePulse 2.5s ease-in-out infinite;
+}
+
+/* ── Título ── */
+.ag-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
+  text-align: center;
+  animation: slideUpFade 0.6s ease 0.45s both;
+  background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.85) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ag-subtitle {
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.45);
+  text-align: center;
+  line-height: 1.6;
+  margin: 0 0 24px 0;
+  max-width: 360px;
+  animation: slideUpFade 0.6s ease 0.5s both;
+}
+
+/* ── Error ── */
+.ag-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(220, 38, 38, 0.12);
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  border-left: 3px solid #dc2626;
+  border-radius: 10px;
+  color: #fca5a5;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Formulario ── */
+.ag-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: slideUpFade 0.6s ease 0.55s both;
+}
+
+.ag-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.ag-input-group label {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.ag-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ag-input {
+  width: 100%;
+  padding: 15px 48px 15px 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: inherit;
+  transition: all 0.3s ease;
+  letter-spacing: 2px;
+}
+
+.ag-input::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.5px;
+  font-size: 13px;
+}
+
+.ag-input:focus {
+  outline: none;
+  border-color: rgba(0, 163, 59, 0.5);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 0 0 3px rgba(0, 163, 59, 0.1),
+    0 0 20px rgba(0, 163, 59, 0.08);
+}
+
+.ag-input-icon {
+  position: absolute;
+  right: 16px;
+  color: rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: color 0.2s;
+}
+
+.ag-input:focus~.ag-input-icon {
+  color: rgba(0, 163, 59, 0.7);
+}
+
+/* ── Botón de verificar ── */
+.ag-submit-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #003087 0%, #0052cc 50%, #0047ab 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.3px;
+  box-shadow:
+    0 4px 15px rgba(0, 48, 135, 0.4),
+    0 0 0 1px rgba(0, 82, 204, 0.3) inset;
+}
+
+.ag-submit-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.ag-submit-btn:hover:not(:disabled)::before {
+  transform: translateX(100%);
+}
+
+.ag-submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 25px rgba(0, 48, 135, 0.5),
+    0 0 0 1px rgba(0, 82, 204, 0.5) inset,
+    0 0 30px rgba(0, 48, 135, 0.2);
+}
+
+.ag-submit-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.ag-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ── Spinner ── */
+.ag-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: agSpin 0.8s linear infinite;
+}
+
+@keyframes agSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Divisor ── */
+.ag-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right,
+      transparent 0%,
+      rgba(255, 255, 255, 0.06) 20%,
+      rgba(0, 163, 59, 0.3) 50%,
+      rgba(255, 255, 255, 0.06) 80%,
+      transparent 100%);
+  margin: 20px 0 16px;
+  animation: slideUpFade 0.6s ease 0.6s both;
+}
+
+/* ── Info de seguridad ── */
+.ag-security-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  animation: slideUpFade 0.6s ease 0.65s both;
+}
+
+.ag-info-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.ag-info-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.08);
+  transform: translateX(4px);
+}
+
+.ag-info-item span {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 500;
+}
+
+.ag-info-item svg {
+  flex-shrink: 0;
+}
+
+/* ── Footer ── */
+.ag-footer {
+  margin-top: 20px;
+  animation: slideUpFade 0.6s ease 0.7s both;
+}
+
+.ag-footer p {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.25);
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 520px) {
+  .ag-card {
+    margin: 16px;
+    padding: 32px 24px 24px;
+    border-radius: 20px;
+  }
+
+  .ag-title {
+    font-size: 24px;
+  }
+
+  .ag-subtitle {
+    font-size: 12.5px;
+  }
+
+  .ag-logo img {
+    width: 140px;
+  }
+
+  .ag-shield {
+    width: 64px;
+    height: 64px;
+  }
+
+  .ag-shield svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .ag-badge {
+    font-size: 8px;
+    letter-spacing: 1.2px;
+  }
+
+  .ag-lang-btn {
+    top: 16px;
+    right: 16px;
+  }
+}
+
+@media (max-height: 700px) {
+  .ag-card {
+    padding: 28px 28px 24px;
+    gap: 0;
+  }
+
+  .ag-shield-container {
+    margin-bottom: 10px;
+  }
+
+  .ag-shield {
+    width: 60px;
+    height: 60px;
+  }
+
+  .ag-shield svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .ag-logo img {
+    width: 140px;
+  }
+
+  .ag-badge {
+    margin-bottom: 14px;
+  }
+
+  .ag-title {
+    font-size: 24px;
+  }
+
+  .ag-subtitle {
+    margin-bottom: 16px;
+    font-size: 12.5px;
+  }
+
+  .ag-divider {
+    margin: 14px 0 12px;
+  }
+
+  .ag-footer {
+    margin-top: 14px;
+  }
 }
