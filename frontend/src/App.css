@@ -1,4 +1,4 @@
-/* ===================================================== */
+﻿/* ===================================================== */
 /* SISTEMA DE DISEÑO PROFESIONAL - LAB RESERVA */
 /* ===================================================== */
 
@@ -2968,10 +2968,10 @@ tbody tr:last-child td {
 }
 
 .edtech-inicio-stat-card {
-  background: #ffffff;
+  background: #0a0f1e;
   border-radius: 8px;
   padding: 28px 28px 24px;
-  border: 1px solid #e4e8ef;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   position: relative;
   overflow: hidden;
   transition: box-shadow 0.3s ease, transform 0.3s ease;
@@ -2996,7 +2996,7 @@ tbody tr:last-child td {
 }
 
 .edtech-inicio-stat-card:hover {
-  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.10);
+  box-shadow: 0 8px 32px rgba(0, 48, 135, 0.2);
   transform: translateY(-4px);
 }
 
@@ -3035,7 +3035,7 @@ tbody tr:last-child td {
 .edtech-inicio-stat-number {
   font-size: 42px;
   font-weight: 300;
-  color: #0f172a;
+  color: #ffffff;
   line-height: 1;
   font-family: 'DM Serif Display', serif;
 }
@@ -3053,7 +3053,7 @@ tbody tr:last-child td {
 
 .edtech-inicio-stat-bar {
   height: 3px;
-  background: #f1f5f9;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   overflow: hidden;
 }
@@ -3084,10 +3084,10 @@ tbody tr:last-child td {
 
 /* ── Panel (shared) ── */
 .edtech-inicio-panel {
-  background: #ffffff;
+  background: #0a0f1e;
   border-radius: 8px;
   padding: 26px;
-  border: 1px solid #e4e8ef;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .edtech-inicio-panel-label {
@@ -3109,7 +3109,7 @@ tbody tr:last-child td {
 
 .edtech-inicio-unread-count {
   font-size: 11px;
-  color: #003087;
+  color: #60a5fa;
   font-weight: 600;
   font-family: 'DM Sans', sans-serif;
 }
@@ -3127,8 +3127,8 @@ tbody tr:last-child td {
   gap: 14px;
   padding: 13px 16px;
   border-radius: 8px;
-  border: 1px solid #e9edf3;
-  background: #fafbfc;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.02);
   cursor: pointer;
   transition: all 0.25s ease;
   width: 100%;
@@ -3137,9 +3137,9 @@ tbody tr:last-child td {
 }
 
 .edtech-inicio-action-btn:hover {
-  background: #ffffff;
-  border-color: #94a3b8;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.07);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   transform: translateX(4px);
 }
 
@@ -3166,7 +3166,7 @@ tbody tr:last-child td {
 .edtech-inicio-action-title {
   font-size: 13px;
   font-weight: 600;
-  color: #1e293b;
+  color: #ffffff;
   margin-bottom: 2px;
 }
 
@@ -3191,7 +3191,7 @@ tbody tr:last-child td {
   max-height: 300px;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: var(--gray-200) transparent;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 
 .edtech-inicio-activity-row {
@@ -3199,7 +3199,7 @@ tbody tr:last-child td {
   align-items: flex-start;
   gap: 12px;
   padding: 13px 0;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   opacity: 0;
   animation: edtechFadeInRow 0.4s ease forwards;
 }
@@ -3222,7 +3222,7 @@ tbody tr:last-child td {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #e2e8f0;
+  background: rgba(255, 255, 255, 0.2);
   flex-shrink: 0;
   margin-top: 6px;
 }
@@ -3235,7 +3235,7 @@ tbody tr:last-child td {
 .edtech-inicio-activity-title {
   font-size: 13px;
   font-weight: 600;
-  color: #1e293b;
+  color: #ffffff;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -3245,7 +3245,7 @@ tbody tr:last-child td {
 
 .edtech-inicio-activity-title.read {
   font-weight: 400;
-  color: #64748b;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .edtech-inicio-activity-desc {
@@ -3275,7 +3275,7 @@ tbody tr:last-child td {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   margin: 0 auto 12px;
   display: flex;
   align-items: center;
@@ -4637,7 +4637,7 @@ tbody tr:last-child td {
 
 /* -- Banner / Header -- */
 .edtech-equipos-banner {
-  background: linear-gradient(105deg, var(--navy) 0%, #004d16 50%, var(--green) 100%);
+  background: #0a0f1e;
   border-radius: 8px;
   padding: 32px 40px;
   margin-bottom: 24px;
@@ -4838,8 +4838,13 @@ tbody tr:last-child td {
   animation: edtechSlideUp 0.4s ease forwards;
 }
 
-.edtech-equipos-card-delay-1 { animation-delay: 0.1s; }
-.edtech-equipos-card-delay-2 { animation-delay: 0.2s; }
+.edtech-equipos-card-delay-1 {
+  animation-delay: 0.1s;
+}
+
+.edtech-equipos-card-delay-2 {
+  animation-delay: 0.2s;
+}
 
 .edtech-equipos-card-header {
   padding: 16px 20px;
@@ -4936,7 +4941,8 @@ tbody tr:last-child td {
   box-shadow: 0 4px 10px rgba(0, 163, 59, 0.2);
 }
 
-.edtech-equipos-btn-danger, .edtech-equipos-btn-ghost {
+.edtech-equipos-btn-danger,
+.edtech-equipos-btn-ghost {
   padding: 6px 14px;
   background: transparent;
   border-radius: 4px;
@@ -4946,20 +4952,26 @@ tbody tr:last-child td {
   cursor: pointer;
   transition: all 0.2s;
 }
+
 .edtech-equipos-btn-danger {
   border: 1px solid #fca5a5;
   color: #dc2626;
 }
+
 .edtech-equipos-btn-danger:hover {
-  border-color: #dc2626; background: #fef2f2;
+  border-color: #dc2626;
+  background: #fef2f2;
 }
 
 .edtech-equipos-btn-ghost {
   border: 1px solid var(--gray-200);
   color: var(--gray-500);
 }
+
 .edtech-equipos-btn-ghost:hover {
-  border-color: var(--gray-400); background: var(--gray-50); color: var(--navy-mid);
+  border-color: var(--gray-400);
+  background: var(--gray-50);
+  color: var(--navy-mid);
 }
 
 /* -- List / Table -- */
@@ -5007,10 +5019,29 @@ tbody tr:last-child td {
   text-transform: uppercase;
 }
 
-.edtech-equipos-status-disp { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
-.edtech-equipos-status-mant { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
-.edtech-equipos-status-baja { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
-.edtech-equipos-status-pres { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+.edtech-equipos-status-disp {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.edtech-equipos-status-mant {
+  background: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+
+.edtech-equipos-status-baja {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.edtech-equipos-status-pres {
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
 
 /* -- Qty Input -- */
 .edtech-equipos-qty {
@@ -5037,3 +5068,221 @@ tbody tr:last-child td {
   }
 }
 
+/* -- Tabs -- */
+.edtech-equipos-tab-bar {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--gray-100);
+  border-radius: 8px;
+}
+
+.edtech-equipos-tab {
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  color: var(--gray-500);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.edtech-equipos-tab.active {
+  background: #ffffff;
+  color: var(--navy);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* ============================================================
+   AULAS RESERVADAS (EDTECH+)
+   ============================================================ */
+.edtech-ar-wrapper {
+  animation: edtechFadeIn 0.5s ease;
+}
+
+.edtech-ar-banner {
+  background: #0a0f1e;
+  border-radius: 8px;
+  padding: 32px 40px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 48, 135, 0.1);
+}
+
+.edtech-ar-banner-mesh {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(at 80% 0%, rgba(37, 99, 235, 0.15) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(5, 150, 105, 0.1) 0px, transparent 50%);
+  z-index: 0;
+}
+
+.edtech-ar-banner-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+  z-index: 0;
+}
+
+.edtech-ar-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  z-index: 0;
+  opacity: 0.6;
+}
+
+.edtech-ar-orb-1 {
+  top: -40px;
+  right: -20px;
+  width: 200px;
+  height: 200px;
+  background: var(--blue);
+}
+
+.edtech-ar-orb-2 {
+  bottom: -60px;
+  left: 20%;
+  width: 250px;
+  height: 250px;
+  background: var(--green);
+}
+
+.edtech-ar-banner-divider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue), var(--green), var(--gold));
+  z-index: 1;
+}
+
+.edtech-ar-banner-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.edtech-ar-banner-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.edtech-ar-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #ffffff;
+  width: fit-content;
+  margin-bottom: 12px;
+  backdrop-filter: blur(4px);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-ar-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #60a5fa;
+  box-shadow: 0 0 8px #60a5fa;
+}
+
+.edtech-ar-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+  letter-spacing: 0.3px;
+  line-height: 1.2;
+}
+
+.edtech-ar-title em {
+  font-style: italic;
+  color: #60a5fa;
+}
+
+.edtech-ar-subtitle {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.edtech-ar-mini-stats {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.edtech-ar-mini-stat {
+  background: rgba(10, 15, 30, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 12px 18px;
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+  min-width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.edtech-ar-mini-stat-warn {
+  border-color: rgba(220, 38, 38, 0.4);
+  background: rgba(220, 38, 38, 0.15);
+}
+
+.edtech-ar-mini-stat-val {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  color: #ffffff;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.edtech-ar-mini-stat-val.warn {
+  color: #fca5a5;
+}
+
+.edtech-ar-mini-stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'DM Sans', sans-serif;
+  text-align: center;
+}
+
+.edtech-ar-mini-stat-label.warn {
+  color: rgba(252, 165, 165, 0.8);
+}

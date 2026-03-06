@@ -1234,60 +1234,60 @@ function App() {
                 <div className="edtech-inicio-stats-grid">
 
                   {/* Aulas */}
-                  <div className="edtech-inicio-stat-card edtech-stat-delay-1" style={{ '--accent': '#003087' }}>
+                  <div className="edtech-inicio-stat-card edtech-stat-delay-1" style={{ '--accent': '#60a5fa' }}>
                     <div className="edtech-inicio-stat-accent" />
                     <div className="edtech-inicio-stat-body">
                       <p className="edtech-inicio-stat-label">{t.home.registeredRooms}</p>
                       <div className="edtech-inicio-stat-row">
                         <span className="edtech-inicio-stat-number">{listaAulas.length}</span>
-                        <div className="edtech-inicio-stat-icon" style={{ background: 'rgba(0,48,135,0.08)', borderColor: 'rgba(0,48,135,0.15)' }}>
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#003087" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <div className="edtech-inicio-stat-icon" style={{ background: 'rgba(96,165,250,0.08)', borderColor: 'rgba(96,165,250,0.15)' }}>
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                             <rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18M9 21V9" />
                           </svg>
                         </div>
                       </div>
                       <div className="edtech-inicio-stat-bar">
-                        <div className="edtech-inicio-stat-bar-fill" style={{ background: '#003087', width: `${Math.min((listaAulas.length / 10) * 100, 100)}%` }} />
+                        <div className="edtech-inicio-stat-bar-fill" style={{ background: '#60a5fa', width: `${Math.min((listaAulas.length / 10) * 100, 100)}%` }} />
                       </div>
                       <p className="edtech-inicio-stat-sub">{t.home.spaces}</p>
                     </div>
                   </div>
 
                   {/* Stock */}
-                  <div className="edtech-inicio-stat-card edtech-stat-delay-2" style={{ '--accent': '#00A33B' }}>
+                  <div className="edtech-inicio-stat-card edtech-stat-delay-2" style={{ '--accent': '#34d399' }}>
                     <div className="edtech-inicio-stat-accent" />
                     <div className="edtech-inicio-stat-body">
                       <p className="edtech-inicio-stat-label">{t.home.stockUnits}</p>
                       <div className="edtech-inicio-stat-row">
                         <span className="edtech-inicio-stat-number">{listaEquipos.reduce((tot, eq) => tot + (eq.cantidad || 0), 0)}</span>
-                        <div className="edtech-inicio-stat-icon" style={{ background: 'rgba(0,163,59,0.08)', borderColor: 'rgba(0,163,59,0.15)' }}>
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00A33B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <div className="edtech-inicio-stat-icon" style={{ background: 'rgba(52,211,153,0.08)', borderColor: 'rgba(52,211,153,0.15)' }}>
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
                           </svg>
                         </div>
                       </div>
                       <div className="edtech-inicio-stat-bar">
-                        <div className="edtech-inicio-stat-bar-fill" style={{ background: '#00A33B', width: '72%' }} />
+                        <div className="edtech-inicio-stat-bar-fill" style={{ background: '#34d399', width: '72%' }} />
                       </div>
                       <p className="edtech-inicio-stat-sub">{t.home.equipmentMaterials}</p>
                     </div>
                   </div>
 
                   {/* Reservas */}
-                  <div className="edtech-inicio-stat-card edtech-stat-delay-3" style={{ '--accent': '#FBC02D' }}>
+                  <div className="edtech-inicio-stat-card edtech-stat-delay-3" style={{ '--accent': '#fbbf24' }}>
                     <div className="edtech-inicio-stat-accent" />
                     <div className="edtech-inicio-stat-body">
                       <p className="edtech-inicio-stat-label">{t.home.confirmedReservations}</p>
                       <div className="edtech-inicio-stat-row">
                         <span className="edtech-inicio-stat-number">{listaReservas.filter(r => r.estado === 'Confirmada').length}</span>
-                        <div className="edtech-inicio-stat-icon" style={{ background: 'rgba(251,192,45,0.10)', borderColor: 'rgba(251,192,45,0.20)' }}>
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d4a017" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <div className="edtech-inicio-stat-icon" style={{ background: 'rgba(251,191,36,0.10)', borderColor: 'rgba(251,191,36,0.20)' }}>
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                             <rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
                           </svg>
                         </div>
                       </div>
                       <div className="edtech-inicio-stat-bar">
-                        <div className="edtech-inicio-stat-bar-fill" style={{ background: '#FBC02D', width: `${Math.min((listaReservas.filter(r => r.estado === 'Confirmada').length / 20) * 100, 100)}%` }} />
+                        <div className="edtech-inicio-stat-bar-fill" style={{ background: '#fbbf24', width: `${Math.min((listaReservas.filter(r => r.estado === 'Confirmada').length / 20) * 100, 100)}%` }} />
                       </div>
                       <p className="edtech-inicio-stat-sub">{t.home.activeReservations}</p>
                     </div>
@@ -1295,28 +1295,28 @@ function App() {
 
                   {/* 4ta tarjeta dinámica */}
                   {(rolNormalizado === 'admin' || rolNormalizado === 'maestro') ? (
-                    <div className="edtech-inicio-stat-card edtech-stat-delay-4" style={{ '--accent': '#dc2626' }}>
+                    <div className="edtech-inicio-stat-card edtech-stat-delay-4" style={{ '--accent': '#f87171' }}>
                       <div className="edtech-inicio-stat-accent" />
                       <div className="edtech-inicio-stat-body">
                         <p className="edtech-inicio-stat-label">{t.home.pendingRequests}</p>
                         <div className="edtech-inicio-stat-row">
-                          <span className="edtech-inicio-stat-number" style={{ color: listaSolicitudes.filter(s => s.estado === 'Pendiente').length + listaSolicitudesMaterial.filter(s => s.estado === 'Pendiente').length > 0 ? '#dc2626' : undefined }}>
+                          <span className="edtech-inicio-stat-number" style={{ color: listaSolicitudes.filter(s => s.estado === 'Pendiente').length + listaSolicitudesMaterial.filter(s => s.estado === 'Pendiente').length > 0 ? '#f87171' : undefined }}>
                             {listaSolicitudes.filter(s => s.estado === 'Pendiente').length + listaSolicitudesMaterial.filter(s => s.estado === 'Pendiente').length}
                           </span>
-                          <div className="edtech-inicio-stat-icon" style={{ background: 'rgba(220,38,38,0.08)', borderColor: 'rgba(220,38,38,0.15)' }}>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                          <div className="edtech-inicio-stat-icon" style={{ background: 'rgba(248,113,113,0.08)', borderColor: 'rgba(248,113,113,0.15)' }}>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f87171" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                               <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
                             </svg>
                           </div>
                         </div>
                         <div className="edtech-inicio-stat-bar">
-                          <div className="edtech-inicio-stat-bar-fill" style={{ background: '#dc2626', width: `${Math.min(((listaSolicitudes.filter(s => s.estado === 'Pendiente').length + listaSolicitudesMaterial.filter(s => s.estado === 'Pendiente').length) / 10) * 100, 100)}%` }} />
+                          <div className="edtech-inicio-stat-bar-fill" style={{ background: '#f87171', width: `${Math.min(((listaSolicitudes.filter(s => s.estado === 'Pendiente').length + listaSolicitudesMaterial.filter(s => s.estado === 'Pendiente').length) / 10) * 100, 100)}%` }} />
                         </div>
                         <p className="edtech-inicio-stat-sub">{t.home.needAttention}</p>
                       </div>
                     </div>
                   ) : (
-                    <div className="edtech-inicio-stat-card edtech-stat-delay-4" style={{ '--accent': '#7c3aed' }}>
+                    <div className="edtech-inicio-stat-card edtech-stat-delay-4" style={{ '--accent': '#a78bfa' }}>
                       <div className="edtech-inicio-stat-accent" />
                       <div className="edtech-inicio-stat-body">
                         <p className="edtech-inicio-stat-label">{t.home.myRequestsStat}</p>
@@ -1324,14 +1324,14 @@ function App() {
                           <span className="edtech-inicio-stat-number">
                             {listaSolicitudes.filter(s => s.solicitadoPor === usuarioActivo.email).length + listaSolicitudesMaterial.filter(s => s.solicitadoPor === usuarioActivo.email).length}
                           </span>
-                          <div className="edtech-inicio-stat-icon" style={{ background: 'rgba(124,58,237,0.08)', borderColor: 'rgba(124,58,237,0.15)' }}>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                          <div className="edtech-inicio-stat-icon" style={{ background: 'rgba(167,139,250,0.08)', borderColor: 'rgba(167,139,250,0.15)' }}>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" />
                             </svg>
                           </div>
                         </div>
                         <div className="edtech-inicio-stat-bar">
-                          <div className="edtech-inicio-stat-bar-fill" style={{ background: '#7c3aed', width: '45%' }} />
+                          <div className="edtech-inicio-stat-bar-fill" style={{ background: '#a78bfa', width: '45%' }} />
                         </div>
                         <p className="edtech-inicio-stat-sub">{t.home.sentRequests}</p>
                       </div>
@@ -1348,8 +1348,8 @@ function App() {
                     <div className="edtech-inicio-actions">
 
                       <button className="edtech-inicio-action-btn" onClick={() => setVistaActual('aulasPúblicas')}>
-                        <div className="edtech-inicio-action-icon" style={{ background: 'rgba(0,48,135,0.08)', borderColor: 'rgba(0,48,135,0.15)' }}>
-                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#003087" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <div className="edtech-inicio-action-icon" style={{ background: 'rgba(96,165,250,0.08)', borderColor: 'rgba(96,165,250,0.15)' }}>
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
                           </svg>
                         </div>
@@ -1362,8 +1362,8 @@ function App() {
 
                       {permisos.solicitarEquipos && (
                         <button className="edtech-inicio-action-btn" onClick={() => setVistaActual('inventario')}>
-                          <div className="edtech-inicio-action-icon" style={{ background: 'rgba(0,163,59,0.08)', borderColor: 'rgba(0,163,59,0.15)' }}>
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#00A33B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <div className="edtech-inicio-action-icon" style={{ background: 'rgba(52,211,153,0.08)', borderColor: 'rgba(52,211,153,0.15)' }}>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#34d399" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                               <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
                             </svg>
                           </div>
@@ -1377,8 +1377,8 @@ function App() {
 
                       {permisos.verSolicitudes && (
                         <button className="edtech-inicio-action-btn" onClick={() => setVistaActual('solicitudesAdmin')}>
-                          <div className="edtech-inicio-action-icon" style={{ background: 'rgba(220,38,38,0.08)', borderColor: 'rgba(220,38,38,0.15)' }}>
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <div className="edtech-inicio-action-icon" style={{ background: 'rgba(248,113,113,0.08)', borderColor: 'rgba(248,113,113,0.15)' }}>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f87171" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                               <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
                             </svg>
                           </div>
@@ -1394,8 +1394,8 @@ function App() {
 
                       {rolNormalizado === 'admin' && (
                         <button className="edtech-inicio-action-btn" onClick={() => setVistaActual('roles')}>
-                          <div className="edtech-inicio-action-icon" style={{ background: 'rgba(124,58,237,0.08)', borderColor: 'rgba(124,58,237,0.15)' }}>
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <div className="edtech-inicio-action-icon" style={{ background: 'rgba(167,139,250,0.08)', borderColor: 'rgba(167,139,250,0.15)' }}>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                               <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
                             </svg>
                           </div>
@@ -1409,8 +1409,8 @@ function App() {
 
                       {permisos.verReservas && (
                         <button className="edtech-inicio-action-btn" onClick={() => setVistaActual('reservasAdmin')}>
-                          <div className="edtech-inicio-action-icon" style={{ background: 'rgba(251,192,45,0.10)', borderColor: 'rgba(251,192,45,0.20)' }}>
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#d4a017" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <div className="edtech-inicio-action-icon" style={{ background: 'rgba(251,191,36,0.10)', borderColor: 'rgba(251,191,36,0.20)' }}>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                               <rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18M9 21V9" />
                             </svg>
                           </div>
@@ -1969,83 +1969,64 @@ function App() {
                   {/* ══════════════════════════════════════
                     HEADER BANNER
                 ══════════════════════════════════════ */}
-                  <div style={{
-                    background: 'linear-gradient(105deg, #0f172a 0%, #064e3b 50%, #065f46 100%)',
-                    borderRadius: '6px',
-                    padding: '32px 40px',
-                    marginBottom: '20px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: '20px',
-                    flexWrap: 'wrap',
-                    position: 'relative',
-                    overflow: 'hidden',
-                    animation: 'giSlideUp 0.5s ease forwards',
-                  }}>
-                    {/* Grid texture */}
-                    <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
-                    {/* Glow */}
-                    <div style={{ position: 'absolute', top: '-50px', right: '-30px', width: '260px', height: '260px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(5,150,105,0.22) 0%, transparent 70%)', pointerEvents: 'none' }} />
-                    <div style={{ position: 'absolute', bottom: '-40px', left: '30%', width: '200px', height: '200px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(5,150,105,0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
+                  <div className="edtech-equipos-banner">
+                    <div className="edtech-equipos-banner-mesh" />
+                    <div className="edtech-equipos-banner-grid" />
+                    <div className="edtech-equipos-orb edtech-equipos-orb-1" />
+                    <div className="edtech-equipos-orb edtech-equipos-orb-2" />
+                    <div className="edtech-equipos-banner-divider" />
 
-                    <div style={{ position: 'relative', zIndex: 1 }}>
-                      <p style={{ margin: '0 0 8px 0', fontSize: '11px', fontWeight: '600', letterSpacing: '2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', fontFamily: '"DM Sans", sans-serif' }}>
-                        {t.inventoryAdmin.sectionLabel}
-                      </p>
-                      <h2 style={{ margin: '0 0 8px 0', fontSize: '24px', fontWeight: '400', color: '#ffffff', fontFamily: '"DM Serif Display", serif', lineHeight: '1.25' }}>
-                        {t.inventoryAdmin.title} <span style={{ fontStyle: 'italic' }}>{t.inventoryAdmin.titleItalic}</span>
-                      </h2>
-                      <p style={{ margin: 0, color: 'rgba(255,255,255,0.42)', fontSize: '13px', fontFamily: '"DM Sans", sans-serif' }}>
-                        {t.inventoryAdmin.subtitle}
-                      </p>
-                    </div>
-
-                    {/* Mini stat cards */}
-                    <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                      {[
-                        {
-                          label: t.inventoryAdmin.equipmentTypes,
-                          value: listaEquipos.length,
-                          warn: false,
-                        },
-                        {
-                          label: t.inventoryAdmin.stockUnits,
-                          value: listaEquipos.reduce((t, eq) => t + (eq.cantidad || 0), 0),
-                          warn: false,
-                        },
-                        {
-                          label: t.inventoryAdmin.noStock,
-                          value: listaEquipos.filter(eq => (eq.cantidad || 0) === 0).length,
-                          warn: listaEquipos.filter(eq => (eq.cantidad || 0) === 0).length > 0,
-                        },
-                        {
-                          label: t.inventoryAdmin.activeLoans,
-                          value: listaSolicitudesMaterial.filter(s => s.estado === 'Aprobada' && !s.devuelto).length,
-                          warn: false,
-                        },
-                        {
-                          label: t.inventoryAdmin.overdue,
-                          value: listaSolicitudesMaterial.filter(s => s.estado === 'Aprobada' && !s.devuelto && new Date(s.fechaDevolucionEsperada) < new Date()).length,
-                          warn: listaSolicitudesMaterial.filter(s => s.estado === 'Aprobada' && !s.devuelto && new Date(s.fechaDevolucionEsperada) < new Date()).length > 0,
-                        },
-                      ].map((stat, i) => (
-                        <div key={i} style={{
-                          background: stat.warn ? 'rgba(220,38,38,0.15)' : 'rgba(255,255,255,0.07)',
-                          border: `1px solid ${stat.warn ? 'rgba(220,38,38,0.35)' : 'rgba(255,255,255,0.1)'}`,
-                          borderRadius: '4px',
-                          padding: '10px 14px',
-                          textAlign: 'center',
-                          minWidth: '76px',
-                        }}>
-                          <div style={{ fontSize: '20px', fontWeight: '300', color: stat.warn ? '#fca5a5' : '#ffffff', fontFamily: '"DM Serif Display", serif', lineHeight: 1, marginBottom: '4px' }}>
-                            {stat.value}
-                          </div>
-                          <div style={{ fontSize: '10px', color: stat.warn ? 'rgba(252,165,165,0.8)' : 'rgba(255,255,255,0.38)', fontFamily: '"DM Sans", sans-serif', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
-                            {stat.label}
-                          </div>
+                    <div className="edtech-equipos-banner-content">
+                      <div className="edtech-equipos-banner-left">
+                        <div className="edtech-equipos-badge-pill">
+                          <span className="edtech-equipos-badge-dot" />
+                          {lang === 'es' ? 'Gestión y Préstamos' : 'Management & Loans'}
                         </div>
-                      ))}
+                        <h2 className="edtech-equipos-title">
+                          {t.inventoryAdmin.title} <em>{t.inventoryAdmin.titleItalic}</em>
+                        </h2>
+                        <p className="edtech-equipos-subtitle">{t.inventoryAdmin.subtitle}</p>
+                      </div>
+
+                      {/* Mini stat cards */}
+                      <div className="edtech-equipos-mini-stats">
+                        {[
+                          {
+                            label: t.inventoryAdmin.equipmentTypes,
+                            value: listaEquipos.length,
+                            warn: false,
+                          },
+                          {
+                            label: t.inventoryAdmin.stockUnits,
+                            value: listaEquipos.reduce((t, eq) => t + (eq.cantidad || 0), 0),
+                            warn: false,
+                          },
+                          {
+                            label: t.inventoryAdmin.noStock,
+                            value: listaEquipos.filter(eq => (eq.cantidad || 0) === 0).length,
+                            warn: listaEquipos.filter(eq => (eq.cantidad || 0) === 0).length > 0,
+                          },
+                          {
+                            label: t.inventoryAdmin.activeLoans,
+                            value: listaSolicitudesMaterial.filter(s => s.estado === 'Aprobada' && !s.devuelto).length,
+                            warn: false,
+                          },
+                          {
+                            label: t.inventoryAdmin.overdue,
+                            value: listaSolicitudesMaterial.filter(s => s.estado === 'Aprobada' && !s.devuelto && new Date(s.fechaDevolucionEsperada) < new Date()).length,
+                            warn: listaSolicitudesMaterial.filter(s => s.estado === 'Aprobada' && !s.devuelto && new Date(s.fechaDevolucionEsperada) < new Date()).length > 0,
+                          },
+                        ].map((stat, i) => (
+                          <div key={i} className={`edtech-equipos-mini-stat ${stat.warn ? 'edtech-equipos-mini-stat-warn' : ''}`}>
+                            <div className={`edtech-equipos-mini-stat-val ${stat.warn ? 'warn' : ''}`}>
+                              {stat.value}
+                            </div>
+                            <div className={`edtech-equipos-mini-stat-label ${stat.warn ? 'warn' : ''}`}>
+                              {stat.label}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
 
@@ -2149,7 +2130,7 @@ function App() {
 
                         {/* Tab bar header */}
                         <div style={{ padding: '16px 20px', borderBottom: '1px solid #f1f5f9', background: '#fafbfc', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
-                          <div className="gi-tab-bar" style={{ display: 'flex', gap: '2px', background: '#f1f5f9', padding: '4px', borderRadius: '6px' }}>
+                          <div className="edtech-equipos-tab-bar">
                             {[
                               { key: 'gi-catalogo', label: t.inventoryAdmin.tabCatalog },
                               { key: 'gi-solicitudes', label: `${t.inventoryAdmin.tabRequests}${pendientesMat > 0 ? ` · ${pendientesMat}` : ''}` },
@@ -2157,15 +2138,7 @@ function App() {
                             ].map(({ key, label }) => (
                               <button
                                 key={key}
-                                className={`gi-tab ${tabActual === key ? 'active' : ''}`}
-                                style={{
-                                  padding: '7px 18px', border: 'none', borderRadius: '4px', fontSize: '12px', fontWeight: '600',
-                                  fontFamily: '"DM Sans", sans-serif', cursor: 'pointer', transition: 'all 0.2s',
-                                  background: tabActual === key ? '#ffffff' : 'transparent',
-                                  color: tabActual === key ? '#003087' : '#64748b',
-                                  boxShadow: tabActual === key ? '0 1px 4px rgba(0, 48, 135, 0.1)' : 'none',
-                                  whiteSpace: 'nowrap', letterSpacing: '0.2px'
-                                }}
+                                className={`edtech-equipos-tab ${tabActual === key ? 'active' : ''}`}
                                 onClick={() => setTabSolicitudesAdmin(key)}
                               >
                                 {label}
@@ -2910,62 +2883,43 @@ function App() {
                   {/* ══════════════════════════════════════
         HEADER BANNER
     ══════════════════════════════════════ */}
-                  <div style={{
-                    background: 'linear-gradient(105deg, #0f172a 0%, #064e3b 50%, #065f46 100%)',
-                    borderRadius: '6px',
-                    padding: '32px 40px',
-                    marginBottom: '20px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: '20px',
-                    flexWrap: 'wrap',
-                    position: 'relative',
-                    overflow: 'hidden',
-                    animation: 'arSlideUp 0.5s ease forwards',
-                  }}>
-                    {/* Grid texture */}
-                    <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
-                    {/* Glow accents */}
-                    <div style={{ position: 'absolute', top: '-50px', right: '-30px', width: '280px', height: '280px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(37,99,235,0.18) 0%, transparent 70%)', pointerEvents: 'none' }} />
-                    <div style={{ position: 'absolute', bottom: '-40px', left: '25%', width: '220px', height: '220px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(5,150,105,0.1) 0%, transparent 70%)', pointerEvents: 'none' }} />
+                  <div className="edtech-ar-banner">
+                    <div className="edtech-ar-banner-mesh" />
+                    <div className="edtech-ar-banner-grid" />
+                    <div className="edtech-ar-orb edtech-ar-orb-1" />
+                    <div className="edtech-ar-orb edtech-ar-orb-2" />
+                    <div className="edtech-ar-banner-divider" />
 
-                    <div style={{ position: 'relative', zIndex: 1 }}>
-                      <p style={{ margin: '0 0 8px 0', fontSize: '11px', fontWeight: '600', letterSpacing: '2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', fontFamily: '"DM Sans", sans-serif' }}>
-                        {t.reservedRooms.sectionLabel}
-                      </p>
-                      <h2 style={{ margin: '0 0 8px 0', fontSize: '24px', fontWeight: '400', color: '#ffffff', fontFamily: '"DM Serif Display", serif', lineHeight: '1.25' }}>
-                        {t.reservedRooms.title} <span style={{ fontStyle: 'italic' }}>{t.reservedRooms.titleItalic}</span>
-                      </h2>
-                      <p style={{ margin: 0, color: 'rgba(255,255,255,0.42)', fontSize: '13px', fontFamily: '"DM Sans", sans-serif' }}>
-                        {t.reservedRooms.subtitle}
-                      </p>
-                    </div>
-
-                    {/* Mini stats */}
-                    <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                      {[
-                        { label: t.reservedRooms.totalRooms, value: listaAulas.length, warn: false },
-                        { label: t.reservedRooms.withReservations, value: listaAulas.filter(a => listaReservas.some(r => r.aulaId === a.id && r.estado === 'Confirmada')).length, warn: false },
-                        { label: t.reservedRooms.withoutReservations, value: listaAulas.filter(a => !listaReservas.some(r => r.aulaId === a.id && r.estado === 'Confirmada')).length, warn: false },
-                        { label: t.reservedRooms.totalConfirmed, value: listaReservas.filter(r => r.estado === 'Confirmada').length, warn: false },
-                      ].map((stat, i) => (
-                        <div key={i} style={{
-                          background: stat.warn ? 'rgba(220,38,38,0.15)' : 'rgba(255,255,255,0.07)',
-                          border: `1px solid ${stat.warn ? 'rgba(220,38,38,0.35)' : 'rgba(255,255,255,0.1)'}`,
-                          borderRadius: '4px',
-                          padding: '10px 14px',
-                          textAlign: 'center',
-                          minWidth: '78px',
-                        }}>
-                          <div style={{ fontSize: '20px', fontWeight: '300', color: stat.warn ? '#fca5a5' : '#ffffff', fontFamily: '"DM Serif Display", serif', lineHeight: 1, marginBottom: '4px' }}>
-                            {stat.value}
-                          </div>
-                          <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.38)', fontFamily: '"DM Sans", sans-serif', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
-                            {stat.label}
-                          </div>
+                    <div className="edtech-ar-banner-content">
+                      <div className="edtech-ar-banner-left">
+                        <div className="edtech-ar-badge-pill">
+                          <span className="edtech-ar-badge-dot" />
+                          {lang === 'es' ? 'Gestión de Reservas' : 'Reservation Management'}
                         </div>
-                      ))}
+                        <h2 className="edtech-ar-title">
+                          {t.reservedRooms.title} <em>{t.reservedRooms.titleItalic}</em>
+                        </h2>
+                        <p className="edtech-ar-subtitle">{t.reservedRooms.subtitle}</p>
+                      </div>
+
+                      {/* Mini stats */}
+                      <div className="edtech-ar-mini-stats">
+                        {[
+                          { label: t.reservedRooms.totalRooms, value: listaAulas.length, warn: false },
+                          { label: t.reservedRooms.withReservations, value: listaAulas.filter(a => listaReservas.some(r => r.aulaId === a.id && r.estado === 'Confirmada')).length, warn: false },
+                          { label: t.reservedRooms.withoutReservations, value: listaAulas.filter(a => !listaReservas.some(r => r.aulaId === a.id && r.estado === 'Confirmada')).length, warn: false },
+                          { label: t.reservedRooms.totalConfirmed, value: listaReservas.filter(r => r.estado === 'Confirmada').length, warn: false },
+                        ].map((stat, i) => (
+                          <div key={i} className={`edtech-ar-mini-stat ${stat.warn ? 'edtech-ar-mini-stat-warn' : ''}`}>
+                            <div className={`edtech-ar-mini-stat-val ${stat.warn ? 'warn' : ''}`}>
+                              {stat.value}
+                            </div>
+                            <div className={`edtech-ar-mini-stat-label ${stat.warn ? 'warn' : ''}`}>
+                              {stat.label}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
 
@@ -3496,36 +3450,122 @@ function App() {
             {/* ============ VISTA MIS SOLICITUDES (ALUMNO Y MAESTRO) ============ */}
             {
               permisos.solicitarEquipos && vistaActual === 'solicitudes' && (
-                <div className="requests-wrapper" style={{ animation: 'slideIn 0.5s ease' }}>
-                  <div className="requests-header">
-                    <div className="requests-header-content">
-                      <h1>{t.myRequests.title}</h1>
-                      <p>{t.myRequests.title}</p>
+                <div style={{ animation: 'adFadeIn 0.5s ease' }}>
+                  {/* ── HEADER BANNER ── */}
+                  <div style={{
+                    background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+                    borderRadius: '24px',
+                    padding: '40px 48px',
+                    marginBottom: '32px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: '24px',
+                    flexWrap: 'wrap',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
+                  }}>
+                    {/* Decorative elements */}
+                    <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+                    <div style={{ position: 'absolute', top: '-60px', right: '-40px', width: '280px', height: '280px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(37,99,235,0.15) 0%, transparent 70%)', pointerEvents: 'none' }} />
+                    <div style={{ position: 'absolute', bottom: '-40px', left: '20%', width: '200px', height: '200px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(5,150,105,0.1) 0%, transparent 70%)', pointerEvents: 'none' }} />
+
+                    <div style={{ position: 'relative', zIndex: 1 }}>
+                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 14px', background: 'rgba(255,255,255,0.1)', borderRadius: '30px', border: '1px solid rgba(255,255,255,0.1)', marginBottom: '16px' }}>
+                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#3b82f6', boxShadow: '0 0 10px #3b82f6' }} />
+                        <span style={{ fontSize: '11px', fontWeight: '800', letterSpacing: '1px', textTransform: 'uppercase', color: '#ffffff', fontFamily: '"DM Sans", sans-serif' }}>Trámites Personales</span>
+                      </div>
+                      <h1 style={{ margin: '0 0 12px 0', fontSize: '32px', fontWeight: '400', color: '#ffffff', fontFamily: '"DM Serif Display", serif', lineHeight: '1.2' }}>
+                        Estado de <span style={{ fontStyle: 'italic', color: '#60a5fa' }}>Mis Solicitudes</span>
+                      </h1>
+                      <p style={{ margin: 0, color: 'rgba(255,255,255,0.5)', fontSize: '15px', fontFamily: '"DM Sans", sans-serif', maxWidth: '500px' }}>
+                        Gesto de tus peticiones de aulas y materiales. Recibirás una notificación cuando sean procesadas por administración.
+                      </p>
+                    </div>
+
+                    {/* Quick Stats */}
+                    <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: '16px' }}>
+                      <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '16px 24px', textAlign: 'center', minWidth: '100px', backdropFilter: 'blur(10px)' }}>
+                        <div style={{ fontSize: '28px', color: '#ffffff', fontFamily: '"DM Serif Display", serif', lineHeight: 1, marginBottom: '4px' }}>
+                          {listaSolicitudes.filter(s => s.solicitadoPor === usuarioActivo.email).length}
+                        </div>
+                        <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)', fontFamily: '"DM Sans", sans-serif', textTransform: 'uppercase', letterSpacing: '1px' }}>Aulas</div>
+                      </div>
+                      <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '16px 24px', textAlign: 'center', minWidth: '100px', backdropFilter: 'blur(10px)' }}>
+                        <div style={{ fontSize: '28px', color: '#ffffff', fontFamily: '"DM Serif Display", serif', lineHeight: 1, marginBottom: '4px' }}>
+                          {listaSolicitudesMaterial.filter(s => s.solicitadoPor === usuarioActivo.email).length}
+                        </div>
+                        <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)', fontFamily: '"DM Sans", sans-serif', textTransform: 'uppercase', letterSpacing: '1px' }}>Materiales</div>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="requests-container">
-                    <div className="request-section">
-                      <div className="request-section-header">
-                        <h2>{t.myRequests.pendingRooms}</h2>
-                        <span className="section-badge">{listaSolicitudes.filter(s => s.solicitadoPor === usuarioActivo.email).length}</span>
+                  <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+
+                    {/* Room Requests Section */}
+                    <div className="req-card">
+                      <div className="req-card-header">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                          <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#eff6ff', border: '1px solid #dbeafe', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" />
+                            </svg>
+                          </div>
+                          <div>
+                            <h2 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#0f172a', fontFamily: '"DM Sans", sans-serif' }}>{t.myRequests.pendingRooms}</h2>
+                            <p style={{ margin: 0, fontSize: '12px', color: '#64748b', fontFamily: '"DM Sans", sans-serif' }}>Solicitudes para uso de espacios compartidos</p>
+                          </div>
+                        </div>
+                        <span className="req-section-badge">{listaSolicitudes.filter(s => s.solicitadoPor === usuarioActivo.email).length}</span>
                       </div>
-                      <div className="table-container requests-table">
-                        <table>
-                          <thead><tr><th>{t.myRequests.colRoom}</th><th>{t.myRequests.colDateTime}</th><th>{t.myRequests.colReason}</th><th>{t.myRequests.colStatus}</th><th>{t.myRequests.colActions}</th></tr></thead>
+
+                      <div style={{ overflowX: 'auto' }}>
+                        <table className="req-table">
+                          <thead>
+                            <tr>
+                              <th>{t.myRequests.colRoom}</th>
+                              <th>{t.myRequests.colDateTime}</th>
+                              <th>{t.myRequests.colReason}</th>
+                              <th>{t.myRequests.colStatus}</th>
+                              <th style={{ textAlign: 'right' }}>{t.myRequests.colActions}</th>
+                            </tr>
+                          </thead>
                           <tbody>
                             {listaSolicitudes.filter(s => s.solicitadoPor === usuarioActivo.email).length === 0 ? (
-                              <tr><td colSpan="5" style={{ textAlign: 'center', padding: '30px', color: '#94a3b8' }}>{t.myRequests.noRoomRequests}</td></tr>
+                              <tr>
+                                <td colSpan="5" style={{ textAlign: 'center', padding: '60px', color: '#94a3b8' }}>
+                                  <div style={{ fontSize: '14px', opacity: 0.6 }}>{t.myRequests.noRoomRequests}</div>
+                                </td>
+                              </tr>
                             ) : (
                               listaSolicitudes.filter(s => s.solicitadoPor === usuarioActivo.email).map(sol => (
-                                <tr key={sol.id} className="request-row">
-                                  <td><strong style={{ color: '#0f172a' }}>{sol.aulaNombre || sol.tipo}</strong></td>
-                                  <td style={{ color: '#475569' }}>{sol.fechaSolicitada} ({sol.horaInicio})</td>
-                                  <td style={{ fontSize: '13px', color: '#64748b' }}>{sol.descripcion}</td>
-                                  <td><span className={`request-badge badge ${sol.estado === 'Aprobada' ? 'badge-success' : sol.estado === 'Rechazada' ? 'badge-danger' : 'badge-warning'}`}>{traducirEstado(sol.estado)}</span></td>
+                                <tr key={sol.id}>
                                   <td>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                      <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#f8fafc', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        <span style={{ fontSize: '12px', fontWeight: '800', color: '#334155' }}>{(sol.aulaNombre || sol.tipo).charAt(0)}</span>
+                                      </div>
+                                      <strong style={{ fontWeight: '700', color: '#0f172a' }}>{sol.aulaNombre || sol.tipo}</strong>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div style={{ fontWeight: '600', color: '#334155' }}>{sol.fechaSolicitada}</div>
+                                    <div style={{ fontSize: '11px', color: '#64748b' }}>{sol.horaInicio} — {sol.horaFin}</div>
+                                  </td>
+                                  <td style={{ fontSize: '13px', color: '#64748b', maxWidth: '250px' }}>
+                                    <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{sol.descripcion}</div>
+                                  </td>
+                                  <td>
+                                    <span className={`ad-badge ${sol.estado === 'Aprobada' ? 'ad-badge-green' : sol.estado === 'Rechazada' ? 'ad-badge-red' : 'ad-badge-amber'}`}>
+                                      {traducirEstado(sol.estado)}
+                                    </span>
+                                  </td>
+                                  <td style={{ textAlign: 'right' }}>
                                     {sol.estado === 'Pendiente' && (
-                                      <button className="btn-action btn-withdraw" onClick={() => cancelarSolicitudPropia(sol.id, "solicitudes", `Aula ${sol.aulaNombre}`)}>{t.myRequests.withdrawBtn}</button>
+                                      <button className="req-btn-withdraw" onClick={() => cancelarSolicitudPropia(sol.id, "solicitudes", `Aula ${sol.aulaNombre}`)}>
+                                        {t.myRequests.withdrawBtn}
+                                      </button>
                                     )}
                                   </td>
                                 </tr>
@@ -3536,27 +3576,76 @@ function App() {
                       </div>
                     </div>
 
-                    <div className="request-section">
-                      <div className="request-section-header">
-                        <h2>{t.myRequests.materials}</h2>
-                        <span className="section-badge">{listaSolicitudesMaterial.filter(s => s.solicitadoPor === usuarioActivo.email).length}</span>
+                    {/* Material Requests Section */}
+                    <div className="req-card">
+                      <div className="req-card-header">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                          <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#f0fdf4', border: '1px solid #d1fae5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                            </svg>
+                          </div>
+                          <div>
+                            <h2 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#0f172a', fontFamily: '"DM Sans", sans-serif' }}>{t.myRequests.materials}</h2>
+                            <p style={{ margin: 0, fontSize: '12px', color: '#64748b', fontFamily: '"DM Sans", sans-serif' }}>Préstamos de equipos y materiales tecnológicos</p>
+                          </div>
+                        </div>
+                        <span className="req-section-badge">{listaSolicitudesMaterial.filter(s => s.solicitadoPor === usuarioActivo.email).length}</span>
                       </div>
-                      <div className="table-container requests-table">
-                        <table>
-                          <thead><tr><th>{t.myRequests.colMaterial}</th><th>{t.myRequests.colQty}</th><th>{t.myRequests.colDueDate}</th><th>{t.myRequests.colStatusReturn}</th><th>{t.myRequests.colActions}</th></tr></thead>
+
+                      <div style={{ overflowX: 'auto' }}>
+                        <table className="req-table">
+                          <thead>
+                            <tr>
+                              <th>{t.myRequests.colMaterial}</th>
+                              <th>{t.myRequests.colQty}</th>
+                              <th>{t.myRequests.colDueDate}</th>
+                              <th>{t.myRequests.colStatusReturn}</th>
+                              <th style={{ textAlign: 'right' }}>{t.myRequests.colActions}</th>
+                            </tr>
+                          </thead>
                           <tbody>
                             {listaSolicitudesMaterial.filter(s => s.solicitadoPor === usuarioActivo.email).length === 0 ? (
-                              <tr><td colSpan="5" style={{ textAlign: 'center', padding: '30px', color: '#94a3b8' }}>{t.myRequests.noMaterialRequests}</td></tr>
+                              <tr>
+                                <td colSpan="5" style={{ textAlign: 'center', padding: '60px', color: '#94a3b8' }}>
+                                  <div style={{ fontSize: '14px', opacity: 0.6 }}>{t.myRequests.noMaterialRequests}</div>
+                                </td>
+                              </tr>
                             ) : (
                               listaSolicitudesMaterial.filter(s => s.solicitadoPor === usuarioActivo.email).map(sol => (
-                                <tr key={sol.id} className="request-row">
-                                  <td><strong style={{ color: '#0f172a' }}>{sol.equipoNombre}</strong></td>
-                                  <td style={{ color: '#475569' }}>x{sol.cantidad}</td>
-                                  <td style={{ fontSize: '13px', color: '#64748b' }}>{new Date(sol.fechaDevolucionEsperada).toLocaleString('es-ES', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</td>
-                                  <td><span className={`request-badge badge ${sol.devuelto ? 'badge-success' : (sol.estado === 'Pendiente' ? 'badge-warning' : 'badge-danger')}`}>{sol.devuelto ? t.myRequests.returned : sol.estado}</span></td>
+                                <tr key={sol.id}>
                                   <td>
+                                    <strong style={{ fontWeight: '700', color: '#0f172a' }}>{sol.equipoNombre}</strong>
+                                    <div style={{ fontSize: '11px', color: '#94a3b8' }}>{sol.motivo ? (sol.motivo.length > 30 ? sol.motivo.slice(0, 30) + '...' : sol.motivo) : '—'}</div>
+                                  </td>
+                                  <td>
+                                    <span style={{ fontFamily: '"DM Serif Display", serif', fontSize: '18px', fontWeight: '300', color: '#334155' }}>×{sol.cantidad}</span>
+                                  </td>
+                                  <td>
+                                    <div style={{ fontWeight: '600', color: '#334155' }}>
+                                      {new Date(sol.fechaDevolucionEsperada).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
+                                    </div>
+                                    <div style={{ fontSize: '11px', color: '#64748b' }}>
+                                      {new Date(sol.fechaDevolucionEsperada).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                      <span className={`ad-badge ${sol.estado === 'Aprobada' ? 'ad-badge-green' : sol.estado === 'Rechazada' ? 'ad-badge-red' : 'ad-badge-amber'}`}>
+                                        {traducirEstado(sol.estado)}
+                                      </span>
+                                      {sol.estado === 'Aprobada' && (
+                                        <span className={`ad-badge ${sol.devuelto ? 'ad-badge-indigo' : 'ad-badge-slate'}`} style={{ fontSize: '9px', padding: '2px 8px' }}>
+                                          {sol.devuelto ? '✓ ' + t.myRequests.returned : '• Posesión'}
+                                        </span>
+                                      )}
+                                    </div>
+                                  </td>
+                                  <td style={{ textAlign: 'right' }}>
                                     {sol.estado === 'Pendiente' && (
-                                      <button className="btn-action btn-cancel" onClick={() => cancelarSolicitudPropia(sol.id, "solicitudes_material", `Material ${sol.equipoNombre}`)}>{t.myRequests.cancelBtn}</button>
+                                      <button className="req-btn-cancel" onClick={() => cancelarSolicitudPropia(sol.id, "solicitudes_material", `Material ${sol.equipoNombre}`)}>
+                                        {t.myRequests.cancelBtn}
+                                      </button>
                                     )}
                                   </td>
                                 </tr>
@@ -3712,31 +3801,32 @@ function App() {
 
       /* ── Aula selector buttons ── */
       .ad-aula-btn {
-        padding: 14px 18px;
-        border: 1.5px solid #e4e8ef;
-        border-radius: 6px;
+        padding: 16px 20px;
+        border: 1px solid #e4e8ef;
+        border-radius: 12px;
         background: #ffffff;
         cursor: pointer;
         text-align: left;
         font-family: 'DM Sans', sans-serif;
-        transition: all 0.2s ease;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         position: relative;
         overflow: hidden;
         opacity: 0;
-        animation: adSlideUp 0.35s ease forwards;
+        animation: adSlideUp 0.4s ease forwards;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
       }
       .ad-aula-btn::before {
         content: '';
         position: absolute;
         left: 0; top: 0; bottom: 0;
-        width: 3px;
-        background: #e4e8ef;
-        transition: background 0.2s, width 0.2s;
+        width: 4px;
+        background: transparent;
+        transition: all 0.2s ease;
       }
       .ad-aula-btn:hover {
-        border-color: #94a3b8;
-        box-shadow: 0 4px 16px rgba(15,23,42,0.08);
-        transform: translateY(-2px);
+        border-color: #059669;
+        box-shadow: 0 10px 25px rgba(0, 163, 59, 0.06);
+        transform: translateY(-3px);
       }
       .ad-aula-btn:hover::before {
         background: #059669;
@@ -3744,54 +3834,63 @@ function App() {
       }
       .ad-aula-btn.ad-selected {
         border-color: #059669;
-        background: #f0fdf4;
-        box-shadow: 0 4px 20px rgba(5,150,105,0.15);
+        background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+        box-shadow: 0 12px 30px rgba(5, 150, 105, 0.1);
+        transform: translateY(-2px);
       }
       .ad-aula-btn.ad-selected::before {
         background: #059669;
-        width: 4px;
+        width: 6px;
       }
 
       /* ── Time slot grid ── */
       .ad-slot {
-        border: 1.5px solid transparent;
-        border-radius: 5px;
+        border: 1px solid transparent;
+        border-radius: 12px;
         padding: 0;
         cursor: pointer;
-        transition: all 0.18s ease;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         position: relative;
         overflow: hidden;
         font-family: 'DM Sans', sans-serif;
+        background: #ffffff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
       }
       .ad-slot-inner {
-        padding: 11px 14px;
+        padding: 14px 18px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 8px;
+        gap: 12px;
         height: 100%;
         box-sizing: border-box;
       }
       .ad-slot.ad-slot-free {
-        background: #f0fdf4;
-        border-color: #d1fae5;
+        background: #ffffff;
+        border-color: #e2e8f0;
       }
       .ad-slot.ad-slot-free:hover {
-        background: #dcfce7;
-        border-color: #86efac;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 14px rgba(5,150,105,0.15);
+        background: #f0fdf4;
+        border-color: #059669;
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 12px 25px rgba(5, 150, 105, 0.08);
       }
       .ad-slot.ad-slot-selected {
-        background: #dbeafe;
-        border-color: #3b82f6;
-        box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
-        animation: adPulseBlue 2s ease infinite;
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        border-color: #047857;
+        box-shadow: 0 15px 35px rgba(5, 150, 105, 0.2);
+        transform: translateY(-4px) scale(1.03);
       }
       .ad-slot.ad-slot-occupied {
+        background: #ffffff;
+        border: 1px solid #fee2e2;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .ad-slot.ad-slot-occupied:hover {
         background: #fef2f2;
-        border-color: #fecaca;
-        cursor: default;
+        border-color: #fca5a5;
+        transform: translateY(-2px);
       }
       .ad-slot.ad-slot-pending {
         background: #fffbeb;
@@ -3810,9 +3909,9 @@ function App() {
       .ad-detail-panel {
         background: #ffffff;
         border: 1px solid #e4e8ef;
-        border-radius: 6px;
+        border-radius: 16px;
         overflow: hidden;
-        animation: adScaleIn 0.25s ease forwards;
+        animation: adScaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       }
 
       /* ── Textarea ── */
@@ -3820,7 +3919,7 @@ function App() {
         width: 100%;
         padding: 11px 14px;
         border: 1.5px solid #e4e8ef;
-        border-radius: 5px;
+        border-radius: 8px;
         font-size: 13px;
         font-family: 'DM Sans', sans-serif;
         color: #1e293b;
@@ -3840,47 +3939,47 @@ function App() {
 
       /* ── Submit buttons ── */
       .ad-btn-submit {
-        padding: 11px 24px;
+        padding: 12px 28px;
         background: #059669;
         color: #ffffff;
         border: none;
-        border-radius: 5px;
-        font-size: 13px;
+        border-radius: 8px;
+        font-size: 14px;
         font-weight: 600;
         font-family: 'DM Sans', sans-serif;
         cursor: pointer;
-        transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+        transition: all 0.2s;
         letter-spacing: 0.2px;
       }
       .ad-btn-submit:hover {
         background: #047857;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 14px rgba(5,150,105,0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(5,150,105,0.3);
       }
       .ad-btn-submit-blue {
-        padding: 11px 24px;
+        padding: 12px 28px;
         background: #2563eb;
         color: #ffffff;
         border: none;
-        border-radius: 5px;
-        font-size: 13px;
+        border-radius: 8px;
+        font-size: 14px;
         font-weight: 600;
         font-family: 'DM Sans', sans-serif;
         cursor: pointer;
-        transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+        transition: all 0.2s;
         letter-spacing: 0.2px;
       }
       .ad-btn-submit-blue:hover {
         background: #1d4ed8;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(37,99,235,0.3);
       }
       .ad-btn-ghost {
         padding: 11px 20px;
         background: transparent;
         color: #64748b;
         border: 1.5px solid #e4e8ef;
-        border-radius: 5px;
+        border-radius: 8px;
         font-size: 13px;
         font-weight: 600;
         font-family: 'DM Sans', sans-serif;
@@ -3896,40 +3995,144 @@ function App() {
       /* ── Badges ── */
       .ad-badge {
         display: inline-block;
-        padding: 3px 9px;
-        border-radius: 3px;
-        font-size: 10px;
+        padding: 4px 11px;
+        border-radius: 6px;
+        font-size: 11px;
         font-weight: 700;
-        letter-spacing: 0.7px;
+        letter-spacing: 0.5px;
         text-transform: uppercase;
         font-family: 'DM Sans', sans-serif;
       }
-      .ad-badge-green  { background: #f0fdf4; color: #16a34a; }
-      .ad-badge-red    { background: #fef2f2; color: #dc2626; }
-      .ad-badge-amber  { background: #fffbeb; color: #b45309; }
-      .ad-badge-blue   { background: #eff6ff; color: #2563eb; }
-      .ad-badge-slate  { background: #f1f5f9; color: #475569; }
-      .ad-badge-indigo { background: #eef2ff; color: #4338ca; }
+      .ad-badge-green  { background: #f0fdf4; color: #16a34a; border: 1px solid #d1fae5; }
+      .ad-badge-red    { background: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; }
+      .ad-badge-amber  { background: #fffbeb; color: #b45309; border: 1px solid #fef3c7; }
+      .ad-badge-blue   { background: #eff6ff; color: #2563eb; border: 1px solid #dbeafe; }
+      .ad-badge-slate  { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+      .ad-badge-indigo { background: #eef2ff; color: #4338ca; border: 1px solid #e0e7ff; }
 
       /* ── Legend dot ── */
       .ad-legend-dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 2px;
+        width: 12px;
+        height: 12px;
+        border-radius: 4px;
         flex-shrink: 0;
       }
 
       /* ── Occupancy micro-bar ── */
       .ad-occ-track {
-        height: 2px;
+        height: 3px;
         background: #f1f5f9;
         border-radius: 2px;
         overflow: hidden;
-        margin-top: 3px;
+        width: 100%;
+        margin-top: 6px;
       }
       .ad-occ-fill {
         height: 100%;
         border-radius: 2px;
+        transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      /* ── Mis Solicitudes Premium Redesign ── */
+      .req-card {
+        background: #ffffff;
+        border: 1px solid #e4e8ef;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 25px rgba(0,0,0,0.03);
+        margin-bottom: 30px;
+        animation: adSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      .req-card-header {
+        padding: 24px 30px;
+        background: #ffffff;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .req-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .req-table th {
+        padding: 14px 30px;
+        text-align: left;
+        font-size: 10px;
+        font-weight: 800;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        border-bottom: 1px solid #f1f5f9;
+        background: #fafbfc;
+      }
+      .req-table td {
+        padding: 20px 30px;
+        border-bottom: 1px solid #f1f5f9;
+        font-size: 13.5px;
+        color: #334155;
+        vertical-align: middle;
+        font-family: 'DM Sans', sans-serif;
+      }
+      .req-table tr:last-child td {
+        border-bottom: none;
+      }
+      .req-table tr:hover {
+        background: #fafbfc;
+      }
+      .req-btn-withdraw {
+        padding: 8px 18px;
+        background: #fef2f2;
+        color: #dc2626;
+        border: 1px solid #fee2e2;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        font-family: 'DM Sans', sans-serif;
+      }
+      .req-btn-withdraw:hover {
+        background: #dc2626;
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(220,38,38,0.2);
+        border-color: #dc2626;
+      }
+      .req-btn-cancel {
+        padding: 8px 18px;
+        background: #f8fafc;
+        color: #64748b;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: 'DM Sans', sans-serif;
+      }
+      .req-btn-cancel:hover {
+        background: #f1f5f9;
+        color: #334155;
+        border-color: #cbd5e1;
+        transform: translateY(-2px);
+      }
+      .req-section-badge {
+        background: #f1f5f9;
+        color: #475569;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 800;
+        font-family: 'DM Sans', sans-serif;
+      }
+        border-radius: 4px;
+        overflow: hidden;
+        margin-top: 4px;
+      }
+      .ad-occ-fill {
+        height: 100%;
+        border-radius: 4px;
         animation: adExpandBar 0.8s ease both;
       }
     `}</style>
@@ -3938,48 +4141,66 @@ function App() {
         HEADER BANNER
     ══════════════════════════════════════════════════ */}
                   <div style={{
-                    background: 'linear-gradient(105deg, #0f172a 0%, #064e3b 50%, #065f46 100%)',
-                    borderRadius: '6px',
-                    padding: '32px 40px',
-                    marginBottom: '20px',
+                    background: 'linear-gradient(135deg, #0f172a 0%, #064e3b 60%, #065f46 100%)',
+                    borderRadius: '16px',
+                    padding: '40px',
+                    marginBottom: '24px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    gap: '20px',
+                    gap: '24px',
                     flexWrap: 'wrap',
                     position: 'relative',
                     overflow: 'hidden',
-                    animation: 'adSlideUp 0.5s ease forwards',
+                    border: '1px solid rgba(255, 255, 255, 0.05)',
+                    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.2)',
+                    animation: 'adSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                   }}>
                     {/* Grid texture */}
-                    <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+                    <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '40px 40px', opacity: 0.5 }} />
                     {/* Glow accents */}
-                    <div style={{ position: 'absolute', top: '-60px', right: '-30px', width: '300px', height: '300px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(5,150,105,0.22) 0%, transparent 70%)', pointerEvents: 'none' }} />
-                    <div style={{ position: 'absolute', bottom: '-50px', left: '20%', width: '240px', height: '240px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(5,150,105,0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
+                    <div style={{ position: 'absolute', top: '-100px', right: '-50px', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(5,150,105,0.25) 0%, transparent 70%)', pointerEvents: 'none' }} />
+                    <div style={{ position: 'absolute', bottom: '-80px', left: '10%', width: '300px', height: '300px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
                     {/* Left: text */}
-                    <div style={{ position: 'relative', zIndex: 1 }}>
-                      <p style={{ margin: '0 0 8px 0', fontSize: '11px', fontWeight: '600', letterSpacing: '2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', fontFamily: '"DM Sans", sans-serif' }}>
+                    <div style={{ position: 'relative', zIndex: 2 }}>
+                      <div style={{ display: 'inline-flex', padding: '6px 14px', background: 'rgba(255, 255, 255, 0.08)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '24px', fontSize: '10px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#6ee7b7', fontFamily: '"DM Sans", sans-serif', marginBottom: '16px', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#34d399', boxShadow: '0 0 10px #34d399' }} />
                         {t.availableRooms.sectionLabel}
-                      </p>
-                      <h2 style={{ margin: '0 0 8px 0', fontSize: '24px', fontWeight: '400', color: '#ffffff', fontFamily: '"DM Serif Display", serif', lineHeight: '1.25' }}>
-                        {t.availableRooms.title} <span style={{ fontStyle: 'italic' }}>{t.availableRooms.titleItalic}</span>
+                      </div>
+                      <h2 style={{ margin: '0 0 12px 0', fontSize: '32px', fontWeight: '400', color: '#ffffff', fontFamily: '"DM Serif Display", serif', lineHeight: '1.2' }}>
+                        {t.availableRooms.title} <span style={{ fontStyle: 'italic', color: '#a7f3d0' }}>{t.availableRooms.titleItalic}</span>
                       </h2>
-                      <p style={{ margin: 0, color: 'rgba(255,255,255,0.42)', fontSize: '13px', fontFamily: '"DM Sans", sans-serif' }}>
+                      <p style={{ margin: 0, color: 'rgba(255, 255, 255, 0.65)', fontSize: '14px', fontFamily: '"DM Sans", sans-serif', maxWidth: '400px', lineHeight: '1.6' }}>
                         {t.availableRooms.subtitle}
                       </p>
                     </div>
 
                     {/* Right: date picker + mini stats */}
-                    <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '12px' }}>
+                    <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '20px' }}>
                       {/* Date picker */}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <span style={{ fontSize: '11px', fontWeight: '600', letterSpacing: '1.2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', fontFamily: '"DM Sans", sans-serif' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <span style={{ fontSize: '10px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: 'rgba(255, 255, 255, 0.5)', fontFamily: '"DM Sans", sans-serif' }}>
                           {t.availableRooms.dateLabel}
                         </span>
                         <input
                           type="date"
                           className="ad-date-input"
+                          style={{
+                            padding: '10px 16px',
+                            border: '1px solid rgba(255, 255, 255, 0.15)',
+                            borderRadius: '12px',
+                            fontSize: '14px',
+                            fontWeight: '600',
+                            fontFamily: '"DM Sans", sans-serif',
+                            color: '#ffffff',
+                            background: 'rgba(255, 255, 255, 0.08)',
+                            backdropFilter: 'blur(5px)',
+                            outline: 'none',
+                            cursor: 'pointer',
+                            width: '180px',
+                            transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
+                          }}
                           value={fechaSeleccionada}
                           onChange={(e) => {
                             setFechaSeleccionada(e.target.value);
@@ -3992,7 +4213,7 @@ function App() {
                       </div>
 
                       {/* Mini stats row */}
-                      <div style={{ display: 'flex', gap: '10px' }}>
+                      <div style={{ display: 'flex', gap: '12px' }}>
                         {[
                           { label: t.availableRooms.totalRooms, value: listaAulas.length },
                           {
@@ -4019,9 +4240,9 @@ function App() {
                             })(),
                           },
                         ].map((stat, i) => (
-                          <div key={i} style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px', padding: '8px 14px', textAlign: 'center', minWidth: '74px' }}>
-                            <div style={{ fontSize: '18px', fontWeight: '300', color: '#ffffff', fontFamily: '"DM Serif Display", serif', lineHeight: 1, marginBottom: '3px' }}>{stat.value}</div>
-                            <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.38)', fontFamily: '"DM Sans", sans-serif', textTransform: 'uppercase', letterSpacing: '0.4px' }}>{stat.label}</div>
+                          <div key={i} style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '12px', padding: '12px 20px', textAlign: 'center', minWidth: '85px', backdropFilter: 'blur(5px)' }}>
+                            <div style={{ fontSize: '24px', fontWeight: '400', color: '#ffffff', fontFamily: '"DM Serif Display", serif', lineHeight: 1, marginBottom: '4px' }}>{stat.value}</div>
+                            <div style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.4)', fontFamily: '"DM Sans", sans-serif', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: '700' }}>{stat.label}</div>
                           </div>
                         ))}
                       </div>
@@ -4031,24 +4252,24 @@ function App() {
                   {/* ══════════════════════════════════════════════════
         LAYOUT: SIDEBAR (aula selector) + MAIN (schedule)
     ══════════════════════════════════════════════════ */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: '16px', alignItems: 'flex-start', opacity: 0, animation: 'adSlideUp 0.4s ease 0.08s forwards' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: '24px', alignItems: 'flex-start', opacity: 0, animation: 'adSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards' }}>
 
                     {/* ────────────────────────
           LEFT: AULA SELECTOR
       ──────────────────────── */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                      <p style={{ margin: '0 0 10px 0', fontSize: '10px', fontWeight: '600', letterSpacing: '1.4px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', background: '#ffffff', padding: '24px', borderRadius: '16px', border: '1px solid #e4e8ef', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.02)' }}>
+                      <p style={{ margin: '0 0 12px 0', fontSize: '11px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>
                         {t.availableRooms.selectRoom}
                       </p>
 
                       {listaAulas.length === 0 ? (
-                        <div style={{ background: '#ffffff', border: '1px solid #e4e8ef', borderRadius: '6px', padding: '28px 16px', textAlign: 'center' }}>
-                          <div style={{ width: '38px', height: '38px', borderRadius: '50%', border: '1px solid #e2e8f0', margin: '0 auto 10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1.5">
+                        <div style={{ background: '#f8fafc', border: '1px dashed #ced4da', borderRadius: '12px', padding: '36px 20px', textAlign: 'center' }}>
+                          <div style={{ width: '42px', height: '42px', borderRadius: '50%', border: '1px solid #e9ecef', margin: '0 auto 12px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#ffffff' }}>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ced4da" strokeWidth="1.5">
                               <rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18M9 21V9" />
                             </svg>
                           </div>
-                          <p style={{ margin: 0, fontSize: '12.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.availableRooms.noRooms}</p>
+                          <p style={{ margin: 0, fontSize: '13px', color: '#6c757d', fontFamily: '"DM Sans", sans-serif', fontWeight: '500' }}>{t.availableRooms.noRooms}</p>
                         </div>
                       ) : (
                         listaAulas.map((aula, idx) => {
@@ -4124,19 +4345,19 @@ function App() {
 
                       {/* Legend */}
                       {listaAulas.length > 0 && (
-                        <div style={{ marginTop: '8px', padding: '12px 14px', background: '#fafbfc', border: '1px solid #f1f5f9', borderRadius: '5px' }}>
-                          <p style={{ margin: '0 0 8px 0', fontSize: '9.5px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.availableRooms.legend}</p>
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                        <div style={{ marginTop: 'auto', paddingTop: '20px', borderTop: '1px solid #f1f5f9' }}>
+                          <p style={{ margin: '0 0 12px 0', fontSize: '11px', fontWeight: '800', letterSpacing: '1.2px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.availableRooms.legend}</p>
+                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                             {[
-                              { color: '#d1fae5', border: '#86efac', label: t.availableRooms.legendFree },
-                              { color: '#dbeafe', border: '#93c5fd', label: t.availableRooms.legendSelected },
-                              { color: '#fee2e2', border: '#fca5a5', label: t.availableRooms.legendOccupied },
-                              { color: '#fef3c7', border: '#fde68a', label: t.availableRooms.legendPending },
-                              { color: '#f1f5f9', border: '#e2e8f0', label: t.availableRooms.legendPast },
-                            ].map(({ color, border, label }) => (
-                              <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
-                                <div className="ad-legend-dot" style={{ background: color, border: `1px solid ${border}` }} />
-                                <span style={{ fontSize: '11.5px', color: '#64748b', fontFamily: '"DM Sans", sans-serif' }}>{label}</span>
+                              { color: '#ffffff', border: '#e2e8f0', label: t.availableRooms.legendFree },
+                              { color: '#059669', border: '#059669', label: t.availableRooms.legendSelected, text: '#ffffff' },
+                              { color: '#fef2f2', border: '#fee2e2', label: t.availableRooms.legendOccupied, text: '#dc2626' },
+                              { color: '#fffbeb', border: '#fef3c7', label: t.availableRooms.legendPending, text: '#d97706' },
+                              { color: '#f1f5f9', border: '#e2e8f0', label: t.availableRooms.legendPast, opacity: 0.5 },
+                            ].map(({ color, border, label, text, opacity }) => (
+                              <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '8px', opacity: opacity || 1 }}>
+                                <div style={{ width: '12px', height: '12px', borderRadius: '4px', background: color, border: `1px solid ${border}`, flexShrink: 0 }} />
+                                <span style={{ fontSize: '11px', color: text || '#64748b', fontFamily: '"DM Sans", sans-serif', fontWeight: '600' }}>{label}</span>
                               </div>
                             ))}
                           </div>
@@ -4153,21 +4374,26 @@ function App() {
                         <div style={{
                           background: '#ffffff',
                           border: '1px solid #e4e8ef',
-                          borderRadius: '6px',
-                          padding: '60px 40px',
+                          borderRadius: '16px',
+                          padding: '100px 40px',
                           textAlign: 'center',
                           opacity: 0,
-                          animation: 'adFadeIn 0.4s ease 0.15s forwards',
+                          animation: 'adFadeIn 0.6s ease 0.2s forwards',
+                          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.02)',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          justifyContent: 'center'
                         }}>
-                          <div style={{ width: '56px', height: '56px', borderRadius: '50%', border: '1px solid #e2e8f0', margin: '0 auto 16px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8fafc' }}>
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                              <rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
+                          <div style={{ width: '72px', height: '72px', borderRadius: '24px', border: '1px solid #e2e8f0', marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)', boxShadow: '0 8px 16px rgba(0,0,0,0.03)' }}>
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                              <rect x="3" y="4" width="18" height="18" rx="2" /><path d="M3 10h18M9 21V10" />
                             </svg>
                           </div>
-                          <p style={{ margin: '0 0 6px 0', fontSize: '14px', fontWeight: '600', color: '#475569', fontFamily: '"DM Sans", sans-serif' }}>
+                          <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', fontWeight: '400', color: '#0f172a', fontFamily: '"DM Serif Display", serif' }}>
                             {t.availableRooms.selectRoomPrompt}
-                          </p>
-                          <p style={{ margin: 0, fontSize: '12.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>
+                          </h3>
+                          <p style={{ margin: 0, fontSize: '14px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif', maxWidth: '300px', lineHeight: '1.6' }}>
                             {t.availableRooms.selectRoomHint}
                           </p>
                         </div>
@@ -4178,73 +4404,76 @@ function App() {
                           <div style={{
                             background: '#ffffff',
                             border: '1px solid #e4e8ef',
-                            borderRadius: '6px',
-                            padding: '16px 20px',
+                            borderRadius: '16px',
+                            padding: '24px',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
-                            gap: '16px',
+                            gap: '20px',
                             flexWrap: 'wrap',
-                            animation: 'adSlideRight 0.3s ease forwards',
+                            animation: 'adSlideRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.02)',
                           }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                               <div style={{
-                                width: '42px', height: '42px', borderRadius: '6px', flexShrink: 0,
+                                width: '52px', height: '52px', borderRadius: '12px', flexShrink: 0,
                                 background: aulaActual.estado === 'Mantenimiento' ? '#fffbeb' : '#f0fdf4',
-                                border: `1px solid ${aulaActual.estado === 'Mantenimiento' ? '#fde68a' : '#86efac'}`,
+                                border: `1px solid ${aulaActual.estado === 'Mantenimiento' ? '#fde68a' : '#d1fae5'}`,
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                boxShadow: '0 2px 10px rgba(0, 163, 59, 0.05)'
                               }}>
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={aulaActual.estado === 'Mantenimiento' ? '#b45309' : '#059669'} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={aulaActual.estado === 'Mantenimiento' ? '#b45309' : '#059669'} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                                   <rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18M9 21V9" />
                                 </svg>
                               </div>
                               <div>
-                                <div style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', fontFamily: '"DM Serif Display", serif' }}>
+                                <h1 style={{ margin: 0, fontSize: '20px', fontWeight: '400', color: '#0f172a', fontFamily: '"DM Serif Display", serif' }}>
                                   {aulaActual.nombre}
-                                </div>
-                                <div style={{ fontSize: '12px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif', marginTop: '2px' }}>
+                                </h1>
+                                <div style={{ fontSize: '12.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif', marginTop: '4px', fontWeight: '500' }}>
                                   {t.availableRooms.people} {aulaActual.capacidad} · {aulaActual.equipoDisponible || t.availableRooms.noSpecialEquip}
                                 </div>
                               </div>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                               <div style={{ textAlign: 'right' }}>
-                                <div style={{ fontSize: '12px', fontWeight: '600', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>
-                                  {new Date(fechaSeleccionada + 'T12:00:00').toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                                <div style={{ fontSize: '13px', fontWeight: '700', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>
+                                  {new Date(fechaSeleccionada + 'T12:00:00').toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
                                 </div>
-                                <div style={{ fontSize: '11px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif', marginTop: '1px' }}>
-                                  {generarHorarios(aulaActual.id, fechaSeleccionada).filter(h => !h.ocupado && !h.pasado && !h.conSolicitud).length} bloque(s) disponibles
+                                <div style={{ fontSize: '11px', color: '#059669', fontFamily: '"DM Sans", sans-serif', marginTop: '2px', fontWeight: '600' }}>
+                                  {generarHorarios(aulaActual.id, fechaSeleccionada).filter(h => !h.ocupado && !h.pasado && !h.conSolicitud).length} bloques libres
                                 </div>
                               </div>
-                              <span className={`ad-badge ${aulaActual.estado === 'Mantenimiento' ? 'ad-badge-amber'
+                              <div className={`ad-badge ${aulaActual.estado === 'Mantenimiento' ? 'ad-badge-amber'
                                 : generarHorarios(aulaActual.id, fechaSeleccionada).some(h => !h.ocupado && !h.pasado) ? 'ad-badge-green'
                                   : 'ad-badge-red'
-                                }`}>
+                                }`} style={{ padding: '6px 14px', borderRadius: '8px' }}>
                                 {aulaActual.estado === 'Mantenimiento' ? t.availableRooms.statusMaintenance
                                   : generarHorarios(aulaActual.id, fechaSeleccionada).some(h => !h.ocupado && !h.pasado) ? t.availableRooms.statusAvailable
                                     : t.availableRooms.statusNoSlots}
-                              </span>
+                              </div>
                             </div>
                           </div>
 
-                          {/* ── Time slots grid ── */}
+                          {/* ── Time slots grid container ── */}
                           <div style={{
                             background: '#ffffff',
                             border: '1px solid #e4e8ef',
-                            borderRadius: '6px',
+                            borderRadius: '16px',
                             overflow: 'hidden',
-                            animation: 'adSlideUp 0.3s ease 0.06s forwards',
+                            animation: 'adSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.06s forwards',
                             opacity: 0,
+                            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.02)',
                           }}>
                             {/* Slots header */}
-                            <div style={{ padding: '12px 20px', borderBottom: '1px solid #f1f5f9', background: '#fafbfc', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                              <span style={{ fontSize: '10px', fontWeight: '600', letterSpacing: '1.3px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>
+                            <div style={{ padding: '16px 24px', borderBottom: '1px solid #f1f5f9', background: '#fafbfc', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                              <span style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '1.5px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>
                                 {t.availableRooms.slotsHeader}
                               </span>
                               {horarioSeleccionado && (
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                  <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2563eb', animation: 'adPulse 1.5s ease infinite' }} />
-                                  <span style={{ fontSize: '11.5px', fontWeight: '600', color: '#2563eb', fontFamily: '"DM Sans", sans-serif' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#f0fdf4', padding: '4px 12px', borderRadius: '20px', border: '1px solid #d1fae5' }}>
+                                  <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#059669', animation: 'adPulse 1.5s ease infinite' }} />
+                                  <span style={{ fontSize: '11px', fontWeight: '700', color: '#059669', fontFamily: '"DM Sans", sans-serif' }}>
                                     {t.availableRooms.slotSelected.replace('{inicio}', horarioSeleccionado?.horaInicio).replace('{fin}', horarioSeleccionado?.horaFin)}
                                   </span>
                                 </div>
@@ -4252,28 +4481,28 @@ function App() {
                             </div>
 
                             {/* Slots */}
-                            <div style={{ padding: '16px 20px' }}>
+                            <div style={{ padding: '24px' }}>
                               {/* Banner: fecha pasada */}
                               {(() => {
                                 const hoyStr = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; })();
                                 if (fechaSeleccionada >= hoyStr) return null;
                                 return (
                                   <div style={{
-                                    display: 'flex', alignItems: 'center', gap: '10px',
-                                    padding: '10px 14px', marginBottom: '14px',
-                                    background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '5px',
+                                    display: 'flex', alignItems: 'center', gap: '12px',
+                                    padding: '12px 16px', marginBottom: '20px',
+                                    background: '#fff1f2', border: '1px solid #fecaca', borderRadius: '12px',
                                   }}>
-                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
                                       <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
                                     </svg>
-                                    <span style={{ fontSize: '12.5px', fontWeight: '600', color: '#991b1b', fontFamily: '"DM Sans", sans-serif' }}>
+                                    <span style={{ fontSize: '13px', fontWeight: '600', color: '#991b1b', fontFamily: '"DM Sans", sans-serif' }}>
                                       {t.availableRooms.pastDateWarning}
                                     </span>
                                   </div>
                                 );
                               })()}
 
-                              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: '8px' }}>
+                              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '12px' }}>
                                 {(() => {
                                   const hoyStr = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; })();
                                   const esFechaPasada = fechaSeleccionada < hoyStr;
@@ -4382,32 +4611,32 @@ function App() {
 
                           {/* ── OCCUPIED DETAIL PANEL ── */}
                           {reservaDetalle && !horarioSeleccionado && (
-                            <div className="ad-detail-panel" style={{ borderLeft: '3px solid #dc2626' }}>
+                            <div className="ad-detail-panel" style={{ border: 'none', borderRadius: '16px', boxShadow: '0 10px 40px rgba(0,0,0,0.06)', animation: 'adScaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}>
                               {/* Panel header */}
-                              <div style={{ padding: '14px 20px', background: '#fef2f2', borderBottom: '1px solid #fecaca', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                  <div style={{ width: '28px', height: '28px', borderRadius: '4px', background: '#fecaca', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <div style={{ padding: '18px 24px', background: '#ffffff', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                                  <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#fef2f2', border: '1px solid #fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                       <rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
                                     </svg>
                                   </div>
                                   <div>
-                                    <div style={{ fontSize: '13px', fontWeight: '700', color: '#991b1b', fontFamily: '"DM Sans", sans-serif' }}>Bloque Reservado</div>
-                                    <div style={{ fontSize: '11px', color: '#b91c1c', fontFamily: '"DM Sans", sans-serif' }}>
+                                    <h3 style={{ margin: 0, fontSize: '15px', fontWeight: '800', color: '#0f172a', fontFamily: '"DM Sans", sans-serif' }}>Bloque Reservado</h3>
+                                    <div style={{ fontSize: '12px', color: '#64748b', fontFamily: '"DM Sans", sans-serif', marginTop: '2px' }}>
                                       {reservaDetalle.horaInicio} – {reservaDetalle.horaFin}
                                     </div>
                                   </div>
                                 </div>
                                 <button
                                   onClick={() => setReservaDetalle(null)}
-                                  style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px', fontSize: '16px', lineHeight: 1, fontWeight: '300' }}
+                                  style={{ background: '#f8fafc', border: '1px solid #e2e8f0', color: '#94a3b8', cursor: 'pointer', padding: '6px', borderRadius: '8px', fontSize: '14px', transition: 'all 0.2s' }}
                                 >
                                   ✕
                                 </button>
                               </div>
 
                               {/* Panel body */}
-                              <div style={{ padding: '18px 20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px' }}>
+                              <div style={{ padding: '24px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px' }}>
                                 <div>
                                   <p style={{ margin: '0 0 4px', fontSize: '10px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>Reservado por</p>
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -4445,9 +4674,9 @@ function App() {
                                 </div>
 
                                 {reservaDetalle.descripcion && (
-                                  <div style={{ gridColumn: '1 / -1' }}>
-                                    <p style={{ margin: '0 0 4px', fontSize: '10px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.availableRooms.description}</p>
-                                    <div style={{ fontSize: '13px', color: '#475569', fontFamily: '"DM Sans", sans-serif', lineHeight: '1.5', whiteSpace: 'pre-wrap' }}>
+                                  <div style={{ gridColumn: '1 / -1', padding: '16px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #f1f5f9' }}>
+                                    <p style={{ margin: '0 0 8px', fontSize: '10px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.availableRooms.description}</p>
+                                    <div style={{ fontSize: '13px', color: '#475569', fontFamily: '"DM Sans", sans-serif', lineHeight: '1.6', whiteSpace: 'pre-wrap' }}>
                                       {reservaDetalle.descripcion}
                                     </div>
                                   </div>
@@ -4456,44 +4685,47 @@ function App() {
                             </div>
                           )}
 
-                          {/* ── RESERVATION / REQUEST FORM ── */}
+                          {/* ── RESERVATION FORM ── */}
                           {horarioSeleccionado && !reservaDetalle && (
                             <div
                               className="ad-detail-panel"
-                              style={{ borderLeft: `3px solid ${usuarioActivo.rol === 'alumno' ? '#2563eb' : '#059669'}` }}
+                              style={{ border: 'none', borderRadius: '16px', boxShadow: '0 10px 40px rgba(0,0,0,0.06)', animation: 'adScaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}
                             >
                               {/* Form header */}
                               <div style={{
-                                padding: '14px 20px',
-                                background: usuarioActivo.rol === 'alumno' ? '#eff6ff' : '#f0fdf4',
-                                borderBottom: `1px solid ${usuarioActivo.rol === 'alumno' ? '#bfdbfe' : '#d1fae5'}`,
+                                padding: '18px 24px',
+                                background: '#ffffff',
+                                borderBottom: '1px solid #f1f5f9',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
                               }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                                   <div style={{
-                                    width: '28px', height: '28px', borderRadius: '4px',
-                                    background: usuarioActivo.rol === 'alumno' ? '#bfdbfe' : '#bbf7d0',
+                                    width: '40px', height: '40px', borderRadius: '10px',
+                                    background: usuarioActivo.rol === 'alumno' ? '#eff6ff' : '#f0fdf4',
+                                    border: `1px solid ${usuarioActivo.rol === 'alumno' ? '#dbeafe' : '#d1fae5'}`,
                                     display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                                   }}>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={usuarioActivo.rol === 'alumno' ? '#2563eb' : '#059669'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={usuarioActivo.rol === 'alumno' ? '#2563eb' : '#059669'} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                       {usuarioActivo.rol === 'alumno'
-                                        ? <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /></>
-                                        : <><polyline points="20 6 9 17 4 12" /></>
+                                        ? <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                                        : <polyline points="20 6 9 17 4 12" />
                                       }
                                     </svg>
                                   </div>
                                   <div>
-                                    {usuarioActivo?.rol === 'alumno' ? 'Enviar Solicitud de Reserva' : 'Confirmar Reserva Directa'}
-                                    <div style={{ fontSize: '11px', color: usuarioActivo?.rol === 'alumno' ? '#3b82f6' : '#16a34a', fontFamily: '"DM Sans", sans-serif' }}>
-                                      {aulaActual.nombre} · {horarioSeleccionado.horaInicio}–{horarioSeleccionado.horaFin} · {new Date(fechaSeleccionada + 'T12:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                    <h3 style={{ margin: 0, fontSize: '15px', fontWeight: '800', color: '#0f172a', fontFamily: '"DM Sans", sans-serif' }}>
+                                      {usuarioActivo?.rol === 'alumno' ? 'Enviar Solicitud de Reserva' : 'Confirmar Reserva Directa'}
+                                    </h3>
+                                    <div style={{ fontSize: '12px', color: '#64748b', fontFamily: '"DM Sans", sans-serif', marginTop: '2px' }}>
+                                      {aulaActual.nombre} · {horarioSeleccionado.horaInicio}—{horarioSeleccionado.horaFin}
                                     </div>
                                   </div>
                                 </div>
                                 <button
                                   onClick={() => { setHorarioSeleccionado(null); setShowSolicitudDesdeAula(false); }}
-                                  style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px', fontSize: '16px', lineHeight: 1 }}
+                                  style={{ background: '#f8fafc', border: '1px solid #e2e8f0', color: '#94a3b8', cursor: 'pointer', padding: '6px', borderRadius: '8px', fontSize: '14px' }}
                                 >
                                   ✕
                                 </button>
@@ -4501,24 +4733,23 @@ function App() {
 
                               {/* Booking summary strip */}
                               <div style={{
-                                padding: '12px 20px',
+                                padding: '16px 24px',
                                 borderBottom: '1px solid #f1f5f9',
                                 background: '#fafbfc',
                                 display: 'grid',
-                                gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-                                gap: '12px',
+                                gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+                                gap: '16px',
                               }}>
                                 {[
                                   { label: t.availableRooms.room, value: aulaActual.nombre },
-                                  { label: t.availableRooms.date, value: new Date(fechaSeleccionada + 'T12:00:00').toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' }) },
-                                  { label: t.availableRooms.time, value: `${horarioSeleccionado.horaInicio} – ${horarioSeleccionado.horaFin}` },
+                                  { label: t.availableRooms.time, value: `${horarioSeleccionado.horaInicio}—${horarioSeleccionado.horaFin}` },
                                   { label: t.availableRooms.mode, value: usuarioActivo.rol === 'alumno' ? t.availableRooms.modeRequest : t.availableRooms.modeDirectReserve },
                                 ].map(({ label, value }) => (
                                   <div key={label}>
-                                    <div style={{ fontSize: '10px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif', marginBottom: '2px' }}>
+                                    <div style={{ fontSize: '10px', fontWeight: '800', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif', marginBottom: '4px' }}>
                                       {label}
                                     </div>
-                                    <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>
+                                    <div style={{ fontSize: '14px', fontWeight: '700', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>
                                       {value}
                                     </div>
                                   </div>
@@ -4526,7 +4757,7 @@ function App() {
                               </div>
 
                               {/* Form body */}
-                              <div style={{ padding: '18px 20px' }}>
+                              <div style={{ padding: '24px' }}>
                                 <form onSubmit={crearSolicitud}>
                                   <input type="hidden" name="tipo" value="Aula" />
                                   <input type="hidden" name="fechaSolicitada" value={fechaSeleccionada} />
@@ -4604,7 +4835,11 @@ function App() {
             {
               (permisos.verInventario || permisos.solicitarEquipos) && vistaActual === 'inventario' && (
                 <div style={{ animation: 'fadeIn 0.5s ease-in-out' }}>
-                  <style>{`
+                  {(() => {
+                    const rolNormalizado = usuarioActivo?.rol?.toLowerCase() || 'alumno';
+                    return (
+                      <>
+                        <style>{`
                     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap');
 
                     @keyframes invSlideUp {
@@ -4621,69 +4856,71 @@ function App() {
 
                     .inv-input {
                       width: 100%;
-                      padding: 9px 13px;
-                      border: 1px solid #dde2ea;
-                      border-radius: 4px;
+                      padding: 11px 14px;
+                      border: 1.5px solid #e4e8ef;
+                      border-radius: 8px;
                       font-size: 13px;
                       font-family: 'DM Sans', sans-serif;
                       color: #1e293b;
-                      background: #ffffff;
-                      transition: border-color 0.2s, box-shadow 0.2s;
+                      background: #fafbfc;
+                      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
                       outline: none;
                       box-sizing: border-box;
                     }
                     .inv-input:focus {
                       border-color: #059669;
-                      box-shadow: 0 0 0 3px rgba(5,150,105,0.08);
+                      box-shadow: 0 0 0 4px rgba(5,150,105,0.08);
+                      background: #ffffff;
                     }
-                    .inv-input::placeholder { color: #b0b8c8; }
+                    .inv-input::placeholder { color: #b8c0cc; }
 
                     .inv-btn-primary {
-                      padding: 9px 22px;
+                      padding: 12px 28px;
                       background: #0f172a;
                       color: white;
                       border: none;
-                      border-radius: 4px;
-                      font-size: 13px;
+                      border-radius: 10px;
+                      font-size: 14px;
                       font-weight: 600;
                       font-family: 'DM Sans', sans-serif;
                       cursor: pointer;
                       letter-spacing: 0.3px;
-                      transition: background 0.2s, transform 0.15s;
+                      transition: all 0.2s;
                       white-space: nowrap;
-                      height: 38px;
                     }
                     .inv-btn-primary:hover {
                       background: #1e293b;
-                      transform: translateY(-1px);
+                      transform: translateY(-2px);
+                      box-shadow: 0 10px 20px rgba(15,23,42,0.2);
                     }
 
                     .inv-btn-green {
-                      padding: 9px 22px;
+                      padding: 12px 28px;
                       background: #059669;
                       color: white;
                       border: none;
-                      border-radius: 4px;
-                      font-size: 13px;
+                      border-radius: 10px;
+                      font-size: 14px;
                       font-weight: 600;
                       font-family: 'DM Sans', sans-serif;
                       cursor: pointer;
-                      transition: background 0.2s, transform 0.15s;
+                      transition: all 0.2s;
                       white-space: nowrap;
-                      height: 38px;
+                      letter-spacing: 0.2px;
                     }
                     .inv-btn-green:hover {
                       background: #047857;
-                      transform: translateY(-1px);
+                      transform: translateY(-2px);
+                      box-shadow: 0 10px 20px rgba(5,150,105,0.25);
                     }
 
                     .inv-btn-outline {
-                      padding: 6px 14px;
+                      padding: 8px 16px;
                       background: transparent;
-                      border: 1px solid #e4e8ef;
-                      border-radius: 4px;
-                      font-size: 11px;
-                      font-weight: 600;
+                      border: 1.5px solid #e4e8ef;
+                      border-radius: 8px;
+                      font-size: 12px;
+                      font-weight: 700;
                       font-family: 'DM Sans', sans-serif;
                       cursor: pointer;
                       color: #64748b;
@@ -4692,23 +4929,26 @@ function App() {
                     .inv-btn-outline:hover {
                       border-color: #94a3b8;
                       background: #f8fafc;
+                      color: #334155;
                     }
 
                     .inv-btn-danger-outline {
-                      padding: 6px 14px;
-                      background: transparent;
-                      border: 1px solid #fca5a5;
-                      border-radius: 4px;
+                      padding: 8px 16px;
+                      background: #fef2f2;
+                      border: 1px solid #fee2e2;
+                      border-radius: 8px;
                       font-size: 11px;
-                      font-weight: 600;
+                      font-weight: 700;
                       font-family: 'DM Sans', sans-serif;
                       cursor: pointer;
                       color: #dc2626;
                       transition: all 0.2s;
                     }
                     .inv-btn-danger-outline:hover {
+                      background: #dc2626;
+                      color: #ffffff;
                       border-color: #dc2626;
-                      background: #fef2f2;
+                      box-shadow: 0 5px 15px rgba(220,38,38,0.2);
                     }
 
                     .inv-table {
@@ -4717,529 +4957,530 @@ function App() {
                       font-family: 'DM Sans', sans-serif;
                     }
                     .inv-table thead tr {
-                      background: #f8fafc;
-                      border-bottom: 1px solid #e4e8ef;
+                      background: #fafbfc;
+                      border-bottom: 2px solid #f1f5f9;
                     }
                     .inv-table thead th {
-                      padding: 10px 16px;
+                      padding: 16px 24px;
                       text-align: left;
                       font-size: 10px;
-                      font-weight: 600;
-                      letter-spacing: 1.2px;
+                      font-weight: 800;
+                      letter-spacing: 1.5px;
                       text-transform: uppercase;
                       color: #94a3b8;
                     }
                     .inv-table tbody tr {
                       border-bottom: 1px solid #f1f5f9;
-                      transition: background 0.15s;
+                      transition: all 0.2s;
                       opacity: 0;
                       animation: invFadeRow 0.3s ease forwards;
                     }
                     .inv-table tbody tr:last-child { border-bottom: none; }
                     .inv-table tbody tr:hover { background: #fafbfc; }
                     .inv-table td {
-                      padding: 12px 16px;
-                      font-size: 13px;
+                      padding: 18px 24px;
+                      font-size: 14px;
                       color: #334155;
                       vertical-align: middle;
                     }
 
-                    .inv-stock-bar {
-                      height: 4px;
+                    .inv-stock-track {
+                      height: 5px;
                       background: #f1f5f9;
-                      border-radius: 2px;
+                      border-radius: 3px;
                       overflow: hidden;
-                      margin-top: 4px;
-                      width: 80px;
+                      margin-top: 8px;
+                      width: 100px;
                     }
                     .inv-stock-fill {
                       height: 100%;
-                      border-radius: 2px;
-                      animation: invExpandBar 0.8s ease both;
-                    }
-
-                    .inv-badge {
-                      display: inline-block;
-                      padding: 3px 9px;
                       border-radius: 3px;
-                      font-size: 10px;
-                      font-weight: 700;
-                      letter-spacing: 0.7px;
+                      background: #059669;
+                      width: 0;
+                      transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+                    }
+
+                    .inv-badge-loan {
+                      display: inline-flex;
+                      align-items: center;
+                      padding: 4px 12px;
+                      border-radius: 20px;
+                      font-size: 11px;
+                      font-weight: 800;
                       text-transform: uppercase;
+                      letter-spacing: 0.5px;
                       font-family: 'DM Sans', sans-serif;
                     }
-                    .inv-badge-green    { background: #f0fdf4; color: #16a34a; }
-                    .inv-badge-red      { background: #fef2f2; color: #dc2626; }
-                    .inv-badge-amber    { background: #fffbeb; color: #b45309; }
-                    .inv-badge-blue     { background: #eff6ff; color: #2563eb; }
-                    .inv-badge-gray     { background: #f8fafc; color: #64748b; }
+                    .inv-badge-green    { background: #f0fdf4; color: #16a34a; border: 1px solid #d1fae5; }
+                    .inv-badge-red      { background: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; }
+                    .inv-badge-amber    { background: #fffbeb; color: #b45309; border: 1px solid #fef3c7; }
+                    .inv-badge-blue     { background: #eff6ff; color: #2563eb; border: 1px solid #dbeafe; }
+                    .inv-badge-gray     { background: #f8fafc; color: #94a3b8; border: 1px solid #e2e8f0; }
 
-                    .inv-section-label {
-                      font-size: 10px;
-                      font-weight: 600;
-                      letter-spacing: 1.4px;
-                      text-transform: uppercase;
-                      color: #94a3b8;
-                      margin: 0 0 14px 0;
-                      font-family: 'DM Sans', sans-serif;
+                    .inv-card {
+                      background: #ffffff;
+                      border: 1px solid #e4e8ef;
+                      border-radius: 16px;
+                      overflow: hidden;
+                      box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+                      opacity: 0;
+                      animation: invSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                    }
+                    .inv-card-header {
+                      padding: 24px 30px;
+                      border-bottom: 1px solid #f1f5f9;
+                      display: flex;
+                      align-items: center;
+                      gap: 15px;
                     }
 
                     .inv-qty-input {
-                      width: 64px;
-                      padding: 5px 8px;
-                      border: 1px solid #e4e8ef;
-                      border-radius: 4px;
-                      font-size: 13px;
+                      width: 70px;
+                      padding: 8px 10px;
+                      border: 1.5px solid #e4e8ef;
+                      border-radius: 8px;
+                      font-size: 14px;
+                      font-weight: 700;
                       font-family: 'DM Sans', sans-serif;
                       text-align: center;
                       outline: none;
                       transition: border-color 0.2s;
-                    }
-                    .inv-qty-input:focus { border-color: #059669; }
-
-                    .inv-card {
-                      background: #fff;
-                      border: 1px solid #e4e8ef;
-                      border-radius: 6px;
-                      overflow: hidden;
-                      opacity: 0;
-                      animation: invSlideUp 0.4s ease forwards;
-                    }
-                    .inv-card-header {
-                      padding: 14px 20px;
-                      border-bottom: 1px solid #f1f5f9;
                       background: #fafbfc;
-                      display: flex;
-                      align-items: center;
-                      gap: 10px;
                     }
-
-                    .inv-sol-row {
-                      display: flex;
-                      align-items: flex-start;
-                      gap: 12px;
-                      padding: 13px 0;
-                      border-bottom: 1px solid #f1f5f9;
-                      opacity: 0;
-                      animation: invFadeRow 0.3s ease forwards;
-                    }
-                    .inv-sol-row:last-child { border-bottom: none; }
+                    .inv-qty-input:focus { border-color: #059669; background: #fff; }
                   `}</style>
 
-                  {/* ── HEADER BANNER ── */}
-                  <div style={{
-                    background: 'linear-gradient(100deg, #0f172a 0%, #064e3b 55%, #065f46 100%)',
-                    borderRadius: '6px',
-                    padding: '32px 40px',
-                    marginBottom: '20px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: '20px',
-                    flexWrap: 'wrap',
-                    position: 'relative',
-                    overflow: 'hidden',
-                    animation: 'invSlideUp 0.5s ease forwards',
-                  }}>
-                    <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
-                    <div style={{ position: 'absolute', top: '-60px', right: '-40px', width: '280px', height: '280px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(5,150,105,0.2) 0%, transparent 70%)', pointerEvents: 'none' }} />
+                        {/* ── HEADER BANNER ── */}
+                        <div style={{
+                          background: 'linear-gradient(135deg, #0f172a 0%, #064e3b 100%)',
+                          borderRadius: '24px',
+                          padding: '40px 48px',
+                          marginBottom: '32px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          gap: '24px',
+                          flexWrap: 'wrap',
+                          position: 'relative',
+                          overflow: 'hidden',
+                          boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
+                        }}>
+                          {/* Decorative elements */}
+                          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+                          <div style={{ position: 'absolute', top: '-60px', right: '-40px', width: '280px', height: '280px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
-                    <div style={{ position: 'relative', zIndex: 1 }}>
-                      <p style={{ margin: '0 0 8px 0', fontSize: '11px', fontWeight: '600', letterSpacing: '2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)', fontFamily: '"DM Sans", sans-serif' }}>
-                        {rolNormalizado === 'admin' ? t.inventoryUser.sectionLabel : t.inventoryUser.sectionLabel}
-                      </p>
-                      <h2 style={{ margin: '0 0 8px 0', fontSize: '24px', fontWeight: '400', color: '#ffffff', fontFamily: '"DM Serif Display", serif', lineHeight: '1.25' }}>
-                        {t.inventoryUser.title} <span style={{ fontStyle: 'italic' }}>{t.inventoryUser.titleItalic}</span>
-                      </h2>
-                      <p style={{ margin: 0, color: 'rgba(255,255,255,0.45)', fontSize: '13px', fontFamily: '"DM Sans", sans-serif' }}>
-                        {rolNormalizado === 'admin'
-                          ? t.inventoryUser.subtitle
-                          : t.inventoryUser.subtitle}
-                      </p>
-                    </div>
+                          <div style={{ position: 'relative', zIndex: 1 }}>
+                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 14px', background: 'rgba(255,255,255,0.1)', borderRadius: '30px', border: '1px solid rgba(255,255,255,0.1)', marginBottom: '16px' }}>
+                              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 10px #10b981' }} />
+                              <span style={{ fontSize: '11px', fontWeight: '800', letterSpacing: '1px', textTransform: 'uppercase', color: '#ffffff', fontFamily: '"DM Sans", sans-serif' }}>Recursos Materiales</span>
+                            </div>
+                            <h1 style={{ margin: '0 0 12px 0', fontSize: '32px', fontWeight: '400', color: '#ffffff', fontFamily: '"DM Serif Display", serif', lineHeight: '1.2' }}>
+                              Inventario de <span style={{ fontStyle: 'italic', color: '#34d399' }}>Equipos y Material</span>
+                            </h1>
+                            <p style={{ margin: 0, color: 'rgba(255,255,255,0.5)', fontSize: '15px', fontFamily: '"DM Sans", sans-serif', maxWidth: '500px' }}>
+                              Control centralizado de tecnología educativa. Consulta disponibilidad y solicita préstamos para tus actividades.
+                            </p>
+                          </div>
 
-                    {/* Mini stats */}
-                    <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                      {[
-                        { label: t.inventoryUser.equipmentTypes, value: listaEquipos.length },
-                        { label: t.inventoryUser.totalStock, value: listaEquipos.reduce((t, eq) => t + (eq.cantidad || 0), 0) },
-                        { label: t.inventoryUser.noStock, value: listaEquipos.filter(eq => (eq.cantidad || 0) === 0).length },
-                        { label: t.inventoryUser.activeLoans, value: listaSolicitudesMaterial.filter(s => s.estado === 'Aprobada' && !s.devuelto).length },
-                      ].map((s, i) => (
-                        <div key={i} style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px', padding: '10px 16px', textAlign: 'center', minWidth: '80px' }}>
-                          <div style={{ fontSize: '20px', fontWeight: '300', color: s.label === 'Sin stock' && s.value > 0 ? '#fca5a5' : '#ffffff', fontFamily: '"DM Serif Display", serif', lineHeight: 1, marginBottom: '4px' }}>{s.value}</div>
-                          <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)', fontFamily: '"DM Sans", sans-serif', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{s.label}</div>
+                          {/* Stats strip */}
+                          <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                            {[
+                              { label: t.inventoryUser.equipmentTypes, value: listaEquipos.length },
+                              { label: t.inventoryUser.totalStock, value: listaEquipos.reduce((t, eq) => t + (Number(eq.cantidad) || 0), 0) },
+                              { label: t.inventoryUser.activeLoans, value: listaSolicitudesMaterial.filter(s => s.estado === 'Aprobada' && !s.devuelto).length, color: '#60a5fa' },
+                              { label: t.inventoryUser.noStock, value: listaEquipos.filter(eq => (Number(eq.cantidad) || 0) === 0).length, color: listaEquipos.some(eq => (Number(eq.cantidad) || 0) === 0) ? '#fca5a5' : 'rgba(255,255,255,0.3)' },
+                            ].map((s, i) => (
+                              <div key={i} style={{
+                                background: 'rgba(255,255,255,0.05)',
+                                border: '1px solid rgba(255,255,255,0.08)',
+                                borderRadius: '16px',
+                                padding: '12px 20px',
+                                textAlign: 'center',
+                                minWidth: '90px',
+                                backdropFilter: 'blur(10px)',
+                                flex: '1 1 auto'
+                              }}>
+                                <div style={{ fontSize: '24px', color: s.color || '#ffffff', fontFamily: '"DM Serif Display", serif', lineHeight: 1, marginBottom: '2px' }}>{s.value}</div>
+                                <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.4)', fontFamily: '"DM Sans", sans-serif', textTransform: 'uppercase', letterSpacing: '1px', whiteSpace: 'nowrap' }}>{s.label}</div>
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                      ))}
-                    </div>
-                  </div>
 
-                  {/* ── ADMIN ONLY: FORM TO ADD EQUIPMENT ── */}
-                  {permisos.gestionEquipos && (
-                    <div className="inv-card" style={{ marginBottom: '16px', animationDelay: '0.08s' }}>
-                      <div className="inv-card-header">
-                        <div style={{ width: '28px', height: '28px', borderRadius: '4px', background: '#f0fdf4', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
-                          </svg>
-                        </div>
-                        <div>
-                          <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.registerEquipment}</div>
-                          <div style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.registerEquipmentDesc}</div>
-                        </div>
-                        <button
-                          onClick={() => setShowFormReserva(!showFormReserva)}
-                          style={{ marginLeft: 'auto', padding: '6px 16px', background: showFormReserva ? '#f1f5f9' : '#0f172a', color: showFormReserva ? '#64748b' : '#fff', border: '1px solid #e4e8ef', borderRadius: '4px', fontSize: '12px', fontWeight: '600', fontFamily: '"DM Sans", sans-serif', cursor: 'pointer', transition: 'all 0.2s' }}
-                        >
-                          {showFormReserva ? t.inventoryUser.cancelBtn : t.inventoryUser.addEquipmentBtn}
-                        </button>
-                      </div>
-
-                      {showFormReserva && (
-                        <div style={{ padding: '20px 24px' }}>
-                          <form onSubmit={guardarNuevoEquipo}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 180px 140px 160px', gap: '12px', alignItems: 'flex-end' }}>
-                              <div>
-                                <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.equipmentName}</label>
-                                <input name="nombre" className="inv-input" placeholder={t.inventoryUser.equipmentNamePlaceholder} required />
+                        {/* ── ADMIN ONLY: FORM TO ADD EQUIPMENT ── */}
+                        {permisos.gestionEquipos && (
+                          <div className="inv-card" style={{ marginBottom: '24px', border: '1px solid #d1fae5' }}>
+                            <div className="inv-card-header" style={{ background: '#f0fdf4' }}>
+                              <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#ffffff', border: '1px solid #d1fae5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+                                </svg>
                               </div>
                               <div>
-                                <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.category}</label>
-                                <select name="categoria" className="inv-input" required style={{ cursor: 'pointer' }}>
-                                  <option value="">{t.inventoryUser.selectOption}</option>
-                                  <option value="Gafas RV">Gafas RV</option>
-                                  <option value="Cámara">Cámara</option>
-                                  <option value="Laptop">Laptop</option>
-                                  <option value="Micrófono">Micrófono</option>
-                                  <option value="Otro">Otro</option>
-                                </select>
+                                <div style={{ fontSize: '15px', fontWeight: '800', color: '#064e3b', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.registerEquipment}</div>
+                                <div style={{ fontSize: '12px', color: '#059669', opacity: 0.7, fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.registerEquipmentDesc}</div>
+                              </div>
+                              <button
+                                onClick={() => setShowFormReserva(!showFormReserva)}
+                                className="inv-btn-outline"
+                                style={{ marginLeft: 'auto', background: showFormReserva ? '#fff' : '#059669', color: showFormReserva ? '#059669' : '#fff', borderColor: '#059669' }}
+                              >
+                                {showFormReserva ? t.inventoryUser.cancelBtn : t.inventoryUser.addEquipmentBtn}
+                              </button>
+                            </div>
+
+                            {showFormReserva && (
+                              <div style={{ padding: '30px' }}>
+                                <form onSubmit={guardarNuevoEquipo}>
+                                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 180px 140px 160px', gap: '16px', alignItems: 'flex-end' }}>
+                                    <div>
+                                      <label style={{ display: 'block', marginBottom: '8px', fontSize: '10px', fontWeight: '800', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.equipmentName}</label>
+                                      <input name="nombre" className="inv-input" placeholder={t.inventoryUser.equipmentNamePlaceholder} required />
+                                    </div>
+                                    <div>
+                                      <label style={{ display: 'block', marginBottom: '8px', fontSize: '10px', fontWeight: '800', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.category}</label>
+                                      <select name="categoria" className="inv-input" required style={{ cursor: 'pointer' }}>
+                                        <option value="">{t.inventoryUser.selectOption}</option>
+                                        <option value="Gafas RV">Gafas RV</option>
+                                        <option value="Cámara">Cámara</option>
+                                        <option value="Laptop">Laptop</option>
+                                        <option value="Micrófono">Micrófono</option>
+                                        <option value="Otro">Otro</option>
+                                      </select>
+                                    </div>
+                                    <div>
+                                      <label style={{ display: 'block', marginBottom: '8px', fontSize: '10px', fontWeight: '800', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.quantity}</label>
+                                      <input name="cantidad" type="number" min="1" className="inv-input" placeholder="1" defaultValue="1" />
+                                    </div>
+                                    <div>
+                                      <label style={{ display: 'block', marginBottom: '8px', fontSize: '10px', fontWeight: '800', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.status}</label>
+                                      <select name="estado" className="inv-input" style={{ cursor: 'pointer' }}>
+                                        <option value="Disponible">{t.inventoryUser.available}</option>
+                                        <option value="Mantenimiento">{t.inventoryUser.maintenance}</option>
+                                        <option value="Inactivo">{t.inventoryUser.inactive}</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
+                                    <button type="submit" className="inv-btn-green">{t.inventoryUser.registerBtn}</button>
+                                  </div>
+                                </form>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {/* ── LOAN REQUEST FORM (maestro / alumno) ── */}
+                        {permisos.solicitarEquipos && (
+                          <div className="inv-card" style={{ marginBottom: '24px', border: '1px solid #dbeafe' }}>
+                            <div className="inv-card-header" style={{ background: '#eff6ff' }}>
+                              <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#ffffff', border: '1px solid #dbeafe', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                </svg>
                               </div>
                               <div>
-                                <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.quantity}</label>
-                                <input name="cantidad" type="number" min="1" className="inv-input" placeholder="1" defaultValue="1" />
+                                <div style={{ fontSize: '15px', fontWeight: '800', color: '#1e40af', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.requestLoan}</div>
+                                <div style={{ fontSize: '12px', color: '#2563eb', opacity: 0.7, fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.requestLoanDesc}</div>
+                              </div>
+                              <button
+                                onClick={() => setShowFormSolicitudMaterial(!showFormSolicitudMaterial)}
+                                className="inv-btn-outline"
+                                style={{ marginLeft: 'auto', background: showFormSolicitudMaterial ? '#fff' : '#2563eb', color: showFormSolicitudMaterial ? '#2563eb' : '#fff', borderColor: '#2563eb' }}
+                              >
+                                {showFormSolicitudMaterial ? t.inventoryUser.cancelBtn : t.inventoryUser.newRequestBtn}
+                              </button>
+                            </div>
+
+                            {showFormSolicitudMaterial && (
+                              <div style={{ padding: '30px' }}>
+                                <form onSubmit={crearSolicitudMaterial}>
+                                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 160px 200px', gap: '16px', marginBottom: '16px' }}>
+                                    <div>
+                                      <label style={{ display: 'block', marginBottom: '8px', fontSize: '10px', fontWeight: '800', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.material}</label>
+                                      <select name="equipoId" className="inv-input" required style={{ cursor: 'pointer' }}>
+                                        <option value="">{t.inventoryUser.selectMaterial}</option>
+                                        {listaEquipos.filter(e => e.cantidad > 0).map(equipo => (
+                                          <option key={equipo.id} value={equipo.id}>
+                                            {equipo.nombre} — {equipo.cantidad} {equipo.cantidad === 1 ? t.inventoryUser.available : t.inventoryUser.availablePlural}
+                                          </option>
+                                        ))}
+                                      </select>
+                                    </div>
+                                    <div>
+                                      <label style={{ display: 'block', marginBottom: '8px', fontSize: '10px', fontWeight: '800', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.quantity}</label>
+                                      <input name="cantidad" type="number" min="1" className="inv-input" placeholder="1" required />
+                                    </div>
+                                    <div>
+                                      <label style={{ display: 'block', marginBottom: '8px', fontSize: '10px', fontWeight: '800', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.usageTime}</label>
+                                      <select name="tiempoUso" className="inv-input" required style={{ cursor: 'pointer' }}>
+                                        <option value="">{t.inventoryUser.selectDuration}</option>
+                                        <option value="1">1 hour</option>
+                                        <option value="2">2 hours</option>
+                                        <option value="24">1 full day</option>
+                                        <option value="168">1 week</option>
+                                        <option value="-24" style={{ color: '#dc2626' }}>TEST: Simulate Delay</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div style={{ marginBottom: '20px' }}>
+                                    <label style={{ display: 'block', marginBottom: '8px', fontSize: '10px', fontWeight: '800', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.reasonLoan}</label>
+                                    <textarea name="motivo" className="inv-input" placeholder={t.inventoryUser.reasonLoanPlaceholder} required rows="3" style={{ resize: 'vertical', minHeight: '80px' }} />
+                                  </div>
+                                  <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', alignItems: 'center' }}>
+                                    <span style={{ fontSize: '12px', color: '#64748b', fontFamily: '"DM Sans", sans-serif' }}>Tu solicitud será revisada por el administrador.</span>
+                                    <button type="submit" className="inv-btn-primary" style={{ background: '#2563eb' }}>{t.inventoryUser.submitRequestBtn}</button>
+                                  </div>
+                                </form>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {/* ── STOCK TABLE CARD ── */}
+                        <div className="inv-card" style={{ marginBottom: '32px' }}>
+                          <div className="inv-card-header" style={{ justifyContent: 'space-between', padding: '24px 30px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                              <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#f0fdf4', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                </svg>
                               </div>
                               <div>
-                                <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.status}</label>
-                                <select name="estado" className="inv-input" style={{ cursor: 'pointer' }}>
-                                  <option value="Disponible">{t.inventoryUser.available}</option>
-                                  <option value="Mantenimiento">{t.inventoryUser.maintenance}</option>
-                                  <option value="Inactivo">{t.inventoryUser.inactive}</option>
-                                </select>
+                                <div style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.catalogTitle}</div>
+                                <div style={{ fontSize: '12px', color: '#64748b', fontFamily: '"DM Sans", sans-serif' }}>Listado de recursos tecnológicos disponibles para préstamo.</div>
                               </div>
                             </div>
-                            <div style={{ marginTop: '14px', display: 'flex', justifyContent: 'flex-end' }}>
-                              <button type="submit" className="inv-btn-green">{t.inventoryUser.registerBtn}</button>
-                            </div>
-                          </form>
-                        </div>
-                      )}
-                    </div>
-                  )}
 
-                  {/* ── REQUEST FORM (maestro / alumno) ── */}
-                  {permisos.solicitarEquipos && (
-                    <div className="inv-card" style={{ marginBottom: '16px', animationDelay: '0.1s' }}>
-                      <div className="inv-card-header">
-                        <div style={{ width: '28px', height: '28px', borderRadius: '4px', background: '#f0fdf4', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.requestLoan}</div>
-                          <div style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.requestLoanDesc}</div>
-                        </div>
-                        <button
-                          onClick={() => setShowFormSolicitudMaterial(!showFormSolicitudMaterial)}
-                          style={{ marginLeft: 'auto', padding: '6px 16px', background: showFormSolicitudMaterial ? '#f1f5f9' : '#059669', color: showFormSolicitudMaterial ? '#64748b' : '#fff', border: '1px solid ' + (showFormSolicitudMaterial ? '#e4e8ef' : '#059669'), borderRadius: '4px', fontSize: '12px', fontWeight: '600', fontFamily: '"DM Sans", sans-serif', cursor: 'pointer', transition: 'all 0.2s' }}
-                        >
-                          {showFormSolicitudMaterial ? t.inventoryUser.cancelBtn : t.inventoryUser.newRequestBtn}
-                        </button>
-                      </div>
-
-                      {showFormSolicitudMaterial && (
-                        <div style={{ padding: '20px 24px' }}>
-                          <form onSubmit={crearSolicitudMaterial}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 140px 180px', gap: '12px', marginBottom: '12px' }}>
-                              <div>
-                                <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.material}</label>
-                                <select name="equipoId" className="inv-input" required style={{ cursor: 'pointer' }}>
-                                  <option value="">{t.inventoryUser.selectMaterial}</option>
-                                  {listaEquipos.filter(e => e.cantidad > 0).map(equipo => (
-                                    <option key={equipo.id} value={equipo.id}>
-                                      {equipo.nombre} — {equipo.cantidad} {equipo.cantidad === 1 ? t.inventoryUser.available : t.inventoryUser.availablePlural}
-                                    </option>
-                                  ))}
-                                </select>
-                              </div>
-                              <div>
-                                <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.quantity}</label>
-                                <input name="cantidad" type="number" min="1" className="inv-input" placeholder="1" required />
-                              </div>
-                              <div>
-                                <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.usageTime}</label>
-                                <select name="tiempoUso" className="inv-input" required style={{ cursor: 'pointer' }}>
-                                  <option value="">{t.inventoryUser.selectDuration}</option>
-                                  <option value="1">1 hour</option>
-                                  <option value="2">2 hours</option>
-                                  <option value="24">1 full day</option>
-                                  <option value="168">1 week</option>
-                                  <option value="-24" style={{ color: '#dc2626' }}>TEST: Simulate Delay</option>
-                                </select>
-                              </div>
-                            </div>
-                            <div style={{ marginBottom: '14px' }}>
-                              <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.reasonLoan}</label>
-                              <textarea name="motivo" className="inv-input" placeholder={t.inventoryUser.reasonLoanPlaceholder} required rows="2" style={{ resize: 'vertical', minHeight: '60px' }} />
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                              <button type="submit" className="inv-btn-green">{t.inventoryUser.submitRequestBtn}</button>
-                            </div>
-                          </form>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* ── STOCK TABLE ── */}
-                  <div className="inv-card" style={{ marginBottom: '16px', animationDelay: '0.16s' }}>
-                    <div className="inv-card-header" style={{ justifyContent: 'space-between' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <div style={{ width: '28px', height: '28px', borderRadius: '4px', background: '#f0fdf4', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.catalogTitle}</div>
-                          <div style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{listaEquipos.length} {t.inventoryUser.equipmentRegistered}</div>
-                        </div>
-                      </div>
-                      {/* Category pills */}
-                      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                        {['Disponible', 'Sin stock', 'Mantenimiento'].map((estado) => {
-                          const count = estado === 'Disponible'
-                            ? listaEquipos.filter(e => (e.cantidad || 0) > 0).length
-                            : estado === 'Sin stock'
-                              ? listaEquipos.filter(e => (e.cantidad || 0) === 0).length
-                              : listaEquipos.filter(e => e.estado === 'Mantenimiento').length;
-                          const color = estado === 'Disponible' ? '#059669' : estado === 'Sin stock' ? '#dc2626' : '#b45309';
-                          const bg = estado === 'Disponible' ? '#f0fdf4' : estado === 'Sin stock' ? '#fef2f2' : '#fffbeb';
-                          return (
-                            <div key={estado} style={{ background: bg, border: `1px solid ${color}22`, borderRadius: '4px', padding: '4px 12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                              <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: color, display: 'inline-block' }} />
-                              <span style={{ fontSize: '11px', fontWeight: '600', color, fontFamily: '"DM Sans", sans-serif' }}>{count} {estado === 'Disponible' ? t.inventoryUser.available : estado === 'Sin stock' ? t.inventoryUser.noStock : t.inventoryUser.maintenance}</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    <div style={{ overflowX: 'auto' }}>
-                      <table className="inv-table">
-                        <thead>
-                          <tr>
-                            <th>{t.inventoryUser.colEquipment}</th>
-                            <th>{t.inventoryUser.colCategory}</th>
-                            <th>{t.inventoryUser.colStock}</th>
-                            <th>{t.inventoryUser.colAvailability}</th>
-                            {rolNormalizado === 'admin' && <th>{t.inventoryUser.colRegisteredBy}</th>}
-                            {rolNormalizado === 'admin' && <th style={{ textAlign: 'right' }}>{t.inventoryUser.colActions}</th>}
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {listaEquipos.length === 0 ? (
-                            <tr style={{ opacity: 1 }}>
-                              <td colSpan="6" style={{ textAlign: 'center', padding: '40px', color: '#94a3b8' }}>
-                                <div style={{ width: '40px', height: '40px', borderRadius: '50%', border: '1px solid #e2e8f0', margin: '0 auto 12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1.5">
-                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                                  </svg>
+                            {/* Category Quick Filters (Visual only) */}
+                            <div style={{ display: 'flex', gap: '8px' }}>
+                              {['Todo', 'Disponible', 'Mantenimiento'].map(cat => (
+                                <div key={cat} style={{ padding: '6px 14px', borderRadius: '30px', background: cat === 'Todo' ? '#0f172a' : '#f1f5f9', color: cat === 'Todo' ? '#fff' : '#64748b', fontSize: '11px', fontWeight: '700', cursor: 'pointer', transition: 'all 0.2s' }}>
+                                  {cat}
                                 </div>
-                                {t.inventoryUser.noEquipmentRegistered}
-                              </td>
-                            </tr>
-                          ) : (
-                            listaEquipos.map((eq, idx) => {
-                              const sinStock = (eq.cantidad || 0) === 0;
-                              const enMantenimiento = eq.estado === 'Mantenimiento';
-                              const maxRef = Math.max(...listaEquipos.map(e => e.cantidad || 0), 1);
-                              const pct = Math.min(((eq.cantidad || 0) / maxRef) * 100, 100);
-                              const barColor = sinStock ? '#dc2626' : enMantenimiento ? '#b45309' : '#059669';
+                              ))}
+                            </div>
+                          </div>
 
-                              return (
-                                <tr key={eq.id} style={{ animationDelay: `${0.2 + idx * 0.04}s` }}>
-                                  {/* Nombre */}
-                                  <td>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                      <div style={{ width: '32px', height: '32px', borderRadius: '4px', background: sinStock ? '#fef2f2' : '#f0fdf4', border: `1px solid ${sinStock ? '#fca5a5' : '#86efac'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={sinStock ? '#dc2626' : '#059669'} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                          <div style={{ overflowX: 'auto' }}>
+                            <table className="inv-table">
+                              <thead>
+                                <tr>
+                                  <th>{t.inventoryUser.colEquipment}</th>
+                                  <th>{t.inventoryUser.colCategory}</th>
+                                  <th>{t.inventoryUser.colStock}</th>
+                                  <th>{t.inventoryUser.colAvailability}</th>
+                                  {rolNormalizado === 'admin' && <th>{t.inventoryUser.colRegisteredBy}</th>}
+                                  {rolNormalizado === 'admin' && <th style={{ textAlign: 'right' }}>{t.inventoryUser.colActions}</th>}
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {listaEquipos.length === 0 ? (
+                                  <tr>
+                                    <td colSpan="6" style={{ textAlign: 'center', padding: '80px', color: '#94a3b8' }}>
+                                      <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#f8fafc', margin: '0 auto 20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="2">
                                           <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
                                         </svg>
                                       </div>
-                                      <div>
-                                        <div style={{ fontWeight: '600', color: '#1e293b', fontSize: '13px', fontFamily: '"DM Sans", sans-serif' }}>{eq.nombre}</div>
-                                        <div style={{ fontSize: '11px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>ID: {eq.id.slice(0, 8)}...</div>
-                                      </div>
-                                    </div>
-                                  </td>
-                                  {/* Categoría */}
-                                  <td>
-                                    <span className="inv-badge inv-badge-gray">{eq.categoria || '—'}</span>
-                                  </td>
-                                  {/* Stock */}
-                                  <td>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                      {rolNormalizado === 'admin' ? (
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                          <input
-                                            type="number"
-                                            className="inv-qty-input"
-                                            defaultValue={eq.cantidad || 0}
-                                            min="0"
-                                            onBlur={(e) => {
-                                              const val = parseInt(e.target.value);
-                                              if (!isNaN(val) && val !== eq.cantidad) {
-                                                actualizarCantidadEquipo(eq.id, val);
-                                              }
-                                            }}
-                                            onKeyDown={(e) => {
-                                              if (e.key === 'Enter') e.target.blur();
-                                            }}
-                                          />
-                                          <span style={{ fontSize: '11px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>uds.</span>
-                                        </div>
-                                      ) : (
-                                        <div>
-                                          <span style={{ fontSize: '22px', fontWeight: '300', fontFamily: '"DM Serif Display", serif', color: sinStock ? '#dc2626' : '#0f172a', lineHeight: 1 }}>{eq.cantidad || 0}</span>
-                                          <div className="inv-stock-bar">
-                                            <div className="inv-stock-fill" style={{ width: `${pct}%`, background: barColor }} />
+                                      <div style={{ fontSize: '14px', fontWeight: '600' }}>{t.inventoryUser.noEquipmentRegistered}</div>
+                                      <div style={{ fontSize: '12px', opacity: 0.7 }}>El inventario se encuentra actualmente vacío.</div>
+                                    </td>
+                                  </tr>
+                                ) : (
+                                  listaEquipos.map((eq, idx) => {
+                                    const sinStock = (Number(eq.cantidad) || 0) === 0;
+                                    const enMantenimiento = eq.estado === 'Mantenimiento';
+                                    const maxRef = Math.max(...listaEquipos.map(e => Number(e.cantidad) || 0), 1);
+                                    const pct = Math.min(((Number(eq.cantidad) || 0) / maxRef) * 100, 100);
+
+                                    return (
+                                      <tr key={eq.id} style={{ animationDelay: `${0.1 + idx * 0.05}s` }}>
+                                        {/* Equipment Info */}
+                                        <td>
+                                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                            <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: sinStock ? '#fef2f2' : '#f0fdf4', border: `1px solid ${sinStock ? '#fee2e2' : '#d1fae5'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={sinStock ? '#dc2626' : '#059669'} strokeWidth="2.5">
+                                                <circle cx="12" cy="12" r="10" /><path d="M12 8v4l3 3" />
+                                              </svg>
+                                            </div>
+                                            <div>
+                                              <div style={{ fontWeight: '700', color: '#0f172a', fontSize: '14px' }}>{eq.nombre}</div>
+                                              <div style={{ fontSize: '11px', color: '#94a3b8' }}>Ref: {eq.id.slice(0, 8).toUpperCase()}</div>
+                                            </div>
                                           </div>
-                                        </div>
-                                      )}
-                                    </div>
-                                  </td>
-                                  {/* Disponibilidad */}
-                                  <td>
-                                    <span className={`inv-badge ${sinStock ? 'inv-badge-red' : enMantenimiento ? 'inv-badge-amber' : 'inv-badge-green'}`}>
-                                      {sinStock ? t.inventoryUser.noStock : enMantenimiento ? t.inventoryUser.maintenance : t.inventoryUser.available}
-                                    </span>
-                                  </td>
-                                  {/* Admin only columns */}
-                                  {rolNormalizado === 'admin' && (
-                                    <td style={{ fontSize: '12px', color: '#64748b', fontFamily: '"DM Sans", sans-serif' }}>
-                                      {eq.registradoPor?.split('@')[0] || '—'}
-                                    </td>
-                                  )}
-                                  {rolNormalizado === 'admin' && (
-                                    <td style={{ textAlign: 'right' }}>
-                                      <button className="inv-btn-danger-outline" onClick={() => eliminarEquipo(eq.id)}>
-                                        {t.inventoryUser.deleteBtn}
-                                      </button>
-                                    </td>
-                                  )}
-                                </tr>
-                              );
-                            })
+                                        </td>
+
+                                        {/* Category */}
+                                        <td>
+                                          <span style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', background: '#f1f5f9', padding: '4px 10px', borderRadius: '6px' }}>
+                                            {eq.categoria || 'General'}
+                                          </span>
+                                        </td>
+
+                                        {/* Stock Levels */}
+                                        <td>
+                                          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                                            {rolNormalizado === 'admin' ? (
+                                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                <input
+                                                  type="number"
+                                                  className="inv-qty-input"
+                                                  defaultValue={eq.cantidad || 0}
+                                                  min="0"
+                                                  onBlur={(e) => {
+                                                    const val = parseInt(e.target.value);
+                                                    if (!isNaN(val) && val !== eq.cantidad) {
+                                                      actualizarCantidadEquipo(eq.id, val);
+                                                    }
+                                                  }}
+                                                  onKeyDown={(e) => { if (e.key === 'Enter') e.target.blur(); }}
+                                                />
+                                                <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '600' }}>uds.</span>
+                                              </div>
+                                            ) : (
+                                              <>
+                                                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+                                                  <span style={{ fontSize: '24px', fontWeight: '400', fontFamily: '"DM Serif Display", serif', color: sinStock ? '#dc2626' : '#0f172a', lineHeight: 1 }}>{eq.cantidad || 0}</span>
+                                                  <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '600' }}>unidades</span>
+                                                </div>
+                                                <div className="inv-stock-track">
+                                                  <div className="inv-stock-fill" style={{ width: `${pct}%`, background: sinStock ? '#dc2626' : enMantenimiento ? '#d97706' : '#059669' }} />
+                                                </div>
+                                              </>
+                                            )}
+                                          </div>
+                                        </td>
+
+                                        {/* Availability Badge */}
+                                        <td>
+                                          <span className={`inv-badge-loan ${sinStock ? 'inv-badge-red' : enMantenimiento ? 'inv-badge-amber' : 'inv-badge-green'}`}>
+                                            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'currentColor', marginRight: '8px', opacity: 0.8 }} />
+                                            {sinStock ? t.inventoryUser.noStock : enMantenimiento ? t.inventoryUser.maintenance : t.inventoryUser.available}
+                                          </span>
+                                        </td>
+
+                                        {/* Admin Actions */}
+                                        {rolNormalizado === 'admin' && (
+                                          <td style={{ fontSize: '12px', color: '#64748b', fontFamily: '"DM Sans", sans-serif' }}>
+                                            {eq.registradoPor?.split('@')[0] || 'Desconocido'}
+                                          </td>
+                                        )}
+                                        {rolNormalizado === 'admin' && (
+                                          <td style={{ textAlign: 'right' }}>
+                                            <button className="inv-btn-danger-outline" onClick={() => eliminarEquipo(eq.id)}>
+                                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ marginRight: '6px' }}>
+                                                <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                              </svg>
+                                              {t.inventoryUser.deleteBtn}
+                                            </button>
+                                          </td>
+                                        )}
+                                      </tr>
+                                    );
+                                  })
+                                )}
+                              </tbody>
+                            </table>
+                          </div>
+
+                          {listaEquipos.length > 0 && (
+                            <div style={{ padding: '16px 30px', background: '#fafbfc', borderTop: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <span style={{ fontSize: '12px', color: '#64748b', fontWeight: '600' }}>
+                                {listaEquipos.length} {t.inventoryUser.typesLabel || 'categorías'} · {listaEquipos.reduce((t, eq) => t + (Number(eq.cantidad) || 0), 0)} {t.inventoryUser.unitsLabel || 'unidades totales'}
+                              </span>
+                              {rolNormalizado === 'admin' && (
+                                <span style={{ fontSize: '11px', color: '#94a3b8', fontStyle: 'italic' }}>
+                                  Tip: Registra cambios editando la cantidad directamente.
+                                </span>
+                              )}
+                            </div>
                           )}
-                        </tbody>
-                      </table>
-                    </div>
-
-                    {listaEquipos.length > 0 && (
-                      <div style={{ padding: '10px 20px', borderTop: '1px solid #f1f5f9', background: '#fafbfc', display: 'flex', justifyContent: 'space-between' }}>
-                        <span style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>
-                          {listaEquipos.length} tipo(s) · {listaEquipos.reduce((t, eq) => t + (eq.cantidad || 0), 0)} unidades totales
-                        </span>
-                        {rolNormalizado === 'admin' && (
-                          <span style={{ fontSize: '11px', color: '#cbd5e1', fontFamily: '"DM Sans", sans-serif' }}>
-                            Edita las cantidades directamente en la celda y presiona Enter
-                          </span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* ── MY REQUESTS (maestro / alumno) ── */}
-                  {permisos.solicitarEquipos && listaSolicitudesMaterial.filter(s => s.solicitadoPor === usuarioActivo?.email).length > 0 && (
-                    <div className="inv-card" style={{ animationDelay: '0.24s' }}>
-                      <div className="inv-card-header" style={{ justifyContent: 'space-between' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <div style={{ width: '28px', height: '28px', borderRadius: '4px', background: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" />
-                            </svg>
-                          </div>
-                          <div>
-                            <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.myMaterialRequests}</div>
-                            <div style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.historyBorrowedByYou}</div>
-                          </div>
                         </div>
-                        {/* Pending count badge */}
-                        {listaSolicitudesMaterial.filter(s => s.solicitadoPor === usuarioActivo?.email && s.estado === 'Pendiente').length > 0 && (
-                          <div style={{ background: '#fffbeb', border: '1px solid #fde68a', borderRadius: '4px', padding: '4px 12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#b45309', display: 'inline-block' }} />
-                            <span style={{ fontSize: '11px', fontWeight: '600', color: '#b45309', fontFamily: '"DM Sans", sans-serif' }}>
-                              {listaSolicitudesMaterial.filter(s => s.solicitadoPor === usuarioActivo?.email && s.estado === 'Pendiente').length} {t.inventoryUser.pendingLabel}
-                            </span>
+
+                        {/* ── MY REQUESTS (maestro / alumno) ── */}
+                        {permisos.solicitarEquipos && listaSolicitudesMaterial.filter(s => s.solicitadoPor === usuarioActivo?.email).length > 0 && (
+                          <div className="inv-card" style={{ animationDelay: '0.24s' }}>
+                            <div className="inv-card-header" style={{ justifyContent: 'space-between' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                <div style={{ width: '28px', height: '28px', borderRadius: '4px', background: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" />
+                                  </svg>
+                                </div>
+                                <div>
+                                  <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.myMaterialRequests}</div>
+                                  <div style={{ fontSize: '11.5px', color: '#94a3b8', fontFamily: '"DM Sans", sans-serif' }}>{t.inventoryUser.historyBorrowedByYou}</div>
+                                </div>
+                              </div>
+                              {/* Pending count badge */}
+                              {listaSolicitudesMaterial.filter(s => s.solicitadoPor === usuarioActivo?.email && s.estado === 'Pendiente').length > 0 && (
+                                <div style={{ background: '#fffbeb', border: '1px solid #fde68a', borderRadius: '4px', padding: '4px 12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                  <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#b45309', display: 'inline-block' }} />
+                                  <span style={{ fontSize: '11px', fontWeight: '600', color: '#b45309', fontFamily: '"DM Sans", sans-serif' }}>
+                                    {listaSolicitudesMaterial.filter(s => s.solicitadoPor === usuarioActivo?.email && s.estado === 'Pendiente').length} {t.inventoryUser.pendingLabel}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+
+                            <div style={{ overflowX: 'auto' }}>
+                              <table className="inv-table">
+                                <thead>
+                                  <tr>
+                                    <th>{t.inventoryUser.colMaterial}</th>
+                                    <th>{t.inventoryUser.colQuantity}</th>
+                                    <th>{t.inventoryUser.colReason}</th>
+                                    <th>{t.inventoryUser.colExpectedReturn}</th>
+                                    <th>{t.inventoryUser.colStatus}</th>
+                                    <th>{t.inventoryUser.colReturned}</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {listaSolicitudesMaterial.filter(s => s.solicitadoPor === usuarioActivo?.email).map((sol, idx) => {
+                                    const ahora = new Date();
+                                    const fechaVenc = new Date(sol.fechaDevolucionEsperada);
+                                    const esAtrasado = sol.estado === 'Aprobada' && !sol.devuelto && ahora > fechaVenc;
+
+                                    return (
+                                      <tr key={sol.id} style={{ animationDelay: `${0.3 + idx * 0.04}s`, background: esAtrasado ? '#fef2f2' : '' }}>
+                                        <td>
+                                          <div style={{ fontWeight: '600', color: '#1e293b', fontSize: '13px', fontFamily: '"DM Sans", sans-serif' }}>{sol.equipoNombre}</div>
+                                        </td>
+                                        <td>
+                                          <span style={{ fontFamily: '"DM Serif Display", serif', fontSize: '18px', fontWeight: '300', color: '#0f172a' }}>×{sol.cantidad}</span>
+                                        </td>
+                                        <td style={{ fontSize: '12px', color: '#64748b', maxWidth: '180px', fontFamily: '"DM Sans", sans-serif' }}>{sol.motivo || '—'}</td>
+                                        <td>
+                                          <div style={{ fontSize: '12px', color: esAtrasado ? '#dc2626' : '#64748b', fontFamily: '"DM Sans", sans-serif', fontWeight: esAtrasado ? '600' : '400' }}>
+                                            {esAtrasado && (
+                                              <div style={{ fontSize: '10px', fontWeight: '700', color: '#dc2626', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>{t.inventoryAdmin.overdueBadge}</div>
+                                            )}
+                                            {new Date(sol.fechaDevolucionEsperada).toLocaleString('es-ES', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                          </div>
+                                        </td>
+                                        <td>
+                                          <span className={`inv-badge ${sol.estado === 'Aprobada' ? 'inv-badge-green' : sol.estado === 'Rechazada' ? 'inv-badge-red' : 'inv-badge-amber'}`}>
+                                            {sol.estado}
+                                          </span>
+                                        </td>
+                                        <td>
+                                          <span className={`inv-badge ${sol.devuelto ? 'inv-badge-green' : sol.estado === 'Aprobada' ? 'inv-badge-red' : 'inv-badge-gray'}`}>
+                                            {sol.devuelto ? t.inventoryUser.returned : sol.estado === 'Aprobada' ? t.inventoryUser.notReturned : '—'}
+                                          </span>
+                                        </td>
+                                      </tr>
+                                    );
+                                  })}
+                                </tbody>
+                              </table>
+                            </div>
                           </div>
                         )}
-                      </div>
 
-                      <div style={{ overflowX: 'auto' }}>
-                        <table className="inv-table">
-                          <thead>
-                            <tr>
-                              <th>{t.inventoryUser.colMaterial}</th>
-                              <th>{t.inventoryUser.colQuantity}</th>
-                              <th>{t.inventoryUser.colReason}</th>
-                              <th>{t.inventoryUser.colExpectedReturn}</th>
-                              <th>{t.inventoryUser.colStatus}</th>
-                              <th>{t.inventoryUser.colReturned}</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {listaSolicitudesMaterial.filter(s => s.solicitadoPor === usuarioActivo?.email).map((sol, idx) => {
-                              const ahora = new Date();
-                              const fechaVenc = new Date(sol.fechaDevolucionEsperada);
-                              const esAtrasado = sol.estado === 'Aprobada' && !sol.devuelto && ahora > fechaVenc;
-
-                              return (
-                                <tr key={sol.id} style={{ animationDelay: `${0.3 + idx * 0.04}s`, background: esAtrasado ? '#fef2f2' : '' }}>
-                                  <td>
-                                    <div style={{ fontWeight: '600', color: '#1e293b', fontSize: '13px', fontFamily: '"DM Sans", sans-serif' }}>{sol.equipoNombre}</div>
-                                  </td>
-                                  <td>
-                                    <span style={{ fontFamily: '"DM Serif Display", serif', fontSize: '18px', fontWeight: '300', color: '#0f172a' }}>×{sol.cantidad}</span>
-                                  </td>
-                                  <td style={{ fontSize: '12px', color: '#64748b', maxWidth: '180px', fontFamily: '"DM Sans", sans-serif' }}>{sol.motivo || '—'}</td>
-                                  <td>
-                                    <div style={{ fontSize: '12px', color: esAtrasado ? '#dc2626' : '#64748b', fontFamily: '"DM Sans", sans-serif', fontWeight: esAtrasado ? '600' : '400' }}>
-                                      {esAtrasado && (
-                                        <div style={{ fontSize: '10px', fontWeight: '700', color: '#dc2626', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>{t.inventoryAdmin.overdueBadge}</div>
-                                      )}
-                                      {new Date(sol.fechaDevolucionEsperada).toLocaleString('es-ES', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <span className={`inv-badge ${sol.estado === 'Aprobada' ? 'inv-badge-green' : sol.estado === 'Rechazada' ? 'inv-badge-red' : 'inv-badge-amber'}`}>
-                                      {sol.estado}
-                                    </span>
-                                  </td>
-                                  <td>
-                                    <span className={`inv-badge ${sol.devuelto ? 'inv-badge-green' : sol.estado === 'Aprobada' ? 'inv-badge-red' : 'inv-badge-gray'}`}>
-                                      {sol.devuelto ? t.inventoryUser.returned : sol.estado === 'Aprobada' ? t.inventoryUser.notReturned : '—'}
-                                    </span>
-                                  </td>
-                                </tr>
-                              );
-                            })}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  )}
-
+                      </>
+                    );
+                  })()}
                 </div>
               )
             }
