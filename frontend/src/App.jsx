@@ -1,3 +1,4 @@
+  import logo from './logo.png';
   import translations from './translations';
   import { useState, useEffect } from 'react';
   import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
@@ -6406,10 +6407,12 @@ if (confirm(t.messages.confirmDeleteRoom)) {
             
             <div className="edu-content">
               <div className="edu-header">
-                <div className="lr-brand">LR</div>
-                <h1>LabReserve</h1>
-                <p className="brand-tagline">{t.login.subtitle}</p>
+                <div className="lr-brand">
+                 <img src={logo} alt="EdTech+" style={{ maxWidth: '280px', height: 'auto', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.3))' }} />
               </div>
+              <h1 style={{ display: 'none' }}>EdTech+</h1>
+              <p className="brand-tagline" style={{ color: '#cbd5e1', marginTop: '15px', fontSize: '15px' }}>{t.login.subtitle}</p>
+            </div>
               
               <div className="edu-features">
                 <div className="feature-item">
@@ -6471,7 +6474,7 @@ if (confirm(t.messages.confirmDeleteRoom)) {
 
           <div className="login-form-container">
             <div className="form-header">
-              <h2>{esRegistro ? t.login.createAccount : t.login.title}</h2>
+              <h2>{esRegistro ? t.login.createAccount : 'Bienvenido a EdTech+'}</h2>
               <p className="form-subtitle">{esRegistro ? t.login.subtitle : 'Accede a tu cuenta de estudiante'}</p>
             </div>
 
@@ -6531,7 +6534,7 @@ if (confirm(t.messages.confirmDeleteRoom)) {
             </div>
 
             <div className="form-footer-split">
-              <p>LabReserve © 2025 - Sistema de Reservas Educativo</p>
+              <p>EdTech+ © 2025 - Tecnología Inteligente para la Educación</p>
             </div>
           </div>
         </div>
