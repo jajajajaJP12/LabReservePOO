@@ -1,7 +1,7 @@
 import logo from './logo.png';
 import translations from './translations';
 import { useState, useEffect } from 'react';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { doc, setDoc, getDoc, collection, addDoc, onSnapshot, query, orderBy, updateDoc, deleteDoc, getDocs, where } from 'firebase/firestore';
 import { auth, db } from './firebase';
 import './App.css';
@@ -89,6 +89,7 @@ function App() {
   const [listaSolicitudesMaterial, setListaSolicitudesMaterial] = useState([]);
   const [listaNotificaciones, setListaNotificaciones] = useState([]);
   const [listaUsuarios, setListaUsuarios] = useState([]);
+  const [listaBaneados, setListaBaneados] = useState([]); // <--- NUEVO: Lista de correos revocados
 
   // --- ESTADOS DE FORMULARIO ---
   const [showFormAula, setShowFormAula] = useState(false);
@@ -208,6 +209,16 @@ function App() {
         setListaUsuarios(docs);
       });
 
+      // --- NUEVO: Cargar lista de baneados (Escudo) ---
+      const qBaneados = query(collection(db, "baneados"), orderBy("email"));
+      const unsub8 = onSnapshot(qBaneados, (snapshot) => {
+        const docs = [];
+        snapshot.forEach((doc) => {
+          docs.push({ ...doc.data(), id: doc.id });
+        });
+        setListaBaneados(docs);
+      });
+
       return () => {
         unsub1();
         unsub2();
@@ -215,7 +226,8 @@ function App() {
         unsub4();
         unsub5();
         unsub6();
-        unsub7(); // <--- NUEVO
+        unsub7();
+        unsub8(); // <--- NUEVO
       };
     }
   }, [usuarioActivo]);
@@ -248,6 +260,14 @@ function App() {
     setTipoMensaje('info');
     try {
       const correoNormalizado = email.toLowerCase();
+
+      // --- ESCUDO: VERIFICAR BLACKLIST ---
+      const banDoc = await getDoc(doc(db, "baneados", correoNormalizado));
+      if (banDoc.exists()) {
+        mostrarMensaje('Acceso Denegado: Este correo ha sido bloqueado por el administrador.', 'error');
+        setCargando(false);
+        return;
+      }
 
       const rolDoc = await getDoc(doc(db, "roles_asignados", correoNormalizado));
       let rolFinal = 'alumno';
@@ -300,6 +320,16 @@ function App() {
     setTipoMensaje('info');
 
     try {
+      const correoNormalizado = email.toLowerCase();
+
+      // --- ESCUDO: VERIFICAR BLACKLIST ---
+      const banDoc = await getDoc(doc(db, "baneados", correoNormalizado));
+      if (banDoc.exists()) {
+        mostrarMensaje('Acceso Denegado: Este correo ha sido bloqueado por el administrador.', 'error');
+        setCargando(false);
+        return;
+      }
+
       const credencial = await signInWithEmailAndPassword(auth, email, password);
       const docSnap = await getDoc(doc(db, "usuarios", credencial.user.uid));
 
@@ -390,12 +420,109 @@ function App() {
   const eliminarUsuarioDB = async (userId, correo) => {
     if (confirm(`${t.messages.confirmRevokeAccess} ${correo}?\n\n${t.messages.confirmRevokeExtra}`)) {
       try {
+        // 1. Borramos el perfil del usuario activo
         await deleteDoc(doc(db, "usuarios", userId));
-        // Opcional: También borrar de la lista de roles asignados
+        // 2. Borramos de la lista de roles asignados
         await deleteDoc(doc(db, "roles_asignados", correo));
-        mostrarMensaje(`${t.messages.accessRevoked} ${correo}`, 'success');
+
+        // 3. EL ESCUDO: Lo añadimos a la lista de "baneados" para que no pueda volver a entrar
+        await setDoc(doc(db, "baneados", correo.toLowerCase()), {
+          email: correo.toLowerCase(),
+          fechaBaneo: new Date().toISOString(),
+          motivo: 'Acceso revocado por administrador'
+        });
+
+        mostrarMensaje(`${t.messages.accessRevoked} ${correo} (Cuenta bloqueada permanentemente)`, 'success');
       } catch (error) {
         mostrarMensaje(t.messages.errorRevoke + error.message, 'error');
+      }
+    }
+  };
+
+  // --- FUNCIÓN: RESTAURAR ACCESO A UN CORREO ---
+  const restaurarAcceso = async (correo) => {
+    if (confirm(`${lang === 'es' ? '¿Restaurar acceso para' : 'Restore access for'} ${correo}?`)) {
+      try {
+        await deleteDoc(doc(db, "baneados", correo.toLowerCase()));
+        mostrarMensaje(`${lang === 'es' ? 'Acceso restaurado para' : 'Access restored for'} ${correo}`, 'success');
+      } catch (error) {
+        mostrarMensaje('Error: ' + error.message, 'error');
+      }
+    }
+  };
+
+
+
+  // --- FUNCIÓN: LOGIN SOCIAL (GOOGLE / MICROSOFT) ---
+  const manejarLoginSocial = async (providerName) => {
+    setCargando(true);
+    setMensaje(t.login.loggingIn);
+    setTipoMensaje('info');
+
+    let provider;
+    if (providerName === 'google') {
+      provider = new GoogleAuthProvider();
+    }
+
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const correoNormalizado = user.email.toLowerCase();
+
+      // --- ESCUDO: VERIFICAR BLACKLIST ---
+      const banDoc = await getDoc(doc(db, "baneados", correoNormalizado));
+      if (banDoc.exists()) {
+        await signOut(auth); // Lo sacamos de Auth inmediatamente
+        mostrarMensaje('Acceso Denegado: Tu acceso institucional ha sido revocado.', 'error');
+        setCargando(false);
+        return;
+      }
+
+      // Si el correo no está verificado por el proveedor (raro en Google/MS), lo rechazamos
+      if (!user.emailVerified) {
+        throw new Error('Email not verified by provider');
+      }
+
+      // 1. Buscamos si el usuario ya existe en nuestra colección de usuarios
+      const docSnap = await getDoc(doc(db, "usuarios", user.uid));
+
+      if (docSnap.exists()) {
+        // Usuario existente: Cargamos su rol
+        setUsuarioActivo({ uid: user.uid, email: user.email, rol: docSnap.data().rol.toLowerCase() });
+      } else {
+        // Usuario nuevo: Buscamos si tiene un rol pre-asignado por su correo
+        const rolDoc = await getDoc(doc(db, "roles_asignados", correoNormalizado));
+        let rolFinal = 'alumno'; // Default
+
+        if (rolDoc.exists()) {
+          rolFinal = rolDoc.data().rol;
+        }
+
+        // Creamos su perfil en Firestore
+        await setDoc(doc(db, "usuarios", user.uid), {
+          correo: correoNormalizado,
+          rol: rolFinal,
+          fechaRegistro: new Date().toISOString(),
+          metodoAuth: providerName
+        });
+
+        setUsuarioActivo({ uid: user.uid, email: user.email, rol: rolFinal });
+      }
+
+      setEmail('');
+      setPassword('');
+      setMensaje('');
+      setCargando(false);
+    } catch (error) {
+      console.error("Error social login:", error);
+      setCargando(false);
+
+      if (error.message === 'Email not verified by provider') {
+        mostrarMensaje('Tu cuenta de Google/Microsoft no está verificada. Usa una real.', 'error');
+      } else if (error.code === 'auth/popup-closed-by-user') {
+        setMensaje(''); // Simplemente se cerró
+      } else {
+        mostrarMensaje('Error al iniciar sesión con el proveedor externo.', 'error');
       }
     }
   };
@@ -1051,20 +1178,9 @@ function App() {
               <button
                 onClick={() => setLang(lang === 'es' ? 'en' : 'es')}
                 title={t.topbar.langLabel}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: '6px',
-                  padding: '6px 14px',
-                  background: 'transparent',
-                  border: '1.5px solid #e2e8f0',
-                  borderRadius: '6px',
-                  fontSize: '13px', fontWeight: '700',
-                  color: '#1e293b', cursor: 'pointer',
-                  transition: 'all 0.2s', letterSpacing: '0.5px',
-                  fontFamily: 'inherit',
-                }}
+                className="lang-switcher-dashboard"
               >
-                <span style={{ fontSize: '16px' }}>{lang === 'es' ? '🇺🇸' : '🇲🇽'}</span>
-                <span>{t.topbar.langButton}</span>
+                <span className="lang-flag-circle">{lang === 'es' ? '🇺🇸' : '🇲🇽'}</span>
               </button>
               <span>{t.topbar.systemName}</span>
               {usuarioActivo && (
@@ -1694,6 +1810,69 @@ function App() {
                     </div>
                   )}
                 </div>
+
+                {/* ── SECCIÓN: CUENTAS CON ACCESO RESTRINGIDO (BLACKLIST) ── */}
+                {listaBaneados.length > 0 && (
+                  <div className="edtech-roles-card edtech-roles-card-delay-3" style={{ borderLeft: '4px solid #dc2626' }}>
+                    <div className="edtech-roles-card-header">
+                      <div className="edtech-roles-card-header-left">
+                        <div className="edtech-roles-card-icon" style={{ background: 'rgba(220,38,38,0.08)', borderColor: 'rgba(220,38,38,0.15)' }}>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                          </svg>
+                        </div>
+                        <div>
+                          <div className="edtech-roles-card-title">{lang === 'es' ? 'Cuentas con Acceso Restringido' : 'Restricted Access Accounts'}</div>
+                          <div className="edtech-roles-card-sub">{listaBaneados.length} {lang === 'es' ? 'correos bloqueados por el sistema' : 'emails blocked by the system'}</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="edtech-roles-table-wrap">
+                      <table className="edtech-roles-table">
+                        <thead>
+                          <tr>
+                            <th>{t.rolesPage.colUser}</th>
+                            <th>{lang === 'es' ? 'Motivo' : 'Reason'}</th>
+                            <th>{lang === 'es' ? 'Fecha de Restricción' : 'Restriction Date'}</th>
+                            <th style={{ textAlign: 'right' }}>{t.rolesPage.colActions}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {listaBaneados.map((ban, idx) => (
+                            <tr key={ban.id} className="edtech-roles-banned-row">
+                              <td>
+                                <div className="edtech-roles-user-cell">
+                                  <div className="edtech-roles-avatar" style={{ background: '#fef2f2', borderColor: '#fecaca' }}>
+                                    <span style={{ color: '#dc2626' }}>!</span>
+                                  </div>
+                                  <div className="edtech-roles-user-email" style={{ fontWeight: '600', color: '#475569' }}>{ban.email}</div>
+                                </div>
+                              </td>
+                              <td>
+                                <span style={{ fontSize: '12px', color: '#dc2626', fontWeight: '500' }}>
+                                  {ban.motivo || 'Revocación manual'}
+                                </span>
+                              </td>
+                              <td className="edtech-roles-date-cell">
+                                {ban.fechaBaneo ? new Date(ban.fechaBaneo).toLocaleDateString(lang === 'es' ? 'es-ES' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '—'}
+                              </td>
+                              <td style={{ textAlign: 'right' }}>
+                                <button
+                                  className="btn-small btn-success"
+                                  onClick={() => restaurarAcceso(ban.email)}
+                                  style={{ padding: '8px 16px', fontSize: '12px', borderRadius: '50px' }}
+                                >
+                                  {lang === 'es' ? 'Restaurar Acceso' : 'Restore Access'}
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
@@ -5769,7 +5948,7 @@ function App() {
         <div className="edu-content">
           <div className="lr-brand">
             <img src={logo} alt="EdTech+ Logo" />
-          </div>+
+          </div>
 
           <div className="lr-brand-badge">
             <span className="badge-dot" />
@@ -5825,9 +6004,8 @@ function App() {
       {/* ── PANEL DERECHO ── */}
       <div className="login-right-panel">
 
-        <button onClick={() => setLang(lang === 'es' ? 'en' : 'es')} className="lang-switcher-login">
-          <span style={{ fontSize: '15px' }}>{lang === 'es' ? '🇺🇸' : '🇲🇽'}</span>
-          <span>{lang === 'es' ? 'EN' : 'ES'}</span>
+        <button onClick={() => setLang(lang === 'es' ? 'en' : 'es')} className="lang-switcher-login only-flag">
+          <span className="lang-flag-circle">{lang === 'es' ? '🇺🇸' : '🇲🇽'}</span>
         </button>
 
         <div className="login-form-container">
@@ -5895,6 +6073,25 @@ function App() {
                 ? 'Procesando...'
                 : esRegistro ? 'Registrar Cuenta' : 'Iniciar Sesión'}
             </button>
+
+            {/* Opciones de Login Social */}
+            <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <button
+                type="button"
+                className="btn-google-split"
+                onClick={() => manejarLoginSocial('google')}
+                disabled={cargando}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-1 .67-2.28 1.07-3.71 1.07-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                  <path fill="#FBBC05" d="M5.84 14.11c-.22-.66-.35-1.36-.35-2.11s.13-1.45.35-2.11V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.83z" />
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.83c.87-2.6 3.3-4.53 6.16-4.53z" />
+                </svg>
+                {esRegistro ? 'Registrarse con Google' : 'Entrar con Google'}
+              </button>
+
+            </div>
           </form>
 
           <div className="form-divider">
