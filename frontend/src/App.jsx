@@ -523,10 +523,13 @@ function App() {
     }
 
     try {
+      console.log("Iniciando login con:", providerName);
       const result = await signInWithPopup(auth, provider);
+      console.log("Resultado de popup:", result);
       const user = result.user;
       const correoNormalizado = user.email.toLowerCase();
 
+      console.log("Verificando baneados para:", correoNormalizado);
       // --- ESCUDO: VERIFICAR BLACKLIST ---
       const banDoc = await getDoc(doc(db, "baneados", correoNormalizado));
       if (banDoc.exists()) {
@@ -541,13 +544,16 @@ function App() {
         throw new Error('Email not verified by provider');
       }
 
+      console.log("Verificando perfil de usuario en Firestore...");
       // 1. Buscamos si el usuario ya existe en nuestra colección de usuarios
       const docSnap = await getDoc(doc(db, "usuarios", user.uid));
 
       if (docSnap.exists()) {
+        console.log("Usuario existente, rol:", docSnap.data().rol);
         // Usuario existente: Cargamos su rol
         setUsuarioActivo({ uid: user.uid, email: user.email, rol: docSnap.data().rol.toLowerCase() });
       } else {
+        console.log("Usuario nuevo, buscando rol asignado...");
         // Usuario nuevo: Buscamos si tiene un rol pre-asignado por su correo
         const rolDoc = await getDoc(doc(db, "roles_asignados", correoNormalizado));
         let rolFinal = 'alumno'; // Default
@@ -556,6 +562,7 @@ function App() {
           rolFinal = rolDoc.data().rol;
         }
 
+        console.log("Creando perfil en Firestore con rol:", rolFinal);
         // Creamos su perfil en Firestore
         await setDoc(doc(db, "usuarios", user.uid), {
           correo: correoNormalizado,
@@ -572,15 +579,21 @@ function App() {
       setMensaje('');
       setCargando(false);
     } catch (error) {
-      console.error("Error social login:", error);
+      console.error("Error social login completo:", error);
       setCargando(false);
 
       if (error.message === 'Email not verified by provider') {
         mostrarMensaje('Tu cuenta de Google/Microsoft no está verificada. Usa una real.', 'error');
       } else if (error.code === 'auth/popup-closed-by-user') {
         setMensaje(''); // Simplemente se cerró
+      } else if (error.code === 'auth/unauthorized-domain') {
+        mostrarMensaje('Error: Este dominio no está autorizado en la consola de Firebase.', 'error');
+      } else if (error.code === 'auth/popup-blocked') {
+        mostrarMensaje('Error: El navegador bloqueó la ventana emergente de inicio de sesión.', 'error');
+      } else if (error.code === 'auth/configuration-not-found') {
+        mostrarMensaje('Error: El proveedor de Google no está habilitado en la consola de Firebase Auth.', 'error');
       } else {
-        mostrarMensaje('Error al iniciar sesión con el proveedor externo.', 'error');
+        mostrarMensaje('Error al iniciar sesión con el proveedor externo: ' + (error.code || error.message), 'error');
       }
     }
   };
@@ -7120,12 +7133,11 @@ function App() {
 
           <div className="lr-brand-badge">
             <span className="badge-dot" />
-            PLATAFORMA EDUCATIVA INSTITUCIONAL
+            {t.login.badge}
           </div>
 
           <p className="brand-tagline">
-            Sistema Integral para la Gestión de Espacios<br />
-            y Recursos Tecnológicos Educativos.
+            {t.login.tagline}
           </p>
           <div className="edu-divider" />
 
@@ -7137,8 +7149,8 @@ function App() {
                 </svg>
               </div>
               <div>
-                <h3>Gestión Académica</h3>
-                <p>Administración centralizada de aulas y laboratorios para docentes y alumnos.</p>
+                <h3>{t.login.feature1Title}</h3>
+                <p>{t.login.feature1Desc}</p>
               </div>
             </div>
 
@@ -7149,8 +7161,8 @@ function App() {
                 </svg>
               </div>
               <div>
-                <h3>Control de Inventario</h3>
-                <p>Seguimiento en tiempo real de equipos, préstamos y estado de mantenimiento.</p>
+                <h3>{t.login.feature2Title}</h3>
+                <p>{t.login.feature2Desc}</p>
               </div>
             </div>
 
@@ -7161,8 +7173,8 @@ function App() {
                 </svg>
               </div>
               <div>
-                <h3>Acceso Seguro</h3>
-                <p>Autenticación estructurada por niveles de permisos y roles institucionales.</p>
+                <h3>{t.login.feature3Title}</h3>
+                <p>{t.login.feature3Desc}</p>
               </div>
             </div>
           </div>
@@ -7181,13 +7193,13 @@ function App() {
           <div className="form-header">
             <div className="form-header-pill">
               <span className="pill-dot" />
-              Sistema Activo
+              {t.login.systemActive}
             </div>
-            <h2>{esRegistro ? 'Crear Cuenta' : 'Bienvenido de vuelta'}</h2>
+            <h2>{esRegistro ? t.login.createAccount : t.login.loginTitle}</h2>
             <p className="form-subtitle">
               {esRegistro
-                ? 'Regístrate con tu correo institucional'
-                : 'Ingresa tus credenciales para acceder'}
+                ? t.login.registerSubtitle
+                : t.login.loginSubtitle}
             </p>
           </div>
 
@@ -7199,11 +7211,11 @@ function App() {
 
           <form onSubmit={esRegistro ? manejarRegistro : manejarIngreso} className="modern-login-form">
             <div className="form-group-split">
-              <label>Correo Institucional</label>
+              <label>{t.login.institutionalEmail}</label>
               <div className="input-field">
                 <input
                   type="email"
-                  placeholder="usuario@institucion.edu"
+                  placeholder={t.login.emailPlaceholder}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -7218,7 +7230,7 @@ function App() {
             </div>
 
             <div className="form-group-split">
-              <label>Contraseña</label>
+              <label>{t.login.password}</label>
               <div className="input-field">
                 <input
                   type="password"
@@ -7249,15 +7261,15 @@ function App() {
                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                     <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                   </svg>
-                  {lang === 'es' ? '¿Olvidaste tu contraseña?' : 'Forgot your password?'}
+                  {t.login.forgotPassword}
                 </button>
               </div>
             )}
 
             <button className="btn-submit-split" type="submit" disabled={cargando}>
               {cargando
-                ? 'Procesando...'
-                : esRegistro ? 'Registrar Cuenta' : 'Iniciar Sesión'}
+                ? (lang === 'es' ? 'Procesando...' : 'Processing...')
+                : esRegistro ? t.login.btnRegister : t.login.btnLogin}
             </button>
 
             {/* Opciones de Login Social */}
@@ -7274,28 +7286,28 @@ function App() {
                   <path fill="#FBBC05" d="M5.84 14.11c-.22-.66-.35-1.36-.35-2.11s.13-1.45.35-2.11V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.83z" />
                   <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.83c.87-2.6 3.3-4.53 6.16-4.53z" />
                 </svg>
-                {esRegistro ? 'Registrarse con Google' : 'Entrar con Google'}
+                {esRegistro ? t.login.googleRegister : t.login.googleLogin}
               </button>
 
             </div>
           </form>
 
           <div className="form-divider">
-            <span>o</span>
+            <span>{t.login.altOption}</span>
           </div>
 
           <div className="form-toggle-split">
             <p>
               {esRegistro
-                ? '¿Ya tienes una cuenta institucional?'
-                : '¿Aún no tienes acceso al sistema?'}
+                ? t.login.haveAccount
+                : t.login.noAccountLabel}
             </p>
             <button
               onClick={() => { setEsRegistro(!esRegistro); setMensaje(''); }}
               className="btn-toggle-split"
               type="button"
             >
-              {esRegistro ? 'Ir a Inicio de Sesión' : 'Solicitar Registro'}
+              {esRegistro ? t.login.backToLogin : t.login.requestRegistration}
             </button>
           </div>
 
