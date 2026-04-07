@@ -25,7 +25,7 @@ async function seedAccessGate() {
     try {
         // Código de acceso institucional por defecto
         const accessGateData = {
-            codigoAcceso: "EDTECH2025",
+            codigoAcceso: "EDTECH2026",
             activo: true,
             fechaCreacion: new Date().toISOString(),
             fechaExpiracion: null,  // Sin expiración (permanente)
@@ -39,7 +39,7 @@ async function seedAccessGate() {
         await setDoc(doc(db, "access_gates", "main_gate"), accessGateData);
         console.log("✅ Código de acceso creado exitosamente!");
         console.log("──────────────────────────────────────");
-        console.log("📋 Código: EDTECH2025");
+        console.log("📋 Código: EDTECH2026");
         console.log("📝 Descripción:", accessGateData.descripcion);
         console.log("🔓 Tipo: General (todos los roles)");
         console.log("♾️  Usos: Ilimitados");

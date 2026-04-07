@@ -1,4 +1,4 @@
-﻿import logo from './logo.png';
+import logo from './logo.png';
 import translations from './translations';
 import { useState, useEffect } from 'react';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, sendPasswordResetEmail } from 'firebase/auth';
@@ -749,7 +749,11 @@ function App() {
       setAccessGateLoading(false);
     } catch (error) {
       console.error('Error validando Access Gate:', error);
-      setAccessGateError(lang === 'es' ? 'Error de conexión. Intenta de nuevo.' : 'Connection error. Try again.');
+      // También podríamos mostrar un mensaje más detallado si es permisos
+      const esErrorDePermisos = error.code === 'permission-denied';
+      setAccessGateError(lang === 'es' 
+        ? (esErrorDePermisos ? 'Error: Sin permisos para validar el código.' : 'Error de conexión. Intenta de nuevo.') 
+        : (esErrorDePermisos ? 'Error: No permission to validate code.' : 'Connection error. Try again.'));
       setAccessGateLoading(false);
     }
   };
